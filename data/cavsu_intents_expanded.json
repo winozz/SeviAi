@@ -1,0 +1,472 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Hey",
+        "Good morning",
+        "Good afternoon",
+        "Good evening",
+        "Howdy",
+        "What's up",
+        "Is anyone there?",
+        "Hi there",
+        "Greetings",
+        "Welcome",
+        "Yo",
+        "Hiya",
+        "Salve",
+        "Hola",
+        "Kumusta",
+        "Hi!",
+        "Hello there",
+        "How are you?",
+        "Nice to meet you"
+      ],
+      "responses": [
+        "Hello! Welcome to CvSU Virtual Assistant. How can I help you today?",
+        "Hi there! I'm the CvSU chatbot. What would you like to know?",
+        "Greetings! I'm here to assist you with information about Cavite State University."
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "Have a good day",
+        "Exit",
+        "See you later",
+        "Goodbye",
+        "Take care",
+        "Nothing else",
+        "That's all",
+        "Thanks, bye"
+      ],
+      "responses": [
+        "Goodbye! Feel free to come back anytime. Iskolar para sa Bayan!",
+        "Take care! Don't hesitate to ask if you need more help.",
+        "Goodbye! Best of luck with your CvSU journey!"
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks a lot",
+        "Thanks",
+        "Thank you",
+        "Appreciate it",
+        "Salamat",
+        "Thank you so much",
+        "Maraming salamat",
+        "That's helpful"
+      ],
+      "responses": [
+        "You're welcome! Happy to help.",
+        "Anytime! Is there anything else you'd like to know?",
+        "Glad I could help! Feel free to ask more questions."
+      ]
+    },
+    {
+      "tag": "admissions_requirements",
+      "patterns": [
+        "What are the admission requirements?",
+        "What do I need to enroll?",
+        "Requirements for admission",
+        "What documents do I need to submit?",
+        "How to apply to CvSU?",
+        "What are the requirements for incoming freshmen?",
+        "How do I get admitted?",
+        "Application requirements",
+        "What do I need to get in?",
+        "Enrollment requirements",
+        "CvSU admission requirements",
+        "Admission process CvSU",
+        "How to get into CvSU?",
+        "What do I need for CvSU?",
+        "Documents needed for admission",
+        "Freshman requirements",
+        "What's required to enroll at CvSU?",
+        "Requirements to attend CvSU",
+        "How do I apply?",
+        "Admission checklist CvSU"
+      ],
+      "responses": [
+        "For freshman admission to CvSU, you will need:\n1. Duly accomplished CvSU Application Form\n2. Original Form 138 (Grade 12 Report Card)\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. CvSU Entrance Examination qualifying score\n\nPlease visit the Admissions Office or go to https://www.cvsu.edu.ph for the latest details."
+      ]
+    },
+    {
+      "tag": "admissions_exam",
+      "patterns": [
+        "CvSU entrance exam schedule",
+        "Requirements to attend CvSU",
+        "When is the entrance exam?",
+        "Admission process details",
+        "What are the admission requirements?",
+        "How to register for the entrance exam?",
+        "CvSU admission information",
+        "How do I take the entrance exam?",
+        "When is CVSUCAT?",
+        "Admission test",
+        "College entrance exam CvSU",
+        "What do I need to apply?",
+        "How can I apply to CvSU?",
+        "CVSUCAT schedule"
+      ],
+      "responses": [
+        "The CvSU College Admission Test (CVSUCAT) is typically held from October to January for incoming first-year students. You must register online through the Official CvSU Admissions portal. Check https://www.cvsu.edu.ph for the current schedule and online registration link.",
+        "CVSUCAT (CvSU College Admission Test) is conducted annually. Registration is done online. Visit https://www.cvsu.edu.ph for the exact schedule and guidelines."
+      ]
+    },
+    {
+      "tag": "enrollment_procedure",
+      "patterns": [
+        "How to enroll?",
+        "Steps to enroll",
+        "What is the enrollment procedure?",
+        "How do I enroll at CvSU?",
+        "Enrollment procedure",
+        "Enrollment process",
+        "How to register for classes?",
+        "Online enrollment"
+      ],
+      "responses": [
+        "CvSU Enrollment Steps:\n1. Log in to the CvSU Student Portal\n2. Verify your admission status\n3. Proceed to online registration/pre-enlistment\n4. Pay tuition and fees at the Cashier's Office or via online payment channels\n5. Present proof of payment to the Registrar\n6. Receive your Certificate of Registration (COR)\n\nFor full details, visit the Registrar's Office or the official CvSU website."
+      ]
+    },
+    {
+      "tag": "enrollment_schedule",
+      "patterns": [
+        "Academic year schedule",
+        "Important dates and deadlines",
+        "What is the academic calendar?",
+        "When does enrollment start?",
+        "When to enroll?",
+        "When is the enrollment for this semester?",
+        "School calendar information",
+        "When is enrollment?",
+        "Enrollment period",
+        "When does the semester start?",
+        "Enrollment schedule"
+      ],
+      "responses": [
+        "CvSU holds enrollment at the start of each semester. First semester enrollment is usually in July–August, and second semester enrollment is in December–January. Please check the official CvSU Academic Calendar at https://cvsu.edu.ph for the exact dates."
+      ]
+    },
+    {
+      "tag": "courses_offered",
+      "patterns": [
+        "What courses are offered?",
+        "What programs are available?",
+        "List of courses",
+        "Available degree programs",
+        "What can I study at CvSU?",
+        "What are the programs at CvSU?",
+        "Undergraduate programs",
+        "What college programs does CvSU have?",
+        "Program offerings",
+        "Available courses CvSU",
+        "Degree programs at CvSU",
+        "CvSU programs",
+        "What majors does CvSU offer?",
+        "Courses available",
+        "Can I study engineering at CvSU?",
+        "Does CvSU have business programs?",
+        "What subjects can I take?"
+      ],
+      "responses": [
+        "CvSU (Main Campus – Indang) offers a wide range of programs including:\n\n• College of Agriculture, Food, Environment and Natural Resources\n• College of Arts and Sciences\n• College of Business and Entrepreneurship\n• College of Education\n• College of Engineering and Information Technology (CEIT)\n• College of Hospitality and Institutional Management\n• College of Veterinary Medicine and Biomedical Sciences\n\nPopular programs include BS Computer Science, BSIT, BS Agriculture, BS Education, and more. Visit https://www.cvsu.edu.ph/colleges for the full list."
+      ]
+    },
+    {
+      "tag": "it_cs_courses",
+      "patterns": [
+        "Technology programs",
+        "Available majors and specializations",
+        "IT courses at CvSU",
+        "BSCS CvSU",
+        "What degree programs are available?",
+        "What can I major in?",
+        "Is there Computer Science at CvSU?",
+        "Does CvSU have BSIT?",
+        "Information technology program",
+        "Program and course list",
+        "What are the available programs?",
+        "Computer engineering CvSU"
+      ],
+      "responses": [
+        "Yes! CvSU offers technology programs under the College of Engineering and Information Technology (CEIT):\n\n• BS Computer Science (BSCS)\n• BS Information Technology (BSIT)\n• BS Computer Engineering (BSCpE)\n• BS Electronics Engineering (BSECE)\n• BS Civil Engineering (BSCE)\n• BS Agriculture Engineering (BSAE)\n\nThese programs are accredited and nationally recognized."
+      ]
+    },
+    {
+      "tag": "graduate_programs",
+      "patterns": [
+        "Available majors and specializations",
+        "Masters degree at CvSU",
+        "What degree programs are available?",
+        "What can I major in?",
+        "Doctorate programs",
+        "Masters in CvSU",
+        "Post graduate CvSU",
+        "Program and course list",
+        "What are the available programs?",
+        "Graduate programs",
+        "PhD programs",
+        "Graduate school programs"
+      ],
+      "responses": [
+        "CvSU offers graduate programs through its Graduate School, including:\n\n• Master of Arts in Education (MAEd)\n• Master of Science in Agriculture (MS Agriculture)\n• Master of Business Administration (MBA)\n• Master of Science in Information Technology (MSIT)\n• Doctor of Philosophy (PhD) in various fields\n\nFor the complete list, visit the CvSU Graduate School Office."
+      ]
+    },
+    {
+      "tag": "tuition_fees",
+      "patterns": [
+        "How much is tuition?",
+        "Tuition fee at CvSU",
+        "How much does it cost to study at CvSU?",
+        "Is CvSU free?",
+        "School fees",
+        "Cost of enrollment",
+        "Free education CvSU",
+        "How much is the tuition per semester?",
+        "Tuition and fees",
+        "CvSU tuition price",
+        "Enrollment cost",
+        "School expenses CvSU",
+        "Do I have to pay for CvSU?",
+        "How much should I pay?",
+        "Is tuition free in CvSU?",
+        "CvSU tuition",
+        "Cost of studying at CvSU",
+        "Miscellaneous fees",
+        "Fee breakdown"
+      ],
+      "responses": [
+        "CvSU is a state university, so Filipino students enjoy highly subsidized tuition fees. Under the Universal Access to Quality Tertiary Education Act (RA 10931 / Free Higher Education Law), qualified students may study FREE of tuition and other school fees.\n\nHowever, some miscellaneous fees may still apply depending on program and campus. Please contact the Cashier's Office or visit https://www.cvsu.edu.ph for the exact fee schedule per program."
+      ]
+    },
+    {
+      "tag": "scholarship",
+      "patterns": [
+        "Free tuition options",
+        "Are there scholarships?",
+        "Scholarship programs",
+        "Financial aid CvSU",
+        "DOST scholarship",
+        "Scholarship opportunities",
+        "What scholarships are available?",
+        "How can I get financial aid?",
+        "Scholarship application process",
+        "How to apply for scholarship?",
+        "CHED scholarship",
+        "Free tuition scholarship",
+        "Are there grants available?"
+      ],
+      "responses": [
+        "CvSU students can avail of various scholarship programs:\n\n1. UniFAST / Free Higher Education (RA 10931)\n2. CHED Merit Scholarship\n3. DOST-SEI Scholarship\n4. PESFA (Private Education Student Financial Assistance)\n5. CvSU Institutional Scholarships\n6. Local Government Unit (LGU) Scholarships\n\nVisit the CvSU Scholarship & Financial Assistance Office (SFAO) for eligibility and application details."
+      ]
+    },
+    {
+      "tag": "campus_location",
+      "patterns": [
+        "How to get to CvSU?",
+        "Where is the main campus?",
+        "CvSU Indang address",
+        "CvSU campuses",
+        "Where is CvSU located?",
+        "Where can I find CvSU?",
+        "How do I get to the campus?",
+        "Address of CvSU",
+        "CvSU main campus location",
+        "What is the campus address?",
+        "Campus location and directions"
+      ],
+      "responses": [
+        "The CvSU Main Campus is located in Indang, Cavite, Philippines. Address: Brgy. Bancod, Indang, Cavite 4122.\n\nCvSU also has multiple campuses across Cavite:\n• Silang Campus\n• Imus Campus\n• Bacoor Campus\n• Rosario Campus\n• Naic Campus\n• Trece Martires City Campus\n• Carmona Campus\n• General Trias Campus\n• Tanza Campus\n\nYou can reach the Main Campus via jeepney from Dasmarinas or Tagaytay."
+      ]
+    },
+    {
+      "tag": "campus_facilities",
+      "patterns": [
+        "Student facilities",
+        "Dormitory at CvSU",
+        "Accommodation at CvSU",
+        "Where is CvSU located?",
+        "Canteen",
+        "CvSU gym",
+        "Is there a dormitory?",
+        "Where can I find CvSU?",
+        "How do I get to the campus?",
+        "What is the campus address?",
+        "Library at CvSU",
+        "Campus facilities",
+        "What facilities does CvSU have?",
+        "Campus location and directions"
+      ],
+      "responses": [
+        "CvSU Main Campus offers the following facilities:\n\n• University Library (physical + digital resources)\n• Gymnasium and Sports Complex\n• University Dormitory (for qualified students)\n• Canteen and Food Court\n• Computer Laboratories\n• Science and Research Laboratories\n• University Health Unit (clinic)\n• Chapel\n• Auditorium\n• Agricultural Training Farm\n• Animal Hospital (for Veterinary students)\n\nFacilities vary per campus."
+      ]
+    },
+    {
+      "tag": "library",
+      "patterns": [
+        "Online library resources",
+        "Library services",
+        "CvSU library",
+        "Library hours",
+        "How to access library resources?",
+        "What are library hours?",
+        "How do I access the library?",
+        "Online library",
+        "What is in the library?",
+        "Library services available",
+        "E-library CvSU"
+      ],
+      "responses": [
+        "The CvSU Main Library offers both physical and online resources. Regular library hours are Monday to Friday, 7:00 AM – 5:00 PM during semestral periods. Students can also access e-books and online journals through the CvSU Library portal. Contact the library directly at library@cvsu.edu.ph for online access queries."
+      ]
+    },
+    {
+      "tag": "events",
+      "patterns": [
+        "University week",
+        "What events are happening?",
+        "Upcoming events at CvSU",
+        "Upcoming activities at CvSU",
+        "Event schedule",
+        "School activities",
+        "Sportsfest",
+        "What student activities are there?",
+        "Seminar and training",
+        "CvSU anniversary",
+        "CvSU events",
+        "Cultural events",
+        "What can students participate in?"
+      ],
+      "responses": [
+        "CvSU regularly holds various events including:\n\n• CvSU Foundation Anniversary (April)\n• University Sportsfest\n• Research Symposium\n• Cultural Night\n• Job and Career Fair\n• Semestral orientation for freshmen\n• Science and Technology Week\n\nFor the latest events and announcements, follow the official CvSU Facebook page or visit https://www.cvsu.edu.ph/news."
+      ]
+    },
+    {
+      "tag": "academic_calendar",
+      "patterns": [
+        "When is the first day of classes?",
+        "Academic year schedule",
+        "When does school start?",
+        "Holiday schedule CvSU",
+        "School year schedule",
+        "What is the academic calendar?",
+        "School calendar",
+        "Semester schedule",
+        "School calendar information",
+        "Academic calendar",
+        "When does the semester start?",
+        "Important dates and deadlines"
+      ],
+      "responses": [
+        "CvSU follows the CHED academic calendar. Typically:\n• First Semester: August – December\n• Second Semester: January – May\n• Summer: June – July (for certain programs)\n\nThe latest Academic Calendar is published on the official CvSU website at https://www.cvsu.edu.ph."
+      ]
+    },
+    {
+      "tag": "contact_info",
+      "patterns": [
+        "How to contact CvSU?",
+        "CvSU contact number",
+        "Email CvSU",
+        "CvSU hotline",
+        "How can I reach CvSU?",
+        "Phone number of CvSU",
+        "Contact information",
+        "CvSU phone",
+        "Contact details",
+        "CvSU email address",
+        "Where to call CvSU",
+        "How do I contact the admissions office?",
+        "CvSU social media",
+        "CvSU Facebook",
+        "Contact number for registrar",
+        "Reach CvSU"
+      ],
+      "responses": [
+        "You can contact CvSU through:\n\n• Main Campus Phone: (046) 415-0012\n• Email: info@cvsu.edu.ph\n• Website: https://www.cvsu.edu.ph\n• Facebook: facebook.com/CaviteStateUniversity\n• Registrar's Office: registrar@cvsu.edu.ph\n• Admissions Office: admissions@cvsu.edu.ph\n\nOffice hours are Monday to Friday, 8:00 AM – 5:00 PM."
+      ]
+    },
+    {
+      "tag": "registrar",
+      "patterns": [
+        "Diploma request",
+        "Transcript of records",
+        "How to get TOR?",
+        "Honorable dismissal",
+        "Registrar office",
+        "Transfer credentials",
+        "Request for transcript",
+        "Graduation requirements"
+      ],
+      "responses": [
+        "The CvSU Registrar's Office handles:\n• Transcript of Records (TOR)\n• Certificate of Enrollment/Registration\n• Diploma and Honors Certificates\n• Honorable Dismissal\n• Transfer Credentials\n• Graduation clearance\n\nContact: registrar@cvsu.edu.ph | (046) 415-0012 loc. 1\nOffice hours: Monday–Friday, 8:00 AM – 5:00 PM"
+      ]
+    },
+    {
+      "tag": "about_CvSU",
+      "patterns": [
+        "History of CvSU",
+        "CvSU overview",
+        "CvSU background",
+        "About Cavite State University",
+        "Tell me about CvSU",
+        "What is CvSU?",
+        "What kind of school is CvSU?"
+      ],
+      "responses": [
+        "Cavite State University (CvSU) is one of the premier state universities in the Philippines, located in Indang, Cavite. It was established in 1906 and converted into a university in 1998 under Republic Act 8468.\n\nCvSU is known for its strong programs in Agriculture, Engineering, Education, and Technology. Its vision is to be a globally recognized institution providing excellent agro-industrial and technological education.\n\nMotto: 'Veritas Agri Scientia' (Truth, Agriculture, Science)\nTagline: 'Iskolar para sa Bayan'"
+      ]
+    },
+    {
+      "tag": "vision_mission",
+      "patterns": [
+        "CvSU core values",
+        "What does CvSU stand for?",
+        "Vision and mission",
+        "CvSU vision",
+        "What is the mission of CvSU?",
+        "CvSU mission",
+        "Goals of CvSU"
+      ],
+      "responses": [
+        "CvSU Vision: A globally recognized S&T university providing excellent agro-industrial and techno-entrepreneurial education by 2030.\n\nCvSU Mission: To serve the people of the Philippines, especially those of Cavite through relevant instruction, research, extension and production activities.\n\nCore Values: Excellence, Service, Integrity, Teamwork (ESIT)\n\nMotto: Veritas Agri Scientia"
+      ]
+    },
+    {
+      "tag": "student_organizations",
+      "patterns": [
+        "Organizations at CvSU",
+        "Student council CvSU",
+        "Extra curricular activities",
+        "Clubs and organizations",
+        "Student government",
+        "How to join a club?",
+        "Student organizations"
+      ],
+      "responses": [
+        "CvSU has an active student life with numerous recognized organizations:\n\n• Supreme Student Government (SSG)\n• College-based student councils\n• Academic and professional organizations (e.g., JPIA, ELITS, CSE)\n• Cultural and arts groups\n• Sports clubs and varsity teams\n• Religious organizations\n• Service-oriented clubs (Red Cross Youth, ROTC)\n\nVisit the Office of Student Affairs and Services (OSAS) to learn how to join."
+      ]
+    },
+    {
+      "tag": "nlu_fallback",
+      "patterns": [
+        "What?",
+        "Can you repeat that?",
+        "Unknown",
+        "junk text here",
+        "I don't understand",
+        "gibberish"
+      ],
+      "responses": [
+        "I'm sorry, I didn't quite understand that. Could you rephrase your question? You can ask me about admissions, courses, tuition, campus facilities, events, or contact information.",
+        "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!"
+      ]
+    }
+  ]
+}

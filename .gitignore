@@ -1,0 +1,14 @@
+# Local editor / agent settings
+.claude/settings.local.json
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Runtime logs and databases
+logs/
+cloudflared-*.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

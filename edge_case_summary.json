@@ -1,0 +1,111 @@
+﻿{
+    "AssistantName":  "Sevi",
+    "ApiUrl":  "http://127.0.0.1:8001/batch",
+    "TotalRequests":  10000,
+    "BatchSize":  50,
+    "SuccessCount":  10000,
+    "ErrorCount":  0,
+    "AverageConfidence":  0.287016,
+    "FallbackCount":  6182,
+    "FallbackRate":  "61.82%",
+    "DurationSeconds":  134.19,
+    "ResultsFile":  "edge_case_results.jsonl",
+    "Intents":  [
+                    {
+                        "Intent":  "nlu_fallback",
+                        "Count":  6182
+                    },
+                    {
+                        "Intent":  "campus_specific",
+                        "Count":  457
+                    },
+                    {
+                        "Intent":  "tuition_fees",
+                        "Count":  372
+                    },
+                    {
+                        "Intent":  "contact_info",
+                        "Count":  333
+                    },
+                    {
+                        "Intent":  "vision_mission",
+                        "Count":  329
+                    },
+                    {
+                        "Intent":  "admissions_requirements",
+                        "Count":  307
+                    },
+                    {
+                        "Intent":  "scholarship",
+                        "Count":  275
+                    },
+                    {
+                        "Intent":  "graduate_programs",
+                        "Count":  218
+                    },
+                    {
+                        "Intent":  "admissions_exam",
+                        "Count":  189
+                    },
+                    {
+                        "Intent":  "student_organizations",
+                        "Count":  164
+                    },
+                    {
+                        "Intent":  "enrollment_procedure",
+                        "Count":  154
+                    },
+                    {
+                        "Intent":  "registrar",
+                        "Count":  148
+                    },
+                    {
+                        "Intent":  "academic_calendar",
+                        "Count":  136
+                    },
+                    {
+                        "Intent":  "campus_location",
+                        "Count":  136
+                    },
+                    {
+                        "Intent":  "it_cs_courses",
+                        "Count":  120
+                    },
+                    {
+                        "Intent":  "enrollment_schedule",
+                        "Count":  77
+                    },
+                    {
+                        "Intent":  "greeting",
+                        "Count":  62
+                    },
+                    {
+                        "Intent":  "courses_offered",
+                        "Count":  59
+                    },
+                    {
+                        "Intent":  "events",
+                        "Count":  55
+                    },
+                    {
+                        "Intent":  "about_cvsu",
+                        "Count":  52
+                    },
+                    {
+                        "Intent":  "campus_facilities",
+                        "Count":  52
+                    },
+                    {
+                        "Intent":  "library",
+                        "Count":  52
+                    },
+                    {
+                        "Intent":  "thanks",
+                        "Count":  44
+                    },
+                    {
+                        "Intent":  "goodbye",
+                        "Count":  27
+                    }
+                ]
+}

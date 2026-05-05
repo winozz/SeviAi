@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  CvSU-chatbot:
+    build: .
+    container_name: CvSU-chatbot-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WORKERS=4
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    networks:
+      - CvSU-network
+
+networks:
+  CvSU-network:
+    driver: bridge
+

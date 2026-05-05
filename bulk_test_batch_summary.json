@@ -1,0 +1,86 @@
+﻿{
+    "AssistantName":  "Sevi",
+    "ApiUrl":  "http://127.0.0.1:8001/batch",
+    "TotalRequests":  5000,
+    "BatchSize":  25,
+    "DelayMs":  50,
+    "SuccessCount":  5000,
+    "ErrorCount":  0,
+    "AverageConfidence":  0.319742,
+    "DurationSeconds":  75.55,
+    "ResultsFile":  "bulk_test_batch_results.jsonl",
+    "Intents":  [
+                    {
+                        "Intent":  "academic_calendar",
+                        "Count":  227
+                    },
+                    {
+                        "Intent":  "admissions_exam",
+                        "Count":  99
+                    },
+                    {
+                        "Intent":  "admissions_requirements",
+                        "Count":  158
+                    },
+                    {
+                        "Intent":  "campus_facilities",
+                        "Count":  253
+                    },
+                    {
+                        "Intent":  "campus_location",
+                        "Count":  158
+                    },
+                    {
+                        "Intent":  "contact_info",
+                        "Count":  183
+                    },
+                    {
+                        "Intent":  "courses_offered",
+                        "Count":  103
+                    },
+                    {
+                        "Intent":  "enrollment_procedure",
+                        "Count":  55
+                    },
+                    {
+                        "Intent":  "enrollment_schedule",
+                        "Count":  1
+                    },
+                    {
+                        "Intent":  "graduate_programs",
+                        "Count":  2
+                    },
+                    {
+                        "Intent":  "it_cs_courses",
+                        "Count":  37
+                    },
+                    {
+                        "Intent":  "library",
+                        "Count":  111
+                    },
+                    {
+                        "Intent":  "nlu_fallback",
+                        "Count":  2829
+                    },
+                    {
+                        "Intent":  "registrar",
+                        "Count":  191
+                    },
+                    {
+                        "Intent":  "scholarship",
+                        "Count":  181
+                    },
+                    {
+                        "Intent":  "student_organizations",
+                        "Count":  210
+                    },
+                    {
+                        "Intent":  "tuition_fees",
+                        "Count":  127
+                    },
+                    {
+                        "Intent":  "vision_mission",
+                        "Count":  75
+                    }
+                ]
+}

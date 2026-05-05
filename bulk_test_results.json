@@ -1,0 +1,142 @@
+﻿[
+    {
+        "Query":  "What are the admission requirements?",
+        "Intent":  "admissions_requirements",
+        "Confidence":  0.8632194502116599,
+        "Response":  "CvSU ADMISSION REQUIREMENTS \u0026 PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "How much is tuition?",
+        "Intent":  "tuition_fees",
+        "Confidence":  0.6726361094162092,
+        "Response":  "CvSU TUITION FEES \u0026 FREE EDUCATION:\n\nGREAT NEWS! CvSU is covered by RA 10931 (Universal Access to Quality Tertiary Education Act of 2017).\n\nFREE TUITION COVERAGE (For qualified Filipino undergraduate students):\n- ZERO tuition fee\n- ZERO miscellaneous fees including:\n  * Library fees\n  * Computer fees\n  * Laboratory fees\n  * School ID (1st copy)\n  * Athletic fees\n  * Admission fees\n  * Development fees\n  * Guidance fees\n  * Student handbook (1st copy)\n  * Entrance fees\n  * Registration fees\n  * Medical and dental fees\n  * Cultural fees\n\nREQUIREMENTS FOR FREE TUITION:\n- Filipino citizenship\n- Pass admission requirements\n- Maintain academic standing\n- Enrolled in undergraduate degree program\n- Not yet earned a bachelor\u0027s degree\n\nWHAT YOU MAY STILL PAY:\n- Replacement of school ID/handbook\n- Some optional fees (uniform, books)\n- Allowances (transportation, meals)\n- Graduate school tuition (NOT covered by RA 10931)\n\nGRADUATE PROGRAMS (Masters/PhD):\n- Tuition still applies\n- Approximately PHP 6,500-10,000 per unit\n- Scholarships and assistantships available\n\nSCHOLARSHIPS \u0026 FINANCIAL AID:\n- Tertiary Education Subsidy (TES) for stipends\n- Government scholarships\n- Private scholarships\n- Academic merit scholarships\n\nFor specific fee details, contact:\nCashier\u0027s Office: (046) 415-0010\nEmail: cashier@cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "Does CvSU offer Computer Science?",
+        "Intent":  "it_cs_courses",
+        "Confidence":  0.9997220635414124,
+        "Response":  "CvSU COMPUTER SCIENCE \u0026 IT PROGRAMS:\n\nCOLLEGE: College of Engineering and Information Technology (established 1992)\n\nUNDERGRADUATE PROGRAMS:\n- BS Computer Science (BSCS)\n- BS Information Technology (BSIT)\n- BS Computer Engineering\n- BS Electronics Engineering\n\nKEY FEATURES:\n- 4-year program\n- Modern computing labs\n- Industry partnerships\n- Internship opportunities\n- CHED-recognized\n\nFOCUS AREAS:\n- Software development\n- Database systems\n- Networking and security\n- Web development\n- Mobile applications\n- Data analytics\n- Artificial intelligence\n\nWHERE OFFERED:\n- Indang (Main Campus)\n- Imus Campus\n- Bacoor Campus\n- Other selected campuses\n\nGRADUATE OPTION:\n- Master of Science in Computer Science\n\nFor curriculum details, contact: ceit@cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "Are there scholarships available?",
+        "Intent":  "scholarship",
+        "Confidence":  0.7704954935477757,
+        "Response":  "CvSU SCHOLARSHIPS \u0026 FINANCIAL AID:\n\n1. RA 10931 - FREE TUITION LAW:\n   - All qualified undergrad Filipino students\n   - Covers tuition + miscellaneous fees\n   - Most accessible benefit\n\n2. TERTIARY EDUCATION SUBSIDY (TES):\n   - Cash subsidy for living expenses\n   - For students from low-income families\n   - Apply through UniFAST website\n\n3. GOVERNMENT SCHOLARSHIPS:\n   - DOST Science Scholarships (for STEM)\n   - CHED Scholarships (merit-based)\n   - PVAO (military dependents)\n   - Sangguniang Kabataan scholarships\n   - LGU/Provincial scholarships\n\n4. CvSU MERIT SCHOLARSHIPS:\n   - University Scholar (top GPA students)\n   - College Scholar (GPA-based)\n   - Academic excellence awards\n\n5. PRIVATE SCHOLARSHIPS:\n   - Corporate-sponsored\n   - Foundation grants\n   - Alumni-sponsored programs\n\n6. STUDENT ASSISTANTSHIP:\n   - Graduate student teaching/research assistantships\n   - Stipend + tuition discount\n\nHOW TO APPLY:\n- Visit Office of Student Affairs and Services (OSAS)\n- Check requirements per scholarship\n- Submit application before deadlines\n- Maintain required GPA\n\nCONTACT:\nOSAS - Scholarship Office\nEmail: osas@cvsu.edu.ph\nPhone: (046) 415-0010",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "Where is CvSU located?",
+        "Intent":  "campus_location",
+        "Confidence":  0.9956205487251282,
+        "Response":  "CvSU MAIN CAMPUS LOCATION:\n\nDon Severino delas Alas Campus\nIndang, Cavite, Philippines\n(60 km / 37 miles southwest of Manila)\n\nCAMPUS SIZE: 72 hectares\n\nCvSU has 13 campuses across Cavite Province:\n1. Indang (Main Campus) - established 1906\n2. Naic - 1961\n3. Rosario/CCAT - 1969\n4. Cavite City - 2001\n5. Carmona - 2002\n6. Imus - 2003\n7. Trece Martires - 2005\n8. Silang - 2006\n9. Tanza - 2007\n10. Bacoor - 2008\n11. General Trias - 2012\n12. Maragondon - 2015\n13. DasmariÃ±as Learning Center - 2023\n\nFor directions, visit: https://cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What facilities does CvSU have?",
+        "Intent":  "campus_facilities",
+        "Confidence":  0.5872409203189022,
+        "Response":  "CvSU FACILITIES \u0026 RESOURCES:\n\nACADEMIC:\n- Ladislao Diwa Memorial Library and Museum (92,000+ books)\n- Computer laboratories\n- Science laboratories\n- Specialized research centers\n\nRESEARCH CENTERS:\n- Affiliated Renewable Energy Center (AREC) - biogas technology\n- National Coffee Research, Development and Extension Center\n- Sugar Palm Research, Information, and Trade Center (SPRINT)\n- Bee Research, Innovation, Trade, and Extension Center (BRITE)\n- Simulation, Modelling and Measurement Laboratory (SiMM Lab)\n\nSTUDENT SERVICES:\n- Health Service Unit\n- Guidance and Counseling\n- Student dormitories (selected campuses)\n- Cafeteria/canteen\n- Chapel\n- Sports facilities (CvSU Green Hornets)\n- 84+ student organizations\n\nSPECIAL DESIGNATIONS:\n- Center of Excellence in Agriculture (2016)\n- Top-performing state university (AACCUP)\n- Hosts Southern Tagalog Agriculture Research Consortium",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "How do I contact admissions?",
+        "Intent":  "nlu_fallback",
+        "Confidence":  0.0,
+        "Response":  "I\u0027m sorry, I didn\u0027t quite understand that. Could you rephrase your question? You can ask me about CvSU admissions, programs, tuition fees, scholarships, campus facilities, contact info, or events.",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "When is enrollment?",
+        "Intent":  "enrollment_schedule",
+        "Confidence":  0.999323844909668,
+        "Response":  "CvSU ENROLLMENT SCHEDULE (Academic Year 2025-2026):\n\nFIRST SEMESTER:\n- Application opens: November 2024\n- Entrance exams: November-March\n- Notice of Admission: April-May\n- Enrollment: July-August 2025\n- Classes begin: August 2025\n\nSECOND SEMESTER:\n- Enrollment: December 2025-January 2026\n- Classes begin: January 2026\n\nSUMMER TERM:\n- Enrollment: May 2026\n- Classes: May-July 2026\n\nIMPORTANT DATES:\n- Late enrollment: Subject to penalties\n- Add/Drop period: First 2 weeks of classes\n- Final exams: Last week of semester\n\nCHECK SPECIFIC DATES:\nVisit: https://cvsu.edu.ph or campus website\nCall: (046) 415-0010\nEmail: registrarmain@cvsu.edu.ph\n\nNOTE: Specific dates may vary by campus. Always check the academic calendar of your specific CvSU campus.",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What courses are offered?",
+        "Intent":  "courses_offered",
+        "Confidence":  0.5578384154651121,
+        "Response":  "CvSU offers 43 undergraduate programs across 11 colleges:\n\nCOLLEGES:\n1. College of Agriculture, Food, Environment and Natural Resources\n2. College of Arts and Sciences\n3. College of Criminal Justice\n4. College of Economics, Management and Development Studies\n5. College of Education\n6. College of Engineering and Information Technology\n7. College of Medicine (since 2022)\n8. College of Nursing\n9. College of Sports, Physical Education and Recreation\n10. College of Veterinary Medicine and Biomedical Sciences\n11. College of Tourism and Hospitality Management (newest, 2025)\n\nPOPULAR PROGRAMS:\n- BS Computer Science\n- BS Information Technology\n- BS Business Administration\n- BS Hospitality Management\n- BS Psychology\n- BS Entrepreneurship\n- BS Office Administration\n- Bachelor of Elementary Education\n- Bachelor of Secondary Education\n- Bachelor of Early Childhood Education\n- BA Journalism\n- Doctor of Veterinary Medicine\n- Doctor of Medicine\n- BS Nursing\n- BS Agriculture\n\nGRADUATE PROGRAMS: 13 Master\u0027s degrees, 3 PhD programs\n\nFor specific campuses\u0027 offerings, visit: https://cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "Tell me about campus life",
+        "Intent":  "about_cavsu",
+        "Confidence":  0.5188030004501343,
+        "Response":  "Cavite State University (CvSU) is a public university in Cavite, Philippines. Founded in 1906 as Indang Intermediate School by the Thomasites, it became a university on January 22, 1998 through Republic Act No. 8468.\n\nKEY FACTS:\n- Established: 1906 (over 119 years old)\n- University status: 1998\n- Main Campus: Don Severino delas Alas Campus, Indang, Cavite\n- Total Campuses: 13 across Cavite province\n- Students: 22,000+ (as of 2024)\n- Faculty/Staff: ~1,700\n- Athletics: CvSU Green Hornets\n- Motto: Truth, Excellence, Service\n\nCvSU is known as a Center of Excellence in Agriculture and one of the top-performing state universities in the Philippines.",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What are the library hours?",
+        "Intent":  "library",
+        "Confidence":  0.741677944915564,
+        "Response":  "CvSU MAIN LIBRARY:\n\nNAME: Ladislao Diwa Memorial Library and Museum\nLOCATION: Main Campus, Indang\n\nCOLLECTION:\n- 92,000+ book volumes\n- 5,000+ magazine and newsletter series\n- Research journals\n- Digital databases\n- Online resources\n\nSERVICES:\n- Book borrowing\n- Reference assistance\n- Computer/internet access\n- Study spaces\n- Research support\n- Inter-library loans\n\nMUSEUM: Houses historical artifacts and CvSU memorabilia\n\nThe library publishes the peer-reviewed CvSU Research Journal bi-annually.\n\nFor library hours and services, contact the campus library directly or visit https://cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "How do I join a student organization?",
+        "Intent":  "student_organizations",
+        "Confidence":  0.8386269236536316,
+        "Response":  "CvSU STUDENT ORGANIZATIONS:\n\nCvSU has 84+ recognized student organizations across all campuses!\n\nCATEGORIES:\n\n1. ACADEMIC ORGANIZATIONS:\n   - Engineering and IT societies\n   - Education societies\n   - Business student organizations\n   - Science clubs\n   - Subject-specific groups\n\n2. CULTURAL \u0026 ARTS:\n   - CvSU Chorale\n   - Dance troupe\n   - Drama/theater groups\n   - Photography clubs\n   - Cultural appreciation societies\n\n3. SPORTS (CvSU Green Hornets):\n   - Basketball, Volleyball, Football\n   - Athletics, Swimming\n   - Martial arts, Chess\n   - Various team sports\n\n4. RELIGIOUS:\n   - Christian fellowships\n   - Catholic groups\n   - Interfaith organizations\n\n5. SERVICE/SOCIO-CIVIC:\n   - Red Cross Youth\n   - Rotaract\n   - Environmental groups\n\n6. STUDENT GOVERNMENT:\n   - Supreme Student Government (SSG)\n   - College/Department councils\n\n7. PUBLICATIONS:\n   - The Gazette (Indang campus official paper)\n   - Campus journals\n\nHOW TO JOIN:\n- Attend Org Recruitment Week\n- Visit OSAS for list of organizations\n- Attend org orientations\n- Submit application\n\nCONTACT: Office of Student Affairs (OSAS)",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What is the academic calendar?",
+        "Intent":  "academic_calendar",
+        "Confidence":  0.9177584052085876,
+        "Response":  "CvSU ACADEMIC CALENDAR (AY 2025-2026):\n\nFIRST SEMESTER:\n- Classes Start: August 2025\n- Midterm Exams: October 2025\n- Final Exams: December 2025\n- Christmas Break: Mid-December - Early January\n\nSECOND SEMESTER:\n- Classes Start: January 2026\n- Midterm Exams: March 2026\n- Final Exams: May 2026\n- Summer Break: June 2026\n\nSUMMER TERM (Optional):\n- May - July 2026\n\nHOLIDAYS:\n- All regular Philippine holidays observed\n- University-specific holidays (Founding Anniversary)\n- Cavite Day celebrations\n\nKEY EVENTS:\n- Founding Day (January 22)\n- Graduation Ceremony (April-May)\n- Sportsfest\n- Foundation Week (March)\n\nFor specific dates and updates:\nVisit: https://cvsu.edu.ph\nFollow campus social media pages\nContact your campus registrar",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "How do I register for classes?",
+        "Intent":  "enrollment_procedure",
+        "Confidence":  0.9972426891326904,
+        "Response":  "CvSU ENROLLMENT PROCEDURE:\n\nAFTER ADMISSION (NOA received):\n\n1. PRE-ENROLLMENT:\n   - Receive Notice of Admission (NOA)\n   - Attend department interview/orientation\n   - Complete medical examination\n   - Get medical clearance\n\n2. ACADEMIC ADVISING:\n   - Meet with department adviser\n   - Discuss curriculum and course load\n   - Get program of study\n\n3. REGISTRATION:\n   - Online enrollment via student portal\n   - Select courses for the semester\n   - Print Certificate of Registration (COR)\n\n4. PAYMENT (Misc fees only - tuition is FREE under RA 10931):\n   - Pay miscellaneous fees at Cashier\u0027s Office\n   - Get official receipt\n\n5. FINALIZATION:\n   - Submit COR to Registrar\n   - Get student ID\n   - Receive class schedule\n\nFOR CONTINUING STUDENTS:\n- Online registration through student portal\n- Selection of subjects with adviser approval\n- Payment of fees if applicable\n- COR submission\n\nCONTACT: Office of the University Registrar\nEmail: registrarmain@cvsu.edu.ph\nPhone: (046) 415-0010",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What is CvSU\u0027s vision and mission?",
+        "Intent":  "vision_mission",
+        "Confidence":  0.7118859185045957,
+        "Response":  "CvSU\u0027s guiding principles:\n\nMOTTO: \"Truth, Excellence, Service\"\n\nVISION: The premier University in historic Cavite globally recognized for excellence in character development, academics, research, innovation and sustainable community engagement.\n\nMISSION: CvSU shall provide excellent, equitable, and relevant educational opportunities in the arts, sciences, and technology through quality instruction and responsive research and development activities.\n\nCORE VALUES: Represented in the Laya at Diwa Monument (inaugurated 2006), symbolizing freedom, knowledge, and peace.\n\nThe university embodies \"Iskolar para sa Bayan\" - serving the Filipino people through accessible, quality higher education.",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "Where can I get my transcript?",
+        "Intent":  "campus_location",
+        "Confidence":  0.9179428815841675,
+        "Response":  "CvSU MAIN CAMPUS LOCATION:\n\nDon Severino delas Alas Campus\nIndang, Cavite, Philippines\n(60 km / 37 miles southwest of Manila)\n\nCAMPUS SIZE: 72 hectares\n\nCvSU has 13 campuses across Cavite Province:\n1. Indang (Main Campus) - established 1906\n2. Naic - 1961\n3. Rosario/CCAT - 1969\n4. Cavite City - 2001\n5. Carmona - 2002\n6. Imus - 2003\n7. Trece Martires - 2005\n8. Silang - 2006\n9. Tanza - 2007\n10. Bacoor - 2008\n11. General Trias - 2012\n12. Maragondon - 2015\n13. DasmariÃ±as Learning Center - 2023\n\nFor directions, visit: https://cvsu.edu.ph",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What graduate programs are available?",
+        "Intent":  "nlu_fallback",
+        "Confidence":  0.0,
+        "Response":  "I\u0027m not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "How do I apply for financial aid?",
+        "Intent":  "scholarship",
+        "Confidence":  0.6601668852039896,
+        "Response":  "CvSU SCHOLARSHIPS \u0026 FINANCIAL AID:\n\n1. RA 10931 - FREE TUITION LAW:\n   - All qualified undergrad Filipino students\n   - Covers tuition + miscellaneous fees\n   - Most accessible benefit\n\n2. TERTIARY EDUCATION SUBSIDY (TES):\n   - Cash subsidy for living expenses\n   - For students from low-income families\n   - Apply through UniFAST website\n\n3. GOVERNMENT SCHOLARSHIPS:\n   - DOST Science Scholarships (for STEM)\n   - CHED Scholarships (merit-based)\n   - PVAO (military dependents)\n   - Sangguniang Kabataan scholarships\n   - LGU/Provincial scholarships\n\n4. CvSU MERIT SCHOLARSHIPS:\n   - University Scholar (top GPA students)\n   - College Scholar (GPA-based)\n   - Academic excellence awards\n\n5. PRIVATE SCHOLARSHIPS:\n   - Corporate-sponsored\n   - Foundation grants\n   - Alumni-sponsored programs\n\n6. STUDENT ASSISTANTSHIP:\n   - Graduate student teaching/research assistantships\n   - Stipend + tuition discount\n\nHOW TO APPLY:\n- Visit Office of Student Affairs and Services (OSAS)\n- Check requirements per scholarship\n- Submit application before deadlines\n- Maintain required GPA\n\nCONTACT:\nOSAS - Scholarship Office\nEmail: osas@cvsu.edu.ph\nPhone: (046) 415-0010",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "What student services are available?",
+        "Intent":  "campus_facilities",
+        "Confidence":  0.9875370860099792,
+        "Response":  "CvSU FACILITIES \u0026 RESOURCES:\n\nACADEMIC:\n- Ladislao Diwa Memorial Library and Museum (92,000+ books)\n- Computer laboratories\n- Science laboratories\n- Specialized research centers\n\nRESEARCH CENTERS:\n- Affiliated Renewable Energy Center (AREC) - biogas technology\n- National Coffee Research, Development and Extension Center\n- Sugar Palm Research, Information, and Trade Center (SPRINT)\n- Bee Research, Innovation, Trade, and Extension Center (BRITE)\n- Simulation, Modelling and Measurement Laboratory (SiMM Lab)\n\nSTUDENT SERVICES:\n- Health Service Unit\n- Guidance and Counseling\n- Student dormitories (selected campuses)\n- Cafeteria/canteen\n- Chapel\n- Sports facilities (CvSU Green Hornets)\n- 84+ student organizations\n\nSPECIAL DESIGNATIONS:\n- Center of Excellence in Agriculture (2016)\n- Top-performing state university (AACCUP)\n- Hosts Southern Tagalog Agriculture Research Consortium",
+        "ModelUsed":  ""
+    },
+    {
+        "Query":  "How do I find the registrar office?",
+        "Intent":  "tuition_fees",
+        "Confidence":  0.9606742858886719,
+        "Response":  "CvSU TUITION FEES \u0026 FREE EDUCATION:\n\nGREAT NEWS! CvSU is covered by RA 10931 (Universal Access to Quality Tertiary Education Act of 2017).\n\nFREE TUITION COVERAGE (For qualified Filipino undergraduate students):\n- ZERO tuition fee\n- ZERO miscellaneous fees including:\n  * Library fees\n  * Computer fees\n  * Laboratory fees\n  * School ID (1st copy)\n  * Athletic fees\n  * Admission fees\n  * Development fees\n  * Guidance fees\n  * Student handbook (1st copy)\n  * Entrance fees\n  * Registration fees\n  * Medical and dental fees\n  * Cultural fees\n\nREQUIREMENTS FOR FREE TUITION:\n- Filipino citizenship\n- Pass admission requirements\n- Maintain academic standing\n- Enrolled in undergraduate degree program\n- Not yet earned a bachelor\u0027s degree\n\nWHAT YOU MAY STILL PAY:\n- Replacement of school ID/handbook\n- Some optional fees (uniform, books)\n- Allowances (transportation, meals)\n- Graduate school tuition (NOT covered by RA 10931)\n\nGRADUATE PROGRAMS (Masters/PhD):\n- Tuition still applies\n- Approximately PHP 6,500-10,000 per unit\n- Scholarships and assistantships available\n\nSCHOLARSHIPS \u0026 FINANCIAL AID:\n- Tertiary Education Subsidy (TES) for stipends\n- Government scholarships\n- Private scholarships\n- Academic merit scholarships\n\nFor specific fee details, contact:\nCashier\u0027s Office: (046) 415-0010\nEmail: cashier@cvsu.edu.ph",
+        "ModelUsed":  ""
+    }
+]

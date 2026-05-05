@@ -1,0 +1,404 @@
+{
+  "timestamp": "2026-05-05 12:34:25",
+  "overall_accuracy": 43.63636363636363,
+  "total_requests": 220,
+  "elapsed_seconds": 4.558018445968628,
+  "per_intent": {
+    "greeting": {
+      "accuracy": 80.0,
+      "avg_confidence": 0.5497040695362244,
+      "sample_responses": [
+        {
+          "query": "Hey",
+          "actual_intent": "greeting",
+          "confidence": 0.6055163669693611,
+          "correct": true
+        },
+        {
+          "query": "Hi",
+          "actual_intent": "greeting",
+          "confidence": 0.8347403418045531,
+          "correct": true
+        }
+      ]
+    },
+    "goodbye": {
+      "accuracy": 0.0,
+      "avg_confidence": 0.0,
+      "sample_responses": [
+        {
+          "query": "Done",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Bye",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "thanks": {
+      "accuracy": 30.0,
+      "avg_confidence": 0.18919760099932387,
+      "sample_responses": [
+        {
+          "query": "Thank you",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Thank you",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "admissions_requirements": {
+      "accuracy": 80.0,
+      "avg_confidence": 0.5750802998459815,
+      "sample_responses": [
+        {
+          "query": "How do I apply?",
+          "actual_intent": "admissions_requirements",
+          "confidence": 0.5561903231510962,
+          "correct": true
+        },
+        {
+          "query": "CvSU admission process",
+          "actual_intent": "admissions_requirements",
+          "confidence": 0.7312167325143948,
+          "correct": true
+        }
+      ]
+    },
+    "admissions_exam": {
+      "accuracy": 80.0,
+      "avg_confidence": 0.5824735635927824,
+      "sample_responses": [
+        {
+          "query": "When is entrance exam?",
+          "actual_intent": "admissions_exam",
+          "confidence": 0.8423958299597794,
+          "correct": true
+        },
+        {
+          "query": "How to register for exam?",
+          "actual_intent": "admissions_exam",
+          "confidence": 0.6600246085935799,
+          "correct": true
+        }
+      ]
+    },
+    "enrollment_procedure": {
+      "accuracy": 20.0,
+      "avg_confidence": 0.1337888748883295,
+      "sample_responses": [
+        {
+          "query": "Steps to enroll",
+          "actual_intent": "enrollment_procedure",
+          "confidence": 0.633209806973791,
+          "correct": true
+        },
+        {
+          "query": "Enrollment process",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "enrollment_schedule": {
+      "accuracy": 10.0,
+      "avg_confidence": 0.058075197104988305,
+      "sample_responses": [
+        {
+          "query": "When to enroll?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "When is enrollment?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "courses_offered": {
+      "accuracy": 80.0,
+      "avg_confidence": 0.5971982563781534,
+      "sample_responses": [
+        {
+          "query": "What can I study?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "What courses available?",
+          "actual_intent": "courses_offered",
+          "confidence": 0.8356231210339394,
+          "correct": true
+        }
+      ]
+    },
+    "it_cs_courses": {
+      "accuracy": 20.0,
+      "avg_confidence": 0.3080566071552642,
+      "sample_responses": [
+        {
+          "query": "Computer engineering?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Technology programs",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "graduate_programs": {
+      "accuracy": 20.0,
+      "avg_confidence": 0.13928524321679384,
+      "sample_responses": [
+        {
+          "query": "Masters degree?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Masters at CvSU?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "tuition_fees": {
+      "accuracy": 100.0,
+      "avg_confidence": 0.7260542950621546,
+      "sample_responses": [
+        {
+          "query": "School fees?",
+          "actual_intent": "tuition_fees",
+          "confidence": 0.7398085065040578,
+          "correct": true
+        },
+        {
+          "query": "Fee breakdown?",
+          "actual_intent": "tuition_fees",
+          "confidence": 0.7386476725858451,
+          "correct": true
+        }
+      ]
+    },
+    "scholarship": {
+      "accuracy": 90.0,
+      "avg_confidence": 0.6084179276024061,
+      "sample_responses": [
+        {
+          "query": "Are there scholarships?",
+          "actual_intent": "scholarship",
+          "confidence": 0.6660891100515574,
+          "correct": true
+        },
+        {
+          "query": "Scholarship programs?",
+          "actual_intent": "scholarship",
+          "confidence": 0.6635521352275533,
+          "correct": true
+        }
+      ]
+    },
+    "campus_location": {
+      "accuracy": 0.0,
+      "avg_confidence": 0.0,
+      "sample_responses": [
+        {
+          "query": "Where is CvSU?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Campus directions?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "campus_facilities": {
+      "accuracy": 20.0,
+      "avg_confidence": 0.12171569901339208,
+      "sample_responses": [
+        {
+          "query": "Dormitory?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Dormitory?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "library": {
+      "accuracy": 60.0,
+      "avg_confidence": 0.3874776200607491,
+      "sample_responses": [
+        {
+          "query": "Online library?",
+          "actual_intent": "library",
+          "confidence": 0.6295200121979999,
+          "correct": true
+        },
+        {
+          "query": "How to access library?",
+          "actual_intent": "library",
+          "confidence": 0.6206190334348983,
+          "correct": true
+        }
+      ]
+    },
+    "events": {
+      "accuracy": 20.0,
+      "avg_confidence": 0.1241486034970118,
+      "sample_responses": [
+        {
+          "query": "Upcoming events?",
+          "actual_intent": "events",
+          "confidence": 0.6710018461001205,
+          "correct": true
+        },
+        {
+          "query": "What's happening?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "academic_calendar": {
+      "accuracy": 10.0,
+      "avg_confidence": 0.059112563858800246,
+      "sample_responses": [
+        {
+          "query": "Academic calendar?",
+          "actual_intent": "academic_calendar",
+          "confidence": 0.5911256385880025,
+          "correct": true
+        },
+        {
+          "query": "School year dates?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "contact_info": {
+      "accuracy": 100.0,
+      "avg_confidence": 0.6807458238180581,
+      "sample_responses": [
+        {
+          "query": "How to reach?",
+          "actual_intent": "contact_info",
+          "confidence": 0.5996410287916092,
+          "correct": true
+        },
+        {
+          "query": "How to contact CvSU?",
+          "actual_intent": "contact_info",
+          "confidence": 0.7799748473537049,
+          "correct": true
+        }
+      ]
+    },
+    "registrar": {
+      "accuracy": 10.0,
+      "avg_confidence": 0.061731792901654994,
+      "sample_responses": [
+        {
+          "query": "Graduation requirements?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Transcript?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "about_CvSU": {
+      "accuracy": 30.0,
+      "avg_confidence": 0.16915388899899925,
+      "sample_responses": [
+        {
+          "query": "Tell me about CvSU",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "What is CvSU?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "vision_mission": {
+      "accuracy": 20.0,
+      "avg_confidence": 0.11549930490019338,
+      "sample_responses": [
+        {
+          "query": "Core values?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        },
+        {
+          "query": "Core values?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    },
+    "student_organizations": {
+      "accuracy": 80.0,
+      "avg_confidence": 0.5342725194393438,
+      "sample_responses": [
+        {
+          "query": "Student organizations?",
+          "actual_intent": "student_organizations",
+          "confidence": 0.7319802642758185,
+          "correct": true
+        },
+        {
+          "query": "Extracurricular?",
+          "actual_intent": "nlu_fallback",
+          "confidence": 0.0,
+          "correct": false
+        }
+      ]
+    }
+  }
+}
