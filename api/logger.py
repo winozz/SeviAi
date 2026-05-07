@@ -94,9 +94,16 @@ class ChatLogger:
                     helpful INTEGER CHECK(helpful IN (0, 1)),
                     comment TEXT,
                     suggested_intent TEXT,
+                    user_message TEXT,
                     FOREIGN KEY (message_id) REFERENCES chat_messages(id)
                 )
             """)
+
+            # Migrate existing DBs that predate the user_message column
+            cursor.execute("PRAGMA table_info(feedback)")
+            fb_cols = [r[1] for r in cursor.fetchall()]
+            if "user_message" not in fb_cols:
+                cursor.execute("ALTER TABLE feedback ADD COLUMN user_message TEXT")
 
             conn.commit()
             conn.close()
@@ -431,7 +438,8 @@ class ChatLogger:
         rating: Optional[int],
         helpful: Optional[bool],
         comment: Optional[str],
-        suggested_intent: Optional[str]
+        suggested_intent: Optional[str],
+        user_message: Optional[str] = None,
     ) -> Optional[int]:
         """Log user feedback for a bot response. Returns the new feedback row ID."""
         try:
@@ -444,10 +452,10 @@ class ChatLogger:
 
                 cursor.execute("""
                     INSERT INTO feedback
-                    (timestamp, message_id, user_id, session_id, intent, rating, helpful, comment, suggested_intent)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (timestamp, message_id, user_id, session_id, intent, rating, helpful, comment, suggested_intent, user_message)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (timestamp, message_id, user_id, session_id, intent,
-                       rating, helpful_int, comment, suggested_intent))
+                       rating, helpful_int, comment, suggested_intent, user_message))
 
                 feedback_id = cursor.lastrowid
                 conn.commit()
@@ -597,7 +605,7 @@ class ChatLogger:
                     f.helpful,
                     f.comment,
                     f.suggested_intent,
-                    m.user_message,
+                    COALESCE(m.user_message, f.user_message) AS user_message,
                     m.bot_response,
                     m.confidence AS message_confidence,
                     m.model_used

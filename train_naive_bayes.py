@@ -61,7 +61,7 @@ def train_naive_bayes():
 
     print(f"[OK] Loaded {len(intents)} intent categories")
     print(f"     Total training patterns: {len(training_patterns)}")
-    print(f"\n     Intent breakdown:")
+    print("\n     Intent breakdown:")
     for intent in intents:
         count = len(intent["patterns"])
         print(f"       {intent['tag']:<30} {count:>3} patterns")
@@ -74,9 +74,14 @@ def train_naive_bayes():
     # Train model
     print("\n[3/4] Training Naive Bayes classifier...")
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(max_features=500, lowercase=True, stop_words='english')),
-        ('classifier', MultinomialNB(alpha=0.1))
-    ])
+        ('tfidf', TfidfVectorizer(
+            max_features=5000,
+            lowercase=True,
+            stop_words='english',
+            ngram_range=(1, 2),
+        )),
+        ('classifier', MultinomialNB(alpha=0.1)),
+    ], memory=None)
 
     pipeline.fit(preprocessed_patterns, training_labels)
     print("[OK] Model trained")
@@ -99,18 +104,18 @@ def train_naive_bayes():
         json.dump(dict(responses_map), f, ensure_ascii=False, indent=2)
 
     model_size = os.path.getsize("models/CvSU_classifier.pkl") / 1024
-    print(f"[OK] Model saved to models/")
+    print("[OK] Model saved to models/")
     print(f"     CvSU_classifier.pkl ({model_size:.1f} KB)")
-    print(f"     responses_map.json")
+    print("     responses_map.json")
 
     print("\n" + "=" * 70)
     print("  TRAINING COMPLETE")
     print("=" * 70)
-    print(f"\nFinal Model Performance:")
+    print("\nFinal Model Performance:")
     print(f"  Accuracy: {accuracy:.2%}")
     print(f"  Patterns: {len(training_patterns)}")
     print(f"  Intents:  {len(intents)}")
-    print(f"\nThe API will automatically use this trained model.")
+    print("\nThe API will automatically use this trained model.")
     print("=" * 70 + "\n")
 
 if __name__ == "__main__":

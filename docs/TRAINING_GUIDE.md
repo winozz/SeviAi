@@ -11,7 +11,7 @@ Train and improve your chatbot by sending diverse API requests and automatically
 python -m uvicorn app:app --host 0.0.0.0 --port 8000
 
 # Terminal 2: Run tests
-python test_intents.py 8000 5
+python training/test_intents.py 8000 5
 ```
 
 **What it does**: Tests each of 22 intents with 5 random queries (110 total requests) and reports:
@@ -31,9 +31,9 @@ Weak Intents (16):
    - goodbye: 0% accuracy
    
 Recommendations:
-   1. Run: python expand_intents.py
+   1. Run: python training/expand_intents.py
    2. Add more diverse patterns
-   3. Retrain: python train_naive_bayes.py
+   3. Retrain: python training/train_naive_bayes.py
 ```
 
 ---
@@ -46,7 +46,7 @@ Recommendations:
 
 **Usage**:
 ```bash
-python test_intents.py [PORT] [QUERIES_PER_INTENT]
+python training/test_intents.py [PORT] [QUERIES_PER_INTENT]
 ```
 
 **Parameters**:
@@ -56,13 +56,13 @@ python test_intents.py [PORT] [QUERIES_PER_INTENT]
 **Examples**:
 ```bash
 # Quick test (5 queries per intent = 110 total)
-python test_intents.py 8000 5
+python training/test_intents.py 8000 5
 
 # Comprehensive test (10 queries per intent = 220 total)
-python test_intents.py 8000 10
+python training/test_intents.py 8000 10
 
 # Very thorough (20 queries = 440 total)
-python test_intents.py 8000 20
+python training/test_intents.py 8000 20
 ```
 
 **Output**:
@@ -80,14 +80,14 @@ python test_intents.py 8000 20
 
 **Usage**:
 ```bash
-python expand_intents.py
+python training/expand_intents.py
 ```
 
 **What it does**:
-1. Loads `data/CvSU_intents.json`
+1. Loads `data/cavsu_intents.json`
 2. Analyzes each intent
 3. Generates 5-15 new pattern variations
-4. Saves to `data/CvSU_intents_expanded.json`
+4. Saves to `data/cavsu_intents_expanded.json`
 
 **Example additions**:
 ```
@@ -103,10 +103,10 @@ tuition_fees
 **Next steps after running**:
 ```bash
 # Replace original with expanded version
-mv data/CvSU_intents_expanded.json data/CvSU_intents.json
+mv data/cavsu_intents_expanded.json data/cavsu_intents.json
 
 # Retrain model with new patterns
-python train_naive_bayes.py
+python training/train_naive_bayes.py
 
 # Restart API to load new model
 python -m uvicorn app:app --port 8000
@@ -125,7 +125,7 @@ pip install aiohttp
 
 **Usage**:
 ```bash
-python api_stress_test.py [TOTAL_REQUESTS] [PORT]
+python training/api_stress_test.py [TOTAL_REQUESTS] [PORT]
 ```
 
 **Parameters**:
@@ -135,13 +135,13 @@ python api_stress_test.py [TOTAL_REQUESTS] [PORT]
 **Examples**:
 ```bash
 # Medium test (500 requests)
-python api_stress_test.py 500 8000
+python training/api_stress_test.py 500 8000
 
 # Heavy test (1000 requests)
-python api_stress_test.py 1000 8000
+python training/api_stress_test.py 1000 8000
 
 # Intensive training (5000 requests)
-python api_stress_test.py 5000 8000
+python training/api_stress_test.py 5000 8000
 ```
 
 **Features**:
@@ -171,7 +171,7 @@ python api_stress_test.py 5000 8000
 
 **Usage**:
 ```bash
-python automated_training.py [PORT]
+python training/automated_training.py [PORT]
 ```
 
 **What it does** (6 steps):
@@ -185,7 +185,7 @@ python automated_training.py [PORT]
 **Example**:
 ```bash
 # Start full automated training pipeline
-python automated_training.py 8000
+python training/automated_training.py 8000
 ```
 
 **Output**:
@@ -241,24 +241,24 @@ python -m uvicorn app:app --host 0.0.0.0 --port 8000
 
 ```bash
 # Step 1: Quick baseline test
-python test_intents.py 8000 5
+python training/test_intents.py 8000 5
 
 # Step 2: Analyze results
 cat intent_test_results.json
 
 # Step 3: Expand weak patterns
-python expand_intents.py
-mv data/CvSU_intents_expanded.json data/CvSU_intents.json
+python training/expand_intents.py
+mv data/cavsu_intents_expanded.json data/cavsu_intents.json
 
 # Step 4: Retrain model
-python train_naive_bayes.py
+python training/train_naive_bayes.py
 
 # Step 5: Restart API (kill in Terminal 1, restart)
 # Or in a new terminal:
 python -m uvicorn app:app --host 0.0.0.0 --port 8000
 
 # Step 6: Verify improvements
-python test_intents.py 8000 10
+python training/test_intents.py 8000 10
 ```
 
 ---
@@ -306,12 +306,12 @@ about_CvSU                             0% [FAIL]        0.0%
 ## Improvement Checklist
 
 ```
-□ Run baseline test: python test_intents.py 8000 5
+□ Run baseline test: python training/test_intents.py 8000 5
 □ Review weak intents in results
-□ Expand patterns: python expand_intents.py
-□ Retrain model: python train_naive_bayes.py
+□ Expand patterns: python training/expand_intents.py
+□ Retrain model: python training/train_naive_bayes.py
 □ Restart API with new model
-□ Run verification test: python test_intents.py 8000 10
+□ Run verification test: python training/test_intents.py 8000 10
 □ Compare before/after accuracy
 □ Commit improved model: git add models/ && git commit
 □ Deploy: docker-compose up --build -d
@@ -324,7 +324,7 @@ about_CvSU                             0% [FAIL]        0.0%
 ### Scenario 1: Quick Model Check
 
 ```bash
-python test_intents.py 8000 5
+python training/test_intents.py 8000 5
 ```
 
 **Time**: ~5 seconds  
@@ -336,7 +336,7 @@ python test_intents.py 8000 5
 ### Scenario 2: Identify Weak Areas
 
 ```bash
-python test_intents.py 8000 10
+python training/test_intents.py 8000 10
 ```
 
 **Time**: ~10 seconds  
@@ -352,7 +352,7 @@ python test_intents.py 8000 10
 python -m uvicorn app:app --port 8000
 
 # Terminal 2: Full workflow
-python automated_training.py 8000
+python training/automated_training.py 8000
 ```
 
 **Time**: ~2 minutes  
@@ -368,7 +368,7 @@ python automated_training.py 8000
 pip install aiohttp
 
 # Send 1000 requests in batches
-python api_stress_test.py 1000 8000
+python training/api_stress_test.py 1000 8000
 ```
 
 **Time**: ~3-5 minutes  
@@ -432,10 +432,10 @@ tail -f /tmp/test_api.log
 ls -lh models/CvSU_classifier.pkl
 
 # Verify intents.json was updated
-wc -l data/CvSU_intents.json
+wc -l data/cavsu_intents.json
 
 # If old, retrain:
-python train_naive_bayes.py
+python training/train_naive_bayes.py
 ```
 
 ### "Port already in use"
@@ -469,7 +469,7 @@ python -m uvicorn app:app --port 8001
 
 1. **Try it now**:
    ```bash
-   python test_intents.py 8000 5
+   python training/test_intents.py 8000 5
    ```
 
 2. **Review results**: Check `intent_test_results.json`
@@ -478,18 +478,18 @@ python -m uvicorn app:app --port 8001
 
 4. **Expand patterns**:
    ```bash
-   python expand_intents.py
-   mv data/CvSU_intents_expanded.json data/CvSU_intents.json
+   python training/expand_intents.py
+   mv data/cavsu_intents_expanded.json data/cavsu_intents.json
    ```
 
 5. **Retrain**:
    ```bash
-   python train_naive_bayes.py
+   python training/train_naive_bayes.py
    ```
 
 6. **Verify improvement**:
    ```bash
-   python test_intents.py 8000 10
+   python training/test_intents.py 8000 10
    ```
 
 ---
@@ -502,10 +502,10 @@ python -m uvicorn app:app --port 8001
 #!/bin/bash
 for i in {1..5}; do
   echo "Iteration $i"
-  python test_intents.py 8000 10
-  python expand_intents.py
-  mv data/CvSU_intents_expanded.json data/CvSU_intents.json
-  python train_naive_bayes.py
+  python training/test_intents.py 8000 10
+  python training/expand_intents.py
+  mv data/cavsu_intents_expanded.json data/cavsu_intents.json
+  python training/train_naive_bayes.py
   sleep 5
 done
 ```
