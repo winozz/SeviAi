@@ -17,7 +17,7 @@
   "tuition_fees": 0.85,
   "scholarship": 0.85,
   "academic_calendar": 0.85,
-  "events": 0.85,
+  "events": 0.8148,
   "contact_info": 0.85,
   "registrar": 0.85,
   "student_organizations": 0.85,
@@ -35,5 +35,7 @@
   "directory": 0.85,
   "retention_policy": 0.85,
   "retention_policy_grades": 0.85,
-  "retention_policy_appeal": 0.85
+  "retention_policy_appeal": 0.6372,
+  "shifting": 0.35,
+  "student_id": 0.5709
 }
