@@ -150,7 +150,7 @@ class ChatLogger:
                 # Log to file
                 self._log_to_file(
                     timestamp, user_id, session_id, user_message,
-                    bot_response, intent, confidence
+                    bot_response, intent, confidence, model_used
                 )
 
                 # Update intent statistics
@@ -187,7 +187,7 @@ class ChatLogger:
             print(f"[ERROR] Database log error: {e}")
             return None
 
-    def _log_to_file(self, timestamp, user_id, session_id, user_msg, bot_resp, intent, conf):
+    def _log_to_file(self, timestamp, user_id, session_id, user_msg, bot_resp, intent, conf, model_used=None):
         """Log to JSON file"""
         try:
             # Create daily log file
@@ -201,7 +201,8 @@ class ChatLogger:
                 "user_message": user_msg,
                 "bot_response": bot_resp,
                 "intent": intent,
-                "confidence": conf
+                "confidence": conf,
+                "model_used": model_used
             }
 
             with open(log_file, "a", encoding="utf-8") as f:

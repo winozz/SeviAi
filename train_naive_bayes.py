@@ -22,11 +22,11 @@ from intents_db import load_intents
 import nltk
 from nltk.stem import WordNetLemmatizer
 
-# Ensure NLTK resources are available
-for resource in ['punkt_tab', 'wordnet']:
+# Ensure NLTK resources are available (idempotent — no-op if already present)
+for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
     try:
-        nltk.data.find(f'tokenizers/{resource}')
-    except LookupError:
+        nltk.data.find(f'{kind}/{resource}')
+    except (LookupError, OSError):
         nltk.download(resource, quiet=True)
 
 lemmatizer = WordNetLemmatizer()

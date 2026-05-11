@@ -26,11 +26,11 @@ from api.logger import ChatLogger
 # Import hybrid chatbot
 from hybrid_chatbot import HybridChatbot
 
-# Download NLTK resources
-for resource in ['punkt_tab', 'wordnet']:
+# Download NLTK resources (idempotent — no-op if already present)
+for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
     try:
-        nltk.data.find(f'tokenizers/{resource}')
-    except LookupError:
+        nltk.data.find(f'{kind}/{resource}')
+    except (LookupError, OSError):
         nltk.download(resource, quiet=True)
 
 lemmatizer = WordNetLemmatizer()
@@ -142,6 +142,16 @@ class ChatRequest(BaseModel):
     user_id: Optional[str] = None
     session_id: Optional[str] = None
 
+# Campus map (48 official locations) — see api/campus_places.py
+from api.campus_places import (
+    MapData,
+    PlaceMeta,
+    resolve_map_data as _resolve_map_data,
+    build_place_meta as _build_place_meta,
+    campus_map_payload as _campus_map_payload,
+    has_place as _has_place,
+)
+
 class ChatResponse(BaseModel):
     response: str
     intent: str
@@ -149,6 +159,7 @@ class ChatResponse(BaseModel):
     user_id: Optional[str] = None
     session_id: Optional[str] = None
     message_id: Optional[int] = None
+    map_data: Optional[MapData] = None
 
 
 class FeedbackRequest(BaseModel):
@@ -457,8 +468,31 @@ async def chat_endpoint(request: ChatRequest):
         confidence=confidence,
         user_id=request.user_id,
         session_id=request.session_id,
-        message_id=message_id
+        message_id=message_id,
+        map_data=_resolve_map_data(request.message, intent),
     )
+
+# ============================================================================
+# Campus Map Endpoints
+# ============================================================================
+
+@app.get("/map", tags=["Map"])
+async def get_campus_map():
+    """Return canonical campus places, gate position, and the SVG viewBox.
+
+    The web UI renders the static schematic from this payload — no Google
+    Maps dependency. Edit `api/campus_places.py` to update labels, geometry,
+    walk times, or directions without changing the frontend.
+    """
+    return _campus_map_payload()
+
+@app.get("/map/{place_id}", response_model=PlaceMeta, tags=["Map"],
+         responses={404: {"description": "Place not found"}})
+async def get_place(place_id: str):
+    """Return canonical metadata for a single campus place."""
+    if not _has_place(place_id):
+        raise HTTPException(status_code=404, detail=f"Place '{place_id}' not found")
+    return _build_place_meta(place_id)
 
 @app.get("/intents", tags=["Intents"])
 async def get_intents():

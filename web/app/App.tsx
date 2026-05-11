@@ -18,7 +18,7 @@ import { CategoryCard } from "./components/CategoryCard";
 import { TypingIndicator } from "./components/TypingIndicator";
 import { AdminDashboard } from "./components/AdminDashboard";
 import { motion, AnimatePresence } from "motion/react";
-import { api } from "./lib/api";
+import { api, type MapData } from "./lib/api";
 import { getUserId, getSessionId } from "./lib/ids";
 import {
   getQuickActionTopics,
@@ -36,6 +36,7 @@ interface Message {
   intent?: string;
   confidence?: number;
   messageId?: number;
+  mapData?: MapData | null;
 }
 
 const ICON_MAP: Record<string, any> = {
@@ -130,6 +131,7 @@ export default function App() {
         intent: res.intent,
         confidence: res.confidence,
         messageId: res.message_id ?? undefined,
+        mapData: res.map_data ?? null,
       });
 
       const suggestedTopics = getSuggestedTopics({
@@ -252,10 +254,11 @@ export default function App() {
               intent={msg.intent}
               confidence={msg.confidence}
               messageId={msg.messageId}
+              mapData={msg.mapData}
               onFeedback={
-                msg.messageId !== undefined
-                  ? (helpful) => handleFeedback(msg.messageId!, msg.intent, helpful)
-                  : undefined
+                msg.messageId === undefined
+                  ? undefined
+                  : (helpful) => handleFeedback(msg.messageId as number, msg.intent, helpful)
               }
             />
           ))}

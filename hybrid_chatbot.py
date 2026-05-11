@@ -26,17 +26,18 @@ try:
     from tensorflow.keras.preprocessing.text import Tokenizer
     from tensorflow.keras.preprocessing.sequence import pad_sequences
     from sklearn.preprocessing import LabelEncoder
+    from sklearn.model_selection import train_test_split
     TF_AVAILABLE = True
 except ImportError:
     TF_AVAILABLE = False
     print("[WARNING] TensorFlow not available - Neural Network features disabled")
     print("          Run with Python 3.11 or 3.12 for TensorFlow support")
 
-# Download NLTK resources
-for resource in ['punkt_tab', 'wordnet']:
+# Download NLTK resources (idempotent — no-op if already present)
+for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
     try:
-        nltk.data.find(f'tokenizers/{resource}')
-    except LookupError:
+        nltk.data.find(f'{kind}/{resource}')
+    except (LookupError, OSError):
         nltk.download(resource, quiet=True)
 
 lemmatizer = WordNetLemmatizer()
@@ -73,7 +74,7 @@ class NaiveBayesModel:
 class NeuralNetworkModel:
     """Accurate Neural Network model (requires TensorFlow)"""
 
-    CONFIDENCE_THRESHOLD = 0.5
+    DEFAULT_CONFIDENCE_THRESHOLD = 0.50
     VOCAB_SIZE = 1000
     MAX_LEN = 20
     EMBEDDING_DIM = 64
@@ -89,9 +90,22 @@ class NeuralNetworkModel:
             self.label_encoder = pickle.load(f)
         self.name = "Neural Network"
 
+        # Load per-intent adaptive thresholds if available, otherwise empty dict
+        thresholds_path = os.path.join(model_dir, "nn_thresholds.json")
+        if os.path.exists(thresholds_path):
+            with open(thresholds_path, "r", encoding="utf-8") as f:
+                self.adaptive_thresholds: Dict[str, float] = json.load(f)
+            print(f"[OK] Loaded adaptive thresholds for {len(self.adaptive_thresholds)} intents")
+        else:
+            self.adaptive_thresholds = {}
+
+    def get_threshold(self, intent: str) -> float:
+        """Return the calibrated confidence threshold for a given intent."""
+        return self.adaptive_thresholds.get(intent, self.DEFAULT_CONFIDENCE_THRESHOLD)
+
     def predict(self, text: str) -> Tuple[str, float]:
         """
-        Predict intent and confidence
+        Predict intent and confidence.
 
         Returns:
             (intent, confidence)
@@ -122,7 +136,7 @@ class HybridChatbot:
     Strategy: Use fast NB first, fallback to accurate NN if uncertain
     """
 
-    NB_CONFIDENCE_THRESHOLD = 0.55  # If NB confidence > 55%, use it
+    NB_CONFIDENCE_THRESHOLD = 0.55  # If NB confidence > 55%, use it; otherwise defer to NN
     NN_CONFIDENCE_THRESHOLD = 0.50  # NN minimum confidence threshold
     FALLBACK_INTENT = "nlu_fallback"
 
@@ -257,8 +271,9 @@ class HybridChatbot:
         if self.nn_model:
             nn_intent, nn_confidence = self.nn_model.predict(user_input)
 
-            # Check if NN confidence is acceptable
-            if nn_confidence >= self.NN_CONFIDENCE_THRESHOLD:
+            # Use per-intent adaptive threshold when available
+            nn_threshold = self.nn_model.get_threshold(nn_intent)
+            if nn_confidence >= nn_threshold:
                 response = random.choice(self.responses_map.get(
                     nn_intent, self.responses_map[self.FALLBACK_INTENT]
                 ))
@@ -294,7 +309,8 @@ class HybridChatbot:
                 "bot_response": response,
                 "intent": intent,
                 "confidence": confidence,
-                "model_used": model_used
+                "model_used": model_used,
+                "session_id": session_id,
             })
 
         return intent, response, confidence, model_used
@@ -430,8 +446,15 @@ class NeuralNetworkTrainer:
     VOCAB_SIZE = 1000
     MAX_LEN = 20
     EMBEDDING_DIM = 64
-    EPOCHS = 100
+    MAX_EPOCHS = 10000
     BATCH_SIZE = 8
+
+    # Early stopping: stop if val_loss doesn't improve for this many epochs
+    EARLY_STOPPING_PATIENCE = 150
+    # LR reduction: halve LR if val_loss stagnates for this many epochs
+    LR_REDUCE_PATIENCE = 50
+    LR_REDUCE_FACTOR = 0.5
+    LR_MIN = 1e-6
 
     @staticmethod
     def train(
@@ -439,10 +462,13 @@ class NeuralNetworkTrainer:
         output_dir: str = "models",
         intents_db_path: str = "data/cavsu_intents.db"
     ):
-        """Train neural network on intents"""
+        """Train neural network on intents with early stopping up to 10,000 epochs."""
         print("\n" + "=" * 60)
-        print("  NEURAL NETWORK TRAINING")
+        print("  NEURAL NETWORK TRAINING  (max 10 000 epochs)")
         print("=" * 60)
+
+        gpus = tf.config.list_physical_devices("GPU")
+        print(f"\n[GPU] {'Using: ' + gpus[0].name if gpus else 'No GPU detected — training on CPU'}")
 
         # Load intents from DB if available, otherwise use JSON
         print("\n[1/5] Loading intents...")
@@ -507,15 +533,60 @@ class NeuralNetworkTrainer:
 
         print(model.summary())
 
-        # Train
-        print("\n[5/5] Training model...")
-        history = model.fit(
-            padded, y,
-            epochs=NeuralNetworkTrainer.EPOCHS,
-            batch_size=NeuralNetworkTrainer.BATCH_SIZE,
-            validation_split=0.2,
-            verbose=1
+        # Callbacks: early stopping + LR reduction on plateau
+        callbacks = [
+            tf.keras.callbacks.EarlyStopping(
+                monitor="val_loss",
+                patience=NeuralNetworkTrainer.EARLY_STOPPING_PATIENCE,
+                restore_best_weights=True,
+                verbose=1,
+            ),
+            tf.keras.callbacks.ReduceLROnPlateau(
+                monitor="val_loss",
+                factor=NeuralNetworkTrainer.LR_REDUCE_FACTOR,
+                patience=NeuralNetworkTrainer.LR_REDUCE_PATIENCE,
+                min_lr=NeuralNetworkTrainer.LR_MIN,
+                verbose=1,
+            ),
+        ]
+
+        # Stratified split — ensures every intent has val samples
+        x_train, x_val, y_train, y_val = train_test_split(
+            padded, y, test_size=0.2, random_state=42, stratify=encoded_labels
         )
+
+        # Train
+        print(f"\n[5/5] Training model (max {NeuralNetworkTrainer.MAX_EPOCHS} epochs, "
+              f"early stop patience={NeuralNetworkTrainer.EARLY_STOPPING_PATIENCE})...")
+        history = model.fit(
+            x_train, y_train,
+            epochs=NeuralNetworkTrainer.MAX_EPOCHS,
+            batch_size=NeuralNetworkTrainer.BATCH_SIZE,
+            validation_data=(x_val, y_val),
+            callbacks=callbacks,
+            verbose=1,
+        )
+
+        actual_epochs = len(history.history["accuracy"])
+        print(f"\n[OK] Stopped at epoch {actual_epochs}/{NeuralNetworkTrainer.MAX_EPOCHS}")
+
+        # Compute per-class confidence on full training set (used for adaptive thresholds)
+        print("\n[+] Computing per-class confidence calibration...")
+        all_proba = model.predict(padded, verbose=0)
+        per_class_max = {}
+        for i, label_idx in enumerate(encoded_labels):
+            label = label_encoder.classes_[label_idx]
+            conf = float(all_proba[i, label_idx])
+            if label not in per_class_max:
+                per_class_max[label] = []
+            per_class_max[label].append(conf)
+
+        # Threshold per intent = 80th percentile of its own softmax scores,
+        # clamped between 0.35 and 0.85 so no intent is too easy or too hard.
+        adaptive_thresholds = {}
+        for label, scores in per_class_max.items():
+            p80 = float(np.percentile(scores, 80))
+            adaptive_thresholds[label] = round(min(max(p80, 0.35), 0.85), 4)
 
         # Save
         print("\n" + "=" * 60)
@@ -526,17 +597,22 @@ class NeuralNetworkTrainer:
             pickle.dump(tokenizer, f)
         with open(os.path.join(output_dir, "nn_label_encoder.pkl"), "wb") as f:
             pickle.dump(label_encoder, f)
+        with open(os.path.join(output_dir, "nn_thresholds.json"), "w", encoding="utf-8") as f:
+            json.dump(adaptive_thresholds, f, indent=2, ensure_ascii=False)
 
         # Stats
-        final_acc = history.history["accuracy"][-1]
-        final_val_acc = history.history["val_accuracy"][-1]
+        best_epoch = int(np.argmin(history.history["val_loss"]))
+        best_val_acc = history.history["val_accuracy"][best_epoch]
+        final_acc = history.history["accuracy"][best_epoch]
 
         print(f"[OK] Model saved to {output_dir}")
-        print(f"  Training Accuracy: {final_acc:.2%}")
-        print(f"  Validation Accuracy: {final_val_acc:.2%}")
+        print(f"  Training Accuracy:   {final_acc:.2%}  (epoch {best_epoch + 1})")
+        print(f"  Validation Accuracy: {best_val_acc:.2%}  (best epoch)")
+        print(f"  Epochs run:          {actual_epochs}")
+        print(f"  Adaptive thresholds: {len(adaptive_thresholds)} intents calibrated")
         print("=" * 60 + "\n")
 
-        return model, tokenizer, label_encoder
+        return model, tokenizer, label_encoder, adaptive_thresholds
 
     @staticmethod
     def _preprocess(text: str) -> str:

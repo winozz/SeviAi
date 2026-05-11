@@ -7,6 +7,30 @@ export interface ChatRequest {
   session_id?: string;
 }
 
+export interface MapData {
+  place_id: string;
+  label: string;
+}
+
+export interface MapPlace {
+  place_id: string;
+  label: string;
+  short: string;
+  full: string;
+  walk_minutes_from_gate: number;
+  direction_from_gate: string;
+  x: number | null;
+  y: number | null;
+  w: number | null;
+  h: number | null;
+}
+
+export interface CampusMapPayload {
+  gate: { x: number; y: number };
+  viewbox: { width: number; height: number };
+  places: MapPlace[];
+}
+
 export interface ChatResponse {
   response: string;
   intent: string;
@@ -14,6 +38,7 @@ export interface ChatResponse {
   user_id?: string | null;
   session_id?: string | null;
   message_id?: number | null;
+  map_data?: MapData | null;
 }
 
 export interface FeedbackRequest {
@@ -87,4 +112,9 @@ export const api = {
   getIntentLogs: () => request<any>("/logs/intents"),
 
   getModelInfo: () => request<any>("/model/info"),
+
+  getCampusMap: () => request<CampusMapPayload>("/map"),
+
+  getPlace: (placeId: string) =>
+    request<MapPlace>(`/map/${encodeURIComponent(placeId)}`),
 };

@@ -37,10 +37,9 @@ def main():
     print("-" * 60)
     if not TF_AVAILABLE:
         print("[WARNING] TensorFlow not available - skipping Neural Network training")
-        model = tokenizer = label_encoder = None
     else:
         try:
-            model, tokenizer, label_encoder = NeuralNetworkTrainer.train(
+            NeuralNetworkTrainer.train(
                 intents_json_path,
                 model_dir,
                 intents_db_path=intents_db_path
@@ -74,7 +73,7 @@ def main():
         print("-" * 65)
 
         for query in test_queries:
-            intent, response, confidence, model = hybrid.chat(query, user_id="test_user")
+            _, _, confidence, model = hybrid.chat(query, user_id="test_user")
             print(
                 f"{query[:40]:<40} {model:<15} {confidence:>9.1%}"
             )
@@ -86,17 +85,19 @@ def main():
 
         stats = hybrid.get_usage_stats()
         print(f"\nTotal Predictions: {stats['total_predictions']}")
-        print(f"  Naive Bayes:     {stats['naive_bayes_used']:3d} ({stats['naive_bayes_percentage']:5.1f}%)")
-        print(f"  Neural Network:  {stats['neural_network_used']:3d} ({stats['neural_network_percentage']:5.1f}%)")
-        print(f"  Fallback:        {stats['fallback_used']:3d} ({stats['fallback_percentage']:5.1f}%)")
+        print(f"  Naive Bayes:       {stats['naive_bayes_used']:3d} ({stats['naive_bayes_percentage']:5.1f}%)")
+        print(f"  Neural Network:    {stats['neural_network_used']:3d} ({stats['neural_network_percentage']:5.1f}%)")
+        print(f"  LLM Fallback:      {stats.get('llm_fallback_used', 0):3d} ({stats.get('llm_fallback_percentage', 0.0):5.1f}%)")
+        print(f"  Static Fallback:   {stats['fallback_used']:3d} ({stats['fallback_percentage']:5.1f}%)")
 
         print("\n" + "=" * 60)
         print("[OK] Hybrid Chatbot Training Complete!")
         print("=" * 60)
-        print("\nTo use the hybrid chatbot:")
-        print("  1. Update app.py to use HybridChatbot")
-        print("  2. Start API: python -m uvicorn app:app --host 0.0.0.0 --port 8000")
-        print("  3. Chatbot will automatically use both models hierarchically")
+        print("\nNext steps:")
+        print("  1. Start API: python -m uvicorn api.app:app --host 0.0.0.0 --port 8000")
+        print("  2. Start Ollama (required for LLM fallback on complex queries):")
+        print("       ollama serve && ollama pull llama3")
+        print("  3. Hybrid chain: Naive Bayes -> Neural Network -> Local LLM -> Static")
         print()
 
     except Exception as e:

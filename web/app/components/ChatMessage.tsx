@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Bot, User, ThumbsUp, ThumbsDown, Check } from "lucide-react";
+import { CampusMap, type MapData } from "./CampusMap";
 
 interface ChatMessageProps {
   message: string;
@@ -9,6 +10,7 @@ interface ChatMessageProps {
   intent?: string;
   confidence?: number;
   messageId?: number;
+  mapData?: MapData | null;
   onFeedback?: (helpful: boolean) => void;
 }
 
@@ -19,6 +21,7 @@ export function ChatMessage({
   intent,
   confidence,
   messageId,
+  mapData,
   onFeedback,
 }: ChatMessageProps) {
   const [feedback, setFeedback] = useState<boolean | null>(null);
@@ -61,6 +64,12 @@ export function ChatMessage({
         >
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message}</p>
         </div>
+
+        {isBot && mapData && (
+          <div className="w-full mt-2 max-w-md">
+            <CampusMap data={mapData} />
+          </div>
+        )}
 
         {isBot && showDebugMeta && (intent || confidenceLabel) && (
           <div className="flex flex-wrap gap-1.5 mt-1.5 px-2">

@@ -5,7 +5,7 @@ FastAPI-based endpoint for integration with web applications
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Dict, Any
 import asyncio
 import json
@@ -26,11 +26,11 @@ from .logger import ChatLogger
 # Import hybrid chatbot
 from .hybrid_chatbot import HybridChatbot
 
-# Download NLTK resources
-for resource in ['punkt_tab', 'wordnet']:
+# Download NLTK resources (idempotent — no-op if already present)
+for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
     try:
-        nltk.data.find(f'tokenizers/{resource}')
-    except LookupError:
+        nltk.data.find(f'{kind}/{resource}')
+    except (LookupError, OSError):
         nltk.download(resource, quiet=True)
 
 lemmatizer = WordNetLemmatizer()
@@ -139,15 +139,28 @@ class ChatRequest(BaseModel):
     user_id: Optional[str] = None
     session_id: Optional[str] = None
 
+# Campus map (48 official locations) — see api/campus_places.py
+from api.campus_places import (
+    MapData,
+    PlaceMeta,
+    resolve_map_data as _resolve_map_data,
+    build_place_meta as _build_place_meta,
+    campus_map_payload as _campus_map_payload,
+    has_place as _has_place,
+)
+
 class ChatResponse(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
     response: str
     intent: str
     confidence: float
+    model_used: Optional[str] = None
     user_id: Optional[str] = None
     session_id: Optional[str] = None
     entities: Optional[dict] = None
     is_follow_up: Optional[bool] = None
     message_id: Optional[int] = None
+    map_data: Optional[MapData] = None
 
 class IntentInfo(BaseModel):
     tag: str
@@ -156,6 +169,7 @@ class IntentInfo(BaseModel):
     sample_patterns: List[str]
 
 class ModelInfo(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
     model_name: str
     accuracy: float
     total_intents: int
@@ -250,7 +264,7 @@ async def chat_endpoint(request: ChatRequest):
     start_time = time.time()
 
     # Get response from hybrid chatbot with NLU enhancements
-    intent, response, confidence, _, nlu_data = chatbot.chat(
+    intent, response, confidence, model_used, nlu_data = chatbot.chat(
         request.message,
         user_id=request.user_id,
         session_id=request.session_id
@@ -265,6 +279,7 @@ async def chat_endpoint(request: ChatRequest):
         bot_response=response,
         intent=intent,
         confidence=confidence,
+        model_used=model_used,
         session_id=request.session_id,
         response_time_ms=response_time_ms
     )
@@ -273,11 +288,13 @@ async def chat_endpoint(request: ChatRequest):
         response=response,
         intent=intent,
         confidence=confidence,
+        model_used=model_used,
         user_id=request.user_id,
         session_id=request.session_id,
         entities=nlu_data.get("entities", {}),
         is_follow_up=nlu_data.get("is_follow_up", False),
-        message_id=message_id
+        message_id=message_id,
+        map_data=_resolve_map_data(request.message, intent),
     )
 
 @app.get("/intents", tags=["Intents"])
@@ -288,6 +305,27 @@ async def get_intents():
         "total_intents": len(intents),
         "intents": intents
     }
+
+# ============================================================================
+# Campus Map Endpoints
+# ============================================================================
+
+@app.get("/map", tags=["Map"])
+async def get_campus_map():
+    """Return the full set of campus places, the gate position, and the SVG viewBox.
+
+    Edit `api/campus_places.py` server-side to change labels, geometry, walk
+    times, or directions without recompiling the frontend.
+    """
+    return _campus_map_payload()
+
+@app.get("/map/{place_id}", response_model=PlaceMeta, tags=["Map"],
+         responses={404: {"description": "Place not found"}})
+async def get_place(place_id: str):
+    """Return canonical metadata for a single campus place."""
+    if not _has_place(place_id):
+        raise HTTPException(status_code=404, detail=f"Place '{place_id}' not found")
+    return _build_place_meta(place_id)
 
 @app.get("/intents/{intent_tag}", tags=["Intents"],
          responses={404: {"description": "Intent not found"}})
@@ -371,10 +409,11 @@ async def batch_chat(requests: List[ChatRequest]):
             response=response,
             intent=intent,
             confidence=confidence,
+            model_used=model_used,
             user_id=request.user_id,
             session_id=request.session_id,
             entities=nlu_data.get("entities", {}),
-            is_follow_up=nlu_data.get("is_follow_up", False)
+            is_follow_up=nlu_data.get("is_follow_up", False),
         ))
     return {"count": len(results), "results": results}
 
