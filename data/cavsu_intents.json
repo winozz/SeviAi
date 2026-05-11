@@ -3823,6 +3823,19 @@
         "To get or replace your CvSU student ID, visit the Student Affairs Office with your registration form and ID photos. Lost ID replacements require a notarized affidavit of loss.",
         "CvSU student IDs are processed at the Office of Student Affairs (OSA). Bring your registration form, 1x1 photos, and any required fees. For lost IDs, submit an affidavit of loss."
       ]
+    },
+    {
+      "tag": "enrollment",
+      "patterns": [
+        "Kailan ang enrollment sa CvSU?",
+        "Paano mag-enroll sa CvSU online?",
+        "When does second semester start at CvSU?",
+        "What is the academic calendar of CvSU?",
+        "What is the re-enrollment procedure at CvSU?"
+      ],
+      "responses": [
+        "For questions about enrollment, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly."
+      ]
     }
   ]
 }

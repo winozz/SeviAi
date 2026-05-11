@@ -358,6 +358,21 @@ async def get_instructions():
         "version": "1.0.0"
     }
 
+@app.post("/model/reload", tags=["Model"])
+async def reload_model():
+    """Hot-reload all model artifacts from disk without restarting the server."""
+    global chatbot
+    chatbot = HybridChatbot(
+        model_dir=MODEL_DIR,
+        responses_path=os.path.join(MODEL_DIR, "responses_map.json")
+    )
+    return {
+        "status": "reloaded",
+        "total_intents": chatbot.total_intents,
+        "total_patterns": chatbot.total_patterns,
+        "accuracy": chatbot.accuracy,
+    }
+
 @app.get("/conversation/{user_id}", tags=["Conversation"])
 async def get_conversation_history(user_id: str):
     """Get conversation history for a user."""
