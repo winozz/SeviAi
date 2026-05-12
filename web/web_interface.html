@@ -323,6 +323,44 @@
             min-width: 0;
         }
 
+        .feedback-reasons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+            width: 100%;
+        }
+
+        .feedback-reason-chip {
+            padding: 3px 10px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            background: var(--surface);
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s, color 0.18s;
+        }
+
+        .feedback-reason-chip:hover {
+            background: rgba(0, 104, 180, 0.06);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .feedback-reason-chip.active {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .feedback-reason-chip.active-positive {
+            background: rgba(16, 185, 129, 0.12);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
         .campus-map {
             margin-top: 12px;
             border: 1px solid #bcd9b3;
@@ -831,11 +869,29 @@
             return wrap;
         }
 
+        // Reason taxonomy — keep in sync with backend FEEDBACK_REASONS in api/app.py.
+        const POSITIVE_REASONS = [
+            { code: "accurate", label: "Got my answer" },
+            { code: "clear",    label: "Easy to understand" },
+            { code: "helpful",  label: "Pointed me the right way" },
+            { code: "other",    label: "Something else" },
+        ];
+        const NEGATIVE_REASONS = [
+            { code: "wrong_info",  label: "Contains incorrect info" },
+            { code: "wrong_topic", label: "Answered something else" },
+            { code: "incomplete",  label: "Missing key details" },
+            { code: "outdated",    label: "Looks out of date" },
+            { code: "confusing",   label: "Hard to understand" },
+            { code: "other",       label: "Something else" },
+        ];
+
         function buildFeedbackRow(messageId, intent) {
             const wrap = document.createElement("div");
+            let selectedReason = null;
 
             function renderButtons() {
                 wrap.innerHTML = "";
+                selectedReason = null;
                 const row = document.createElement("div");
                 row.className = "feedback-row";
 
@@ -845,49 +901,99 @@
                 const thumbUp = document.createElement("button");
                 thumbUp.className = "feedback-btn";
                 thumbUp.textContent = "👍 Yes";
-                thumbUp.onclick = () => doSubmit(true, 5, "");
+                thumbUp.onclick = () => renderReasonBox(true);
 
                 const thumbDown = document.createElement("button");
                 thumbDown.className = "feedback-btn";
                 thumbDown.textContent = "👎 No";
-                thumbDown.onclick = () => renderCommentBox();
+                thumbDown.onclick = () => renderReasonBox(false);
 
                 row.append(label, thumbUp, thumbDown);
                 wrap.appendChild(row);
             }
 
-            function renderCommentBox() {
+            function renderReasonBox(helpful) {
                 wrap.innerHTML = "";
+                selectedReason = null;
                 const row = document.createElement("div");
                 row.className = "feedback-row";
 
+                const promptLabel = document.createElement("span");
+                promptLabel.textContent = helpful
+                    ? "What worked well? (optional)"
+                    : "What went wrong? (optional)";
+                row.appendChild(promptLabel);
+
+                // Chip picker
+                const reasons = helpful ? POSITIVE_REASONS : NEGATIVE_REASONS;
+                const chipRow = document.createElement("div");
+                chipRow.className = "feedback-reasons";
+                const chipEls = {};
+                reasons.forEach((opt) => {
+                    const chip = document.createElement("button");
+                    chip.type = "button";
+                    chip.className = "feedback-reason-chip";
+                    chip.textContent = opt.label;
+                    chip.onclick = () => {
+                        if (selectedReason === opt.code) {
+                            selectedReason = null;
+                        } else {
+                            selectedReason = opt.code;
+                        }
+                        // Repaint active states
+                        Object.entries(chipEls).forEach(([code, el]) => {
+                            el.classList.remove("active", "active-positive");
+                            if (code === selectedReason) {
+                                el.classList.add(helpful ? "active-positive" : "active");
+                            }
+                        });
+                    };
+                    chipEls[opt.code] = chip;
+                    chipRow.appendChild(chip);
+                });
+                row.appendChild(chipRow);
+
+                // Free-text + buttons
                 const commentRow = document.createElement("div");
                 commentRow.className = "feedback-comment-row";
 
                 const input = document.createElement("input");
                 input.type = "text";
-                input.placeholder = "What went wrong? (optional)";
+                input.maxLength = 500;
+                input.placeholder = helpful
+                    ? "Anything else? (optional)"
+                    : "Tell us more so we can fix it (optional)";
                 input.addEventListener("keypress", (e) => {
-                    if (e.key === "Enter") doSubmit(false, 1, input.value.trim());
+                    if (e.key === "Enter") {
+                        doSubmit(helpful, helpful ? 5 : 2, input.value.trim(), selectedReason);
+                    }
                 });
 
                 const submitBtn = document.createElement("button");
-                submitBtn.className = "feedback-btn active-down";
-                submitBtn.textContent = "Submit";
-                submitBtn.onclick = () => doSubmit(false, 1, input.value.trim());
+                submitBtn.className = helpful
+                    ? "feedback-btn active-up"
+                    : "feedback-btn active-down";
+                submitBtn.textContent = "Send";
+                submitBtn.onclick = () =>
+                    doSubmit(helpful, helpful ? 5 : 2, input.value.trim(), selectedReason);
+
+                const skipBtn = document.createElement("button");
+                skipBtn.className = "feedback-btn";
+                skipBtn.textContent = "Skip";
+                skipBtn.onclick = () => doSubmit(helpful, helpful ? 5 : 2, "", null);
 
                 const cancelBtn = document.createElement("button");
                 cancelBtn.className = "feedback-btn";
                 cancelBtn.textContent = "Cancel";
                 cancelBtn.onclick = renderButtons;
 
-                commentRow.append(input, submitBtn, cancelBtn);
+                commentRow.append(input, submitBtn, skipBtn, cancelBtn);
                 row.appendChild(commentRow);
                 wrap.appendChild(row);
                 input.focus();
             }
 
-            async function doSubmit(helpful, rating, comment) {
+            async function doSubmit(helpful, rating, comment, reason) {
                 try {
                     await fetch(`${API_URL}/feedback`, {
                         method: "POST",
@@ -898,6 +1004,7 @@
                             intent: intent || null,
                             helpful: helpful,
                             rating: rating,
+                            reason: reason || null,
                             comment: comment || null
                         })
                     });

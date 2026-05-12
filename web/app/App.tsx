@@ -12,7 +12,7 @@ import {
   AlertCircle,
   Phone,
 } from "lucide-react";
-import { ChatMessage } from "./components/ChatMessage";
+import { ChatMessage, type FeedbackSubmission } from "./components/ChatMessage";
 import { QuickActionButton } from "./components/QuickActionButton";
 import { CategoryCard } from "./components/CategoryCard";
 import { TypingIndicator } from "./components/TypingIndicator";
@@ -182,15 +182,21 @@ export default function App() {
     sendToApi(topic.prompt);
   };
 
-  const handleFeedback = async (messageId: number, intent: string | undefined, helpful: boolean) => {
+  const handleFeedback = async (
+    messageId: number,
+    intent: string | undefined,
+    submission: FeedbackSubmission,
+  ) => {
     try {
       await api.submitFeedback({
         message_id: messageId,
         user_id: userId,
         session_id: sessionId,
         intent,
-        helpful,
-        rating: helpful ? 5 : 2,
+        helpful: submission.helpful,
+        rating: submission.helpful ? 5 : 2,
+        reason: submission.reason,
+        comment: submission.comment,
       });
     } catch {
       // silent
@@ -258,7 +264,8 @@ export default function App() {
               onFeedback={
                 msg.messageId === undefined
                   ? undefined
-                  : (helpful) => handleFeedback(msg.messageId as number, msg.intent, helpful)
+                  : (submission) =>
+                      handleFeedback(msg.messageId as number, msg.intent, submission)
               }
             />
           ))}

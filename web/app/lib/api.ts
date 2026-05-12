@@ -48,8 +48,21 @@ export interface FeedbackRequest {
   intent?: string;
   rating?: number;
   helpful?: boolean;
+  /** Structured reason code from /feedback/reasons (e.g. "wrong_info", "accurate"). */
+  reason?: string;
+  /** Optional free-text reason supplied by the user. */
   comment?: string;
   suggested_intent?: string;
+}
+
+export interface FeedbackReasonOption {
+  code: string;
+  label: string;
+}
+
+export interface FeedbackReasonsResponse {
+  positive: FeedbackReasonOption[];
+  negative: FeedbackReasonOption[];
 }
 
 export interface IntentSummary {
@@ -93,6 +106,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify(body),
     }),
+
+  getFeedbackReasons: () => request<FeedbackReasonsResponse>("/feedback/reasons"),
 
   getFeedbackStats: () => request<any>("/feedback/stats"),
 
