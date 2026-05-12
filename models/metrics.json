@@ -1,0 +1,200 @@
+{
+  "trained_at": "2026-05-09T02:07:01+00:00",
+  "model_type": "TF-IDF (word+char) -> ComplementNB -> sigmoid calibration",
+  "model_size_kb": 14787.8,
+  "train_accuracy": 0.8834,
+  "holdout_accuracy": 0.7554,
+  "macro_f1": 0.7693,
+  "weighted_f1": 0.7611,
+  "n_train": 2385,
+  "n_holdout": 597,
+  "n_classes": 30,
+  "excluded_classes": [
+    "nlu_fallback"
+  ],
+  "skipped_thin_classes": [],
+  "per_intent": {
+    "about_cvsu": {
+      "precision": 0.9125,
+      "recall": 0.8588,
+      "f1": 0.8848,
+      "support": 85
+    },
+    "academic_calendar": {
+      "precision": 0.8,
+      "recall": 0.6667,
+      "f1": 0.7273,
+      "support": 12
+    },
+    "academic_policies": {
+      "precision": 0.697,
+      "recall": 0.7931,
+      "f1": 0.7419,
+      "support": 29
+    },
+    "admissions_exam": {
+      "precision": 0.75,
+      "recall": 0.8182,
+      "f1": 0.7826,
+      "support": 11
+    },
+    "admissions_requirements": {
+      "precision": 0.8182,
+      "recall": 0.72,
+      "f1": 0.766,
+      "support": 25
+    },
+    "campus_facilities": {
+      "precision": 0.8889,
+      "recall": 0.5333,
+      "f1": 0.6667,
+      "support": 15
+    },
+    "campus_location": {
+      "precision": 0.625,
+      "recall": 0.4167,
+      "f1": 0.5,
+      "support": 12
+    },
+    "campus_specific": {
+      "precision": 0.4265,
+      "recall": 0.5686,
+      "f1": 0.4874,
+      "support": 51
+    },
+    "chitchat": {
+      "precision": 0.4937,
+      "recall": 0.7222,
+      "f1": 0.5865,
+      "support": 54
+    },
+    "contact_info": {
+      "precision": 0.8571,
+      "recall": 0.8571,
+      "f1": 0.8571,
+      "support": 14
+    },
+    "courses_offered": {
+      "precision": 0.7692,
+      "recall": 0.5556,
+      "f1": 0.6452,
+      "support": 18
+    },
+    "dormitory": {
+      "precision": 0.7778,
+      "recall": 0.6364,
+      "f1": 0.7,
+      "support": 11
+    },
+    "enrollment_procedure": {
+      "precision": 0.9333,
+      "recall": 0.875,
+      "f1": 0.9032,
+      "support": 16
+    },
+    "enrollment_schedule": {
+      "precision": 0.7273,
+      "recall": 0.7273,
+      "f1": 0.7273,
+      "support": 11
+    },
+    "events": {
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1": 0.75,
+      "support": 8
+    },
+    "goodbye": {
+      "precision": 0.7857,
+      "recall": 0.7333,
+      "f1": 0.7586,
+      "support": 15
+    },
+    "graduate_programs": {
+      "precision": 1.0,
+      "recall": 0.913,
+      "f1": 0.9545,
+      "support": 23
+    },
+    "greeting": {
+      "precision": 0.8947,
+      "recall": 0.8947,
+      "f1": 0.8947,
+      "support": 19
+    },
+    "international_students": {
+      "precision": 0.8889,
+      "recall": 0.7273,
+      "f1": 0.8,
+      "support": 11
+    },
+    "it_cs_courses": {
+      "precision": 0.7143,
+      "recall": 0.5556,
+      "f1": 0.625,
+      "support": 9
+    },
+    "library": {
+      "precision": 0.9091,
+      "recall": 0.9091,
+      "f1": 0.9091,
+      "support": 11
+    },
+    "nstp": {
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1": 0.9474,
+      "support": 10
+    },
+    "online_programs": {
+      "precision": 0.8333,
+      "recall": 0.4545,
+      "f1": 0.5882,
+      "support": 11
+    },
+    "registrar": {
+      "precision": 0.8235,
+      "recall": 1.0,
+      "f1": 0.9032,
+      "support": 14
+    },
+    "scholarship": {
+      "precision": 0.875,
+      "recall": 0.913,
+      "f1": 0.8936,
+      "support": 23
+    },
+    "student_organizations": {
+      "precision": 0.7273,
+      "recall": 0.8,
+      "f1": 0.7619,
+      "support": 10
+    },
+    "student_portal": {
+      "precision": 0.8333,
+      "recall": 0.625,
+      "f1": 0.7143,
+      "support": 8
+    },
+    "thanks": {
+      "precision": 0.8182,
+      "recall": 0.6667,
+      "f1": 0.7347,
+      "support": 27
+    },
+    "tuition_fees": {
+      "precision": 1.0,
+      "recall": 0.9444,
+      "f1": 0.9714,
+      "support": 18
+    },
+    "vision_mission": {
+      "precision": 1.0,
+      "recall": 0.8125,
+      "f1": 0.8966,
+      "support": 16
+    }
+  },
+  "preprocessing": "api.preprocessing.preprocess_text",
+  "random_state": 42
+}
