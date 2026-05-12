@@ -1,0 +1,316 @@
+{
+  "info": {
+    "name": "SeviAi - CvSU Virtual Assistant",
+    "_postman_id": "8a3b2f4d-1c5e-4a91-9f12-cvsuseviai0001",
+    "description": "REST API collection for the SeviAi (CvSU Virtual Assistant) FastAPI service.\n\n**Base URL** is controlled by the `baseUrl` collection variable (default `http://127.0.0.1:8009`).\n\nEndpoints are grouped by tag: Health, Chat, Intents, Model, Conversation, Logging, Feedback.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8009", "type": "string" },
+    { "key": "userId", "value": "test_user", "type": "string" },
+    { "key": "sessionId", "value": "session_001", "type": "string" },
+    { "key": "intentTag", "value": "admissions_requirements", "type": "string" },
+    { "key": "messageId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET / (root banner)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/", "host": ["{{baseUrl}}"], "path": [""] }
+          }
+        },
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "POST /chat",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What are the admission requirements?\",\n  \"user_id\": \"{{userId}}\",\n  \"session_id\": \"{{sessionId}}\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/chat", "host": ["{{baseUrl}}"], "path": ["chat"] }
+          }
+        },
+        {
+          "name": "POST /batch",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"message\": \"Hello\", \"user_id\": \"{{userId}}\", \"session_id\": \"{{sessionId}}\" },\n  { \"message\": \"How much is tuition?\", \"user_id\": \"{{userId}}\", \"session_id\": \"{{sessionId}}\" },\n  { \"message\": \"What scholarships are available?\", \"user_id\": \"{{userId}}\", \"session_id\": \"{{sessionId}}\" }\n]"
+            },
+            "url": { "raw": "{{baseUrl}}/batch", "host": ["{{baseUrl}}"], "path": ["batch"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Intents",
+      "item": [
+        {
+          "name": "GET /intents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/intents", "host": ["{{baseUrl}}"], "path": ["intents"] }
+          }
+        },
+        {
+          "name": "GET /intents/{intent_tag}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/intents/{{intentTag}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["intents", "{{intentTag}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Model",
+      "item": [
+        {
+          "name": "GET /model/info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/model/info", "host": ["{{baseUrl}}"], "path": ["model", "info"] }
+          }
+        },
+        {
+          "name": "GET /model/instructions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/model/instructions", "host": ["{{baseUrl}}"], "path": ["model", "instructions"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversation",
+      "item": [
+        {
+          "name": "GET /conversation/{user_id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/conversation/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversation", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /conversation/{user_id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/conversation/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["conversation", "{{userId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Logging",
+      "item": [
+        {
+          "name": "GET /logs/user/{user_id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logs/user/{{userId}}?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["logs", "user", "{{userId}}"],
+              "query": [{ "key": "limit", "value": "50" }]
+            }
+          }
+        },
+        {
+          "name": "GET /logs/session/{session_id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logs/session/{{sessionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["logs", "session", "{{sessionId}}"]
+            }
+          }
+        },
+        {
+          "name": "GET /logs/intents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/logs/intents", "host": ["{{baseUrl}}"], "path": ["logs", "intents"] }
+          }
+        },
+        {
+          "name": "GET /logs/sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logs/sessions?user_id={{userId}}&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["logs", "sessions"],
+              "query": [
+                { "key": "user_id", "value": "{{userId}}" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /logs/today",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/logs/today", "host": ["{{baseUrl}}"], "path": ["logs", "today"] }
+          }
+        },
+        {
+          "name": "GET /logs/search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logs/search?query=tuition&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["logs", "search"],
+              "query": [
+                { "key": "query", "value": "tuition" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /logs/export/{user_id}",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logs/export/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["logs", "export", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "DELETE /logs/cleanup",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logs/cleanup?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["logs", "cleanup"],
+              "query": [{ "key": "days", "value": "30" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "POST /feedback",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message_id\": {{messageId}},\n  \"user_id\": \"{{userId}}\",\n  \"session_id\": \"{{sessionId}}\",\n  \"intent\": \"nlu_fallback\",\n  \"rating\": 2,\n  \"helpful\": false,\n  \"comment\": \"Did not understand my question.\",\n  \"suggested_intent\": \"admissions_requirements\",\n  \"user_message\": \"how do I apply as a freshman\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/feedback", "host": ["{{baseUrl}}"], "path": ["feedback"] }
+          }
+        },
+        {
+          "name": "GET /feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedback?limit=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback"],
+              "query": [
+                { "key": "limit", "value": "100" },
+                { "key": "helpful", "value": "false", "disabled": true },
+                { "key": "user_id", "value": "{{userId}}", "disabled": true },
+                { "key": "session_id", "value": "{{sessionId}}", "disabled": true },
+                { "key": "intent", "value": "{{intentTag}}", "disabled": true },
+                { "key": "min_rating", "value": "1", "disabled": true },
+                { "key": "max_rating", "value": "5", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /feedback/stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/feedback/stats", "host": ["{{baseUrl}}"], "path": ["feedback", "stats"] }
+          }
+        },
+        {
+          "name": "GET /feedback/fallbacks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedback/fallbacks?limit=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedback", "fallbacks"],
+              "query": [{ "key": "limit", "value": "100" }]
+            }
+          }
+        },
+        {
+          "name": "POST /feedback/analyze",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"limit\": 5000,\n  \"apply\": false,\n  \"helpful\": false\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/feedback/analyze", "host": ["{{baseUrl}}"], "path": ["feedback", "analyze"] }
+          }
+        }
+      ]
+    }
+  ]
+}

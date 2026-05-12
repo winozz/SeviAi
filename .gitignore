@@ -1,6 +1,10 @@
 # Local editor / agent settings
 .claude/settings.local.json
 
+# Secrets
+.env
+*.env.local
+
 # Python bytecode
 __pycache__/
 *.py[cod]
@@ -12,3 +16,4 @@ cloudflared-*.log
 # OS/editor noise
 .DS_Store
 Thumbs.db
+.venv/
