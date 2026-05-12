@@ -399,8 +399,8 @@ def patch_intents_json(fallbacks, low_conf):
             "CvSU LOA applications must be filed at the Registrar within the first few weeks of the semester. Required documents include the LOA form, parent/guardian consent, and dean's endorsement.",
         ],
         "campus_branches": [
-            "CvSU has 14 campuses across Cavite: Main (Indang), Bacoor, Imus, Silang, Naic, Tanza, Rosario, Trece Martires, Carmona, General Trias, Cavite City, Alfonso, Amadeo, and Maragondon. Each campus offers selected programs.",
-            "Cavite State University operates multiple campuses throughout Cavite province. The main campus is in Indang. Visit cvsu.edu.ph for the complete list of campuses and their offered programs.",
+            "Cavite State University operates a Main Campus in Indang and additional campuses across the province of Cavite. The complete list of campuses, the year each was established/integrated, and the programs offered at each campus are best verified through the official CvSU website (cvsu.edu.ph) — this avoids quoting an out-of-date roster.",
+            "Cavite State University operates multiple campuses throughout Cavite province. The main campus is in Indang. Visit cvsu.edu.ph for the complete, current list of campuses and their offered programs.",
         ],
         "dormitory": [
             "CvSU main campus has a dormitory for qualifying students. Fees and availability vary per semester. Contact the Student Affairs Office or visit the university website for current rates and application procedures.",

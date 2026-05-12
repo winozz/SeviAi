@@ -25,6 +25,9 @@ from nltk.stem import WordNetLemmatizer
 from .logger import ChatLogger
 # Import hybrid chatbot
 from .hybrid_chatbot import HybridChatbot
+# Seasonal topic recommender + intent-onboarding sanitation checks
+from .topic_recommender import recommend as _recommend_topics
+from .intent_curation import sanitize_candidate_intent as _sanitize_candidate_intent
 
 # Download NLTK resources (idempotent — no-op if already present)
 for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
@@ -155,6 +158,10 @@ from api.campus_places import (
     save_waypoint_overrides as _save_waypoint_overrides,
     list_waypoint_overrides as _list_waypoint_overrides,
     reset_waypoint_overrides as _reset_waypoint_overrides,
+    delete_waypoint_override as _delete_waypoint_override,
+    list_custom_markers as _list_custom_markers,
+    upsert_custom_marker as _upsert_custom_marker,
+    delete_custom_marker as _delete_custom_marker,
 )
 
 
@@ -163,9 +170,32 @@ class CoordEntry(BaseModel):
     y: int
 
 
+class WaypointEntry(BaseModel):
+    """Waypoint coordinate plus optional adjacency list. The frontend uses
+    `neighbors` for custom waypoints so they can be wired into the routing
+    graph without code changes."""
+    x: int
+    y: int
+    neighbors: Optional[List[str]] = None
+
+
 class CoordsUpdate(BaseModel):
     """Body for PUT /map/coords. Keys are place_ids."""
     coords: Dict[str, CoordEntry]
+
+
+class WaypointsUpdate(BaseModel):
+    """Body for PUT /map/waypoints. Values may carry an adjacency list."""
+    coords: Dict[str, WaypointEntry]
+
+
+class CustomMarkerCreate(BaseModel):
+    id: str
+    name: str
+    x: int
+    y: int
+    abbr: Optional[str] = None
+    num: Optional[int] = None
 
 
 def _is_header_line(line: str) -> bool:
@@ -243,9 +273,31 @@ class FeedbackRequest(BaseModel):
     intent: Optional[str] = None
     rating: Optional[int] = None          # 1–5
     helpful: Optional[bool] = None
-    comment: Optional[str] = None
+    reason: Optional[str] = None          # structured taxonomy code (see /feedback/reasons)
+    comment: Optional[str] = None         # free-text qualitative detail
     suggested_intent: Optional[str] = None
     user_message: Optional[str] = None    # store query directly when message_id unavailable
+
+
+# Structured reason taxonomy. Keep in sync with the frontends
+# (web/app/components/ChatMessage.tsx and web/web_interface.html).
+FEEDBACK_REASONS = {
+    "positive": [
+        {"code": "accurate",   "label": "Got my answer"},
+        {"code": "clear",      "label": "Easy to understand"},
+        {"code": "helpful",    "label": "Pointed me the right way"},
+        {"code": "other",      "label": "Something else"},
+    ],
+    "negative": [
+        {"code": "wrong_info",   "label": "Contains incorrect information"},
+        {"code": "wrong_topic",  "label": "Answered something else"},
+        {"code": "incomplete",   "label": "Missing key details"},
+        {"code": "outdated",     "label": "Looks out of date"},
+        {"code": "confusing",    "label": "Hard to understand"},
+        {"code": "other",        "label": "Something else"},
+    ],
+}
+_VALID_REASON_CODES = {r["code"] for group in FEEDBACK_REASONS.values() for r in group}
 
 class FeedbackAnalyzeRequest(BaseModel):
     session_id: Optional[str] = None
@@ -424,9 +476,15 @@ async def get_map_waypoints():
 
 
 @app.put("/map/waypoints", tags=["Map"])
-async def put_map_waypoints(body: CoordsUpdate):
-    """Admin: persist waypoint (x, y) edits."""
-    payload = {wid: {"x": e.x, "y": e.y} for wid, e in body.coords.items()}
+async def put_map_waypoints(body: WaypointsUpdate):
+    """Admin: persist waypoint (x, y) edits. Entries for custom waypoints
+    may include a `neighbors` array to splice them into the routing graph."""
+    payload: Dict[str, Dict[str, Any]] = {}
+    for wid, e in body.coords.items():
+        entry: Dict[str, Any] = {"x": e.x, "y": e.y}
+        if e.neighbors is not None:
+            entry["neighbors"] = list(e.neighbors)
+        payload[wid] = entry
     count = _save_waypoint_overrides(payload)
     return {"status": "saved", "overrides": _list_waypoint_overrides(), "total": count}
 
@@ -435,6 +493,38 @@ async def put_map_waypoints(body: CoordsUpdate):
 async def delete_map_waypoints():
     _reset_waypoint_overrides()
     return {"status": "reset"}
+
+
+@app.delete("/map/waypoints/{waypoint_id}", tags=["Map"])
+async def delete_map_waypoint(waypoint_id: str):
+    """Admin: drop a single waypoint override (used for custom waypoints)."""
+    removed = _delete_waypoint_override(waypoint_id)
+    return {"status": "deleted" if removed else "not_found", "waypoint_id": waypoint_id}
+
+
+# ---------------------------------------------------------------------------
+# Custom markers — admin-created buildings beyond the canonical 48.
+# ---------------------------------------------------------------------------
+
+@app.get("/map/custom_markers", tags=["Map"])
+async def get_custom_markers():
+    return {"markers": _list_custom_markers()}
+
+
+@app.post("/map/custom_markers", tags=["Map"])
+async def post_custom_marker(body: CustomMarkerCreate):
+    """Admin: add or update a custom marker."""
+    try:
+        entry = _upsert_custom_marker(body.model_dump(exclude_none=True))
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    return {"status": "saved", "marker": entry, "markers": _list_custom_markers()}
+
+
+@app.delete("/map/custom_markers/{marker_id}", tags=["Map"])
+async def remove_custom_marker(marker_id: str):
+    removed = _delete_custom_marker(marker_id)
+    return {"status": "deleted" if removed else "not_found", "marker_id": marker_id}
 
 
 @app.get("/map/{place_id}", response_model=PlaceMeta, tags=["Map"],
@@ -689,6 +779,12 @@ async def submit_feedback(request: FeedbackRequest):
     if request.rating is not None and not (1 <= request.rating <= 5):
         raise HTTPException(status_code=422, detail="rating must be between 1 and 5")
 
+    if request.reason is not None and request.reason not in _VALID_REASON_CODES:
+        raise HTTPException(
+            status_code=422,
+            detail=f"reason must be one of {sorted(_VALID_REASON_CODES)}"
+        )
+
     feedback_id = chat_logger.log_feedback(
         message_id=request.message_id,
         user_id=request.user_id,
@@ -699,6 +795,7 @@ async def submit_feedback(request: FeedbackRequest):
         comment=request.comment,
         suggested_intent=request.suggested_intent,
         user_message=request.user_message,
+        reason=request.reason,
     )
 
     if feedback_id is None:
@@ -732,6 +829,16 @@ async def get_feedback(
         max_rating=max_rating,
     )
     return {"count": len(entries), "feedback": entries}
+
+
+@app.get("/feedback/reasons", tags=["Feedback"])
+async def get_feedback_reasons():
+    """
+    Return the structured reason taxonomy used by /feedback. Frontends should
+    fetch this once and render chips/buttons so the codes stay in lockstep
+    with the backend's allow-list.
+    """
+    return FEEDBACK_REASONS
 
 
 @app.get("/feedback/stats", tags=["Feedback"])
@@ -860,6 +967,146 @@ async def analyze_feedback(request: FeedbackAnalyzeRequest):
         result["message"] = "Dry-run complete. Set apply=true to commit changes."
 
     return result
+
+
+# ============================================================================
+# Topic recommendation (seasonal homepage cards)
+# ============================================================================
+
+@app.get("/topics/recommended", tags=["Topics"])
+async def get_recommended_topics():
+    """Return today's recommended topic tags, ranked.
+
+    Filters against the active intent set so the homepage never recommends
+    an intent that wouldn't actually answer. The frontend turns each tag
+    into a TopicCard using its own catalog.
+    """
+    try:
+        intents = chatbot.get_all_intents() if hasattr(chatbot, "get_all_intents") else []
+    except Exception:
+        intents = []
+    return _recommend_topics(available_tags=intents)
+
+
+# ============================================================================
+# Admin: candidate intent sanitation (content moderation + training safety)
+# ============================================================================
+
+class CandidateIntent(BaseModel):
+    """Payload for POST /admin/intents/sanitize."""
+    tag: str
+    patterns: List[str]
+    responses: List[str]
+
+
+def _predict_proba_dict(text: str) -> Dict[str, float]:
+    """Run an arbitrary string through the loaded NB classifier and return
+    a {tag: probability} map for collision detection."""
+    nb = getattr(chatbot, "nb_model", None)
+    if nb is None or not hasattr(nb, "pipeline"):
+        return {}
+    try:
+        cleaned = nb._preprocess(text)
+        proba = nb.pipeline.predict_proba([cleaned])[0]
+        classes = list(nb.pipeline.classes_)
+        return {tag: float(p) for tag, p in zip(classes, proba)}
+    except Exception:
+        return {}
+
+
+@app.post("/admin/intents/sanitize", tags=["Admin"])
+async def sanitize_intent(body: CandidateIntent):
+    """Pre-flight checks before onboarding a new intent.
+
+    Returns a structured report listing every encoding issue, pattern
+    duplicate, response too-short/too-long, profanity hit, and classifier
+    collision (cases where the *current* model would have confidently sent
+    one of the new patterns to a different intent — that's a regression
+    risk).
+    """
+    try:
+        from intents_db import load_intents as _load_intents
+        existing = _load_intents()
+    except Exception:
+        existing = []
+
+    candidate = body.model_dump()
+    report = _sanitize_candidate_intent(
+        candidate,
+        existing_intents=existing,
+        classifier_predict_proba=_predict_proba_dict,
+    )
+    return report.to_dict()
+
+
+@app.post("/admin/intents", tags=["Admin"])
+async def create_intent(body: CandidateIntent, force: bool = False):
+    """Apply a candidate intent: append to cavsu_intents.json, rebuild the
+    SQLite DB, and ask the caller to re-run training to activate it in the
+    live model.
+
+    Sanitation is re-run server-side; we refuse on any *error* finding
+    unless ?force=true is passed (so the admin can still ship a known
+    collision intentionally — e.g. when later renaming an existing intent).
+    Warnings don't block. The model is NOT retrained synchronously — that
+    would block the API for minutes — the response tells the caller to run
+    `python training/train_naive_bayes.py`.
+    """
+    import json as _json
+    from pathlib import Path as _Path
+    try:
+        from intents_db import load_intents as _load_intents, create_intents_database as _create_db
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"intents_db unavailable: {exc}")
+
+    existing = _load_intents()
+    candidate = body.model_dump()
+    report = _sanitize_candidate_intent(
+        candidate, existing_intents=existing,
+        classifier_predict_proba=_predict_proba_dict,
+    )
+    if report.has_errors and not force:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "message": "Sanitation errors block the write. Fix them or retry with ?force=true.",
+                "report": report.to_dict(),
+            },
+        )
+
+    json_path = _Path("data/cavsu_intents.json")
+    if not json_path.exists():
+        raise HTTPException(status_code=500, detail="data/cavsu_intents.json missing")
+
+    raw = _json.loads(json_path.read_text(encoding="utf-8"))
+    intents_list = raw.get("intents", [])
+    intents_list.append({
+        "tag": body.tag,
+        "patterns": body.patterns,
+        "responses": body.responses,
+    })
+    raw["intents"] = intents_list
+
+    # Atomic write: rename a tmp file so a crash mid-write doesn't corrupt
+    # the canonical intent file.
+    tmp = json_path.with_suffix(json_path.suffix + ".tmp")
+    tmp.write_text(_json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp.replace(json_path)
+
+    # Rebuild the SQLite mirror so the /intents endpoint immediately
+    # surfaces the new tag (chat won't use it until retrain).
+    _create_db(json_path=str(json_path), recreate=True)
+
+    return {
+        "status": "saved",
+        "tag": body.tag,
+        "warnings": report.has_warnings,
+        "report": report.to_dict(),
+        "next_step": (
+            "Run `python training/train_naive_bayes.py` and restart the API "
+            "to activate this intent for routing."
+        ),
+    }
 
 
 # ============================================================================

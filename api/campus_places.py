@@ -315,22 +315,102 @@ def list_waypoint_overrides() -> Dict[str, Dict[str, int]]:
         return {}
 
 
-def save_waypoint_overrides(coords: Dict[str, Dict[str, int]]) -> int:
-    """Persist `coords` (waypoint_id -> {x, y}) merged with whatever's on disk."""
+def save_waypoint_overrides(coords: Dict[str, Any]) -> int:
+    """Persist `coords` (waypoint_id -> {x, y, neighbors?}) merged with disk.
+
+    Entries may also carry an optional `neighbors` list so admin-created
+    custom waypoints (e.g. `wp_custom_<n>`) ship their adjacency along
+    with their coords — the frontend uses that to splice them into the
+    routing graph.
+    """
     _WAYPOINTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     existing = list_waypoint_overrides()
     for wid, c in coords.items():
         if not isinstance(c, dict):
             continue
-        if "x" in c and "y" in c:
-            existing[wid] = {"x": int(c["x"]), "y": int(c["y"])}
+        if "x" not in c or "y" not in c:
+            continue
+        entry: Dict[str, Any] = {"x": int(c["x"]), "y": int(c["y"])}
+        if isinstance(c.get("neighbors"), list):
+            entry["neighbors"] = [str(n) for n in c["neighbors"] if isinstance(n, str)]
+        existing[wid] = entry
     _WAYPOINTS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
     return len(existing)
+
+
+def delete_waypoint_override(waypoint_id: str) -> bool:
+    """Remove a single waypoint entry. Returns True if it existed."""
+    existing = list_waypoint_overrides()
+    if waypoint_id not in existing:
+        return False
+    del existing[waypoint_id]
+    _WAYPOINTS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
+    return True
 
 
 def reset_waypoint_overrides() -> None:
     if _WAYPOINTS_PATH.exists():
         _WAYPOINTS_PATH.unlink()
+
+
+# ---------------------------------------------------------------------------
+# Custom markers — admin-created buildings that don't exist in the hardcoded
+# campus map. Stored separately so they never collide with the 48 canonical
+# places. The shape mirrors the frontend `Building` interface enough for the
+# UI to render and route to them.
+# ---------------------------------------------------------------------------
+
+_CUSTOM_MARKERS_PATH = (
+    _Path(__file__).resolve().parent.parent / "data" / "custom_markers.json"
+)
+
+
+def list_custom_markers() -> Dict[str, Dict[str, Any]]:
+    if not _CUSTOM_MARKERS_PATH.exists():
+        return {}
+    try:
+        return _json.loads(_CUSTOM_MARKERS_PATH.read_text(encoding="utf-8")) or {}
+    except (OSError, _json.JSONDecodeError):
+        return {}
+
+
+def upsert_custom_marker(marker: Dict[str, Any]) -> Dict[str, Any]:
+    """Insert or update a custom marker. Expects {id, name, x, y, abbr?}."""
+    mid = str(marker.get("id", "")).strip()
+    name = str(marker.get("name", "")).strip()
+    if not mid or not name:
+        raise ValueError("custom marker requires id and name")
+    try:
+        x = int(marker["x"])
+        y = int(marker["y"])
+    except (KeyError, TypeError, ValueError):
+        raise ValueError("custom marker requires integer x, y")
+    entry: Dict[str, Any] = {
+        "id": mid,
+        "name": name,
+        "abbr": str(marker.get("abbr") or name)[:48],
+        "x": x,
+        "y": y,
+    }
+    if marker.get("num") is not None:
+        try:
+            entry["num"] = int(marker["num"])
+        except (TypeError, ValueError):
+            pass
+    existing = list_custom_markers()
+    existing[mid] = entry
+    _CUSTOM_MARKERS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    _CUSTOM_MARKERS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
+    return entry
+
+
+def delete_custom_marker(marker_id: str) -> bool:
+    existing = list_custom_markers()
+    if marker_id not in existing:
+        return False
+    del existing[marker_id]
+    _CUSTOM_MARKERS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
+    return True
 
 
 # Apply any saved overrides immediately at import time.
@@ -492,7 +572,7 @@ _INTENT_TO_PLACE: Dict[str, str] = {
 _OUR = "Office of the University Registrar"
 _OUR_ENROLLMENT = "Office of the University Registrar (Enrollment)"
 _REGISTRAR_EMAIL = "registrarmain@cvsu.edu.ph"
-_REGISTRAR_PHONE = "(046) 415-0010"
+_REGISTRAR_PHONE = None  # Sanitized: refer to the official CvSU directory at cvsu.edu.ph for the verified contact number.
 _OSAS_BUILDING = "OSAS Building"
 _OSAS_EMAIL = "osasmain@cvsu.edu.ph"
 _ADMIN_BUILDING = "Administration Building"

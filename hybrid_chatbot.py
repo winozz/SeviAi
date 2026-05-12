@@ -9,6 +9,9 @@ import os
 import random
 import re
 import pickle
+import threading
+import urllib.request
+import urllib.error
 import numpy as np
 from typing import Tuple, Optional, Dict
 import joblib
@@ -18,7 +21,79 @@ from nltk.stem import WordNetLemmatizer
 
 from intents_db import load_intents, build_responses_map
 
+# Load .env from project root (optional — graceful fallback if dotenv missing)
+try:
+    from dotenv import load_dotenv
+    _DOTENV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if os.path.exists(_DOTENV_PATH):
+        load_dotenv(_DOTENV_PATH)
+except ImportError:
+    pass
+
+# Anthropic SDK for Claude fallback (optional)
+try:
+    import anthropic
+    ANTHROPIC_AVAILABLE = True
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
+
 _NON_ALPHA_RE = r"[^a-z0-9\s]"
+
+# Shared refusal token — any LLM (Claude or Ollama) emits this when it
+# judges a query out of scope. The orchestrator intercepts and returns
+# a canned refusal in its place.
+LLM_REFUSAL_TOKEN = "[OUT_OF_SCOPE]"
+
+
+def build_scope_locked_prompt(
+    base_persona: str,
+    intent_list: list,
+    campus_glossary: Optional[list] = None,
+) -> str:
+    """
+    Combine the DIWA persona with the strict-scope protocol and the list of
+    allowed intent topics. Used by both ClaudeLLM and LocalLLM so the model
+    can't be tricked into off-topic answers.
+
+    Args:
+        campus_glossary: Optional list of (acronym, full_name) tuples. When provided,
+            injected as a glossary so the LLM doesn't have to guess at CvSU-specific
+            acronyms like CAFENR, CEMDS, CEIT.
+    """
+    glossary_section = ""
+    if campus_glossary:
+        glossary_section = (
+            "CAMPUS GLOSSARY — these are the authoritative names of CvSU "
+            "Indang campus locations and colleges. NEVER guess at these "
+            "acronyms; use ONLY the meanings below. If asked about an acronym "
+            "not in this list, say you're not sure and refer them to the "
+            "registrar or relevant office.\n\n"
+            + "\n".join(f"  - {acr}: {full}" for acr, full in campus_glossary)
+            + "\n\n"
+        )
+
+    scope_section = (
+        "STRICT SCOPE — you can ONLY answer questions about Cavite State "
+        "University (CvSU). Your knowledge surface is limited to these "
+        "topic categories:\n\n"
+        + "\n".join(f"  - {tag}" for tag in intent_list)
+        + "\n\n"
+        "REFUSAL PROTOCOL:\n"
+        f"- If the user asks ANYTHING outside CvSU scope (math, general "
+        f"knowledge, programming, jokes, other universities, current events, "
+        f"weather, recipes, translations, etc.), respond with EXACTLY this "
+        f"token and nothing else: {LLM_REFUSAL_TOKEN}\n"
+        "- Do not attempt to answer off-topic questions partially.\n"
+        "- Do not apologize before the token. Just output the token.\n\n"
+        "RESPONSE RULES (when in scope):\n"
+        "- Keep answers under 4 sentences unless the user asks for detail.\n"
+        "- Never fabricate tuition fees, deadlines, professor names, course codes, building names, or specific numbers — if uncertain, say so and direct the user to the relevant CvSU office.\n"
+        "- NEVER guess at acronyms. If an acronym isn't in the Campus Glossary above, say you're not sure and recommend asking the registrar.\n"
+        "- For time-sensitive info (deadlines, fees, schedules), always recommend verification with the proper office.\n"
+        "- Disambiguate campus when relevant (Indang vs. Imus vs. other satellite campuses).\n"
+        "- Respond in the same language as the user (English, Filipino, or Taglish).\n"
+    )
+    return (base_persona + "\n\n" + glossary_section + scope_section).strip()
 
 # TensorFlow imports (optional - graceful fallback if not available)
 try:
@@ -77,9 +152,11 @@ class NeuralNetworkModel:
     """Accurate Neural Network model (requires TensorFlow)"""
 
     DEFAULT_CONFIDENCE_THRESHOLD = 0.50
-    VOCAB_SIZE = 1000
-    MAX_LEN = 20
-    EMBEDDING_DIM = 64
+    # Bumped from 1000/20/64 to 3000/30/256 for the 112-class dataset
+    # (sparse data per class, needs more capacity to converge)
+    VOCAB_SIZE = 3000
+    MAX_LEN = 30
+    EMBEDDING_DIM = 256
 
     def __init__(self, model_dir: str):
         if not TF_AVAILABLE:
@@ -143,6 +220,196 @@ class NeuralNetworkModel:
         text = re.sub(_NON_ALPHA_RE, "", text)
         tokens = nltk.word_tokenize(text)
         return " ".join([lemmatizer.lemmatize(t) for t in tokens])
+
+
+class ScopeGate:
+    """
+    Pre-filter that blocks off-topic queries before they reach the LLM.
+    Catches math, programming questions, general-knowledge queries, etc.
+    with deterministic rules — no LLM cost for the obvious refusal cases.
+    """
+
+    MAX_LENGTH = 800
+
+    _MATH_KEYWORDS = re.compile(
+        r"\b(solve|calculate|compute|evaluate|simplify|integrate|"
+        r"differentiate|derivative|integral|equation|factorial|"
+        r"logarithm|sine|cosine|tangent|matrix|determinant|"
+        r"probability of|how much is|what is \d|whats \d)\b",
+        re.IGNORECASE,
+    )
+    _MATH_EXPRESSION = re.compile(r"\d+\s*[\+\-\*/\^x×÷]\s*\d+")
+    _EQUATION_LIKE = re.compile(r"[a-z]\s*[\+\-\*/=]\s*\d+", re.IGNORECASE)
+
+    _OFFTOPIC = re.compile(
+        r"\b(capital of|weather in|recipe|cook|bake|"
+        r"celebrity|movie|netflix|tiktok|"
+        r"sports score|football|basketball game|nba|fifa|"
+        r"write code|debug|python|javascript|java code|c\+\+|"
+        r"write a poem|write a story|write a song|write me a|"
+        r"translate to|translate this|translation of|"
+        r"tell a joke|tell me a joke|funny joke|"
+        r"president of|prime minister|election|"
+        r"bitcoin|crypto|stock price|forex|"
+        r"horoscope|zodiac|tarot)\b",
+        re.IGNORECASE,
+    )
+
+    REFUSAL_MESSAGES = [
+        "I can only help with questions about Cavite State University — programs, admissions, fees, scholarships, campus services, and policies. Is there something CvSU-related I can help with?",
+        "That's outside my scope. I'm DIWA, the CvSU Digital Interface Web Assistant — I focus on Cavite State University topics like enrollment, courses, scholarships, and campus information. What would you like to know about CvSU?",
+        "I'm not able to answer that — I'm built to help with CvSU-related questions only (admissions, programs, fees, campus services). Please ask me something about Cavite State University.",
+    ]
+
+    def allows(self, text: str) -> Tuple[bool, str]:
+        """Returns (allowed, reason). If allowed=False, reason names which rule fired."""
+        if not text or not text.strip():
+            return False, "empty"
+        if len(text) > self.MAX_LENGTH:
+            return False, "too_long"
+        if self._MATH_KEYWORDS.search(text):
+            return False, "math_keyword"
+        if self._MATH_EXPRESSION.search(text):
+            return False, "math_expression"
+        if self._EQUATION_LIKE.search(text):
+            return False, "equation"
+        if self._OFFTOPIC.search(text):
+            return False, "offtopic_keyword"
+        return True, "ok"
+
+    def refusal(self) -> str:
+        return random.choice(self.REFUSAL_MESSAGES)
+
+
+class LocalLLM:
+    """
+    Thin wrapper around Ollama (http://localhost:11434). Used as the final
+    fallback when both NB and NN are below their confidence thresholds.
+    Falls back to None on any error so the chatbot pipeline keeps working.
+    """
+
+    DEFAULT_BASE_URL = "http://localhost:11434"
+    DEFAULT_MODEL = "llama3.1"
+    # 8B models on CPU can take 60-120s on first call (cold start);
+    # subsequent calls are 2-15s. Set generously so cold start doesn't fail.
+    TIMEOUT_SECONDS = 180
+
+    def __init__(self, base_url: str = None, model: str = None, system_prompt: str = ""):
+        self.base_url = (base_url or os.getenv("OLLAMA_BASE_URL", self.DEFAULT_BASE_URL)).rstrip("/")
+        self.model = model or os.getenv("OLLAMA_MODEL", self.DEFAULT_MODEL)
+        self.system_prompt = system_prompt
+        self.available = self._probe()
+
+    def _probe(self) -> bool:
+        try:
+            req = urllib.request.Request(f"{self.base_url}/api/tags", method="GET")
+            with urllib.request.urlopen(req, timeout=3):
+                return True
+        except Exception:
+            return False
+
+    def generate(self, user_message: str, conversation_context: list = None) -> Optional[str]:
+        if not self.available:
+            return None
+
+        messages = []
+        if self.system_prompt:
+            messages.append({"role": "system", "content": self.system_prompt})
+        if conversation_context:
+            messages.extend(conversation_context[-6:])
+        messages.append({"role": "user", "content": user_message})
+
+        payload = json.dumps({
+            "model": self.model,
+            "messages": messages,
+            "stream": False,
+            # keep_alive: keep model resident in RAM for 30m so successive
+            # queries skip the cold-load cost. num_predict capped to keep
+            # responses tight (CPU inference of 8B is ~15-25 tok/s, so 180
+            # tokens ≈ 8-12s per reply).
+            "keep_alive": "30m",
+            "options": {"temperature": 0.4, "num_predict": 180},
+        }).encode("utf-8")
+
+        try:
+            req = urllib.request.Request(
+                f"{self.base_url}/api/chat",
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=self.TIMEOUT_SECONDS) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                return data.get("message", {}).get("content", "").strip() or None
+        except urllib.error.URLError as e:
+            print(f"[WARNING] Ollama request failed: {e}")
+            return None
+        except Exception as e:
+            print(f"[WARNING] Ollama generate error: {type(e).__name__}: {e}")
+            return None
+
+
+class ClaudeLLM:
+    """
+    Claude API fallback. Used when NB+NN are below threshold and ScopeGate
+    allowed the query. Hard-locks Claude to CvSU topics via system prompt.
+    Returns None on any error so caller can degrade to static fallback.
+    """
+
+    DEFAULT_MODEL = "claude-haiku-4-5"
+    MAX_TOKENS = 400
+    TIMEOUT_SECONDS = 12
+
+    def __init__(self, api_key: Optional[str] = None, model: Optional[str] = None, system_prompt: str = ""):
+        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY", "").strip()
+        self.model = model or os.getenv("CLAUDE_MODEL", self.DEFAULT_MODEL)
+        self.system_blocks = [
+            {"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}
+        ]
+        self.client = None
+        self.available = False
+
+        if not ANTHROPIC_AVAILABLE or not self.api_key:
+            return
+        try:
+            self.client = anthropic.Anthropic(api_key=self.api_key, timeout=self.TIMEOUT_SECONDS)
+            self.available = True
+        except Exception as e:
+            print(f"[WARNING] Claude client init failed: {e}")
+            self.available = False
+
+    def generate(self, user_message: str, conversation_context: Optional[list] = None) -> Optional[str]:
+        if not self.available or not self.client:
+            return None
+
+        messages = []
+        if conversation_context:
+            for turn in conversation_context[-6:]:
+                role = turn.get("role")
+                content = turn.get("content")
+                if role in ("user", "assistant") and content:
+                    messages.append({"role": role, "content": content})
+        messages.append({"role": "user", "content": user_message})
+
+        try:
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=self.MAX_TOKENS,
+                system=self.system_blocks,
+                messages=messages,
+            )
+            text_parts = [b.text for b in response.content if getattr(b, "type", "") == "text"]
+            reply = "".join(text_parts).strip()
+            return reply or None
+        except anthropic.APIStatusError as e:
+            print(f"[WARNING] Claude API status error: {e.status_code} {getattr(e, 'message', '')}")
+            return None
+        except anthropic.APIConnectionError:
+            print("[WARNING] Claude API connection error")
+            return None
+        except Exception as e:
+            print(f"[WARNING] Claude generate failed: {e}")
+            return None
 
 
 class HybridChatbot:
@@ -235,15 +502,112 @@ class HybridChatbot:
         self.model_usage_stats = {
             "naive_bayes_used": 0,
             "neural_network_used": 0,
-            "fallback_used": 0
+            "fallback_used": 0,
+            "llm_fallback_used": 0,
+            "scope_gate_blocked": 0,
         }
 
-        print("\n[4/4] Initialization complete")
+        # ----------------------------------------------------------------
+        # LLM fallback initialization (Claude API or local Ollama)
+        # ----------------------------------------------------------------
+        provider = os.getenv("LLM_PROVIDER", "claude").strip().lower()
+        self.scope_gate = ScopeGate()
+        self.llm = None
+        self.llm_provider = provider
+
+        campus_glossary = self._build_campus_glossary()
+        scope_locked_prompt = build_scope_locked_prompt(
+            base_persona=self._system_prompt_text(),
+            intent_list=list(self.responses_map.keys()),
+            campus_glossary=campus_glossary,
+        )
+
+        print("\n[4/5] Initialising LLM fallback...")
+        if provider == "claude":
+            self.llm = ClaudeLLM(system_prompt=scope_locked_prompt)
+            if self.llm.available:
+                print(f"[OK] Claude LLM ready  model={self.llm.model}")
+            else:
+                if not ANTHROPIC_AVAILABLE:
+                    print("[WARNING] anthropic package not installed — pip install anthropic")
+                else:
+                    print("[WARNING] ANTHROPIC_API_KEY not set or invalid — Claude fallback disabled")
+        elif provider == "ollama":
+            self.llm = LocalLLM(system_prompt=scope_locked_prompt)
+            if self.llm.available:
+                print(f"[OK] Local LLM ready  model={self.llm.model}  url={self.llm.base_url}")
+                self._warm_up_llm_async()
+            else:
+                print("[WARNING] Local LLM not reachable — fallback disabled")
+                print("          Start Ollama and run: ollama pull llama3.1")
+        else:
+            print(f"[INFO] LLM fallback disabled (LLM_PROVIDER={provider})")
+
+        print("\n[5/5] Initialization complete")
         print("=" * 60)
         print(f"Strategy: NB threshold = {self.NB_CONFIDENCE_THRESHOLD:.0%}")
         print(f"         NN threshold = {self.NN_CONFIDENCE_THRESHOLD:.0%}")
+        llm_status = "enabled" if (self.llm and self.llm.available) else "disabled"
+        print(f"         LLM fallback = {llm_status} (provider={self.llm_provider})")
         print(f"         Intent source: {'SQLite DB' if intents_db_path else 'JSON'}")
         print("=" * 60 + "\n")
+
+    @staticmethod
+    def _system_prompt_text() -> str:
+        """Base DIWA persona — scope rules and glossary are appended by build_scope_locked_prompt."""
+        return (
+            "You are DIWA, the Digital Interface Web Assistant for Cavite State University. "
+            "Answer questions about academic programs, admissions, fees, scholarships, "
+            "campus services, and university policies concisely and accurately. "
+            "If you are unsure, say so and direct the user to the relevant CvSU office. "
+            "Never fabricate names, figures, deadlines, or official policies. "
+            "Respond in the same language the user uses (English or Filipino/Taglish)."
+        )
+
+    def _build_campus_glossary(self) -> list:
+        """Build a (short, full) acronym glossary from campus_places for the LLM prompt."""
+        try:
+            from api.campus_places import _PLACE_METADATA
+        except ImportError:
+            try:
+                from campus_places import _PLACE_METADATA
+            except ImportError:
+                print("[WARNING] campus_places not importable — LLM has no campus glossary")
+                return []
+
+        glossary = []
+        for place_id, meta in _PLACE_METADATA.items():
+            short = meta.get("short", "")
+            full = meta.get("full", "")
+            if not short or not full or short == full or place_id == "main":
+                continue
+            glossary.append((short, full))
+        print(f"[OK] Campus glossary built — {len(glossary)} entries injected into LLM prompt")
+        return glossary
+
+    def _warm_up_llm_async(self):
+        """Background-warm the local LLM so first user query doesn't pay 60-120s cold-start."""
+        def _warm():
+            try:
+                print("[INFO] Warming up local LLM in background (first load can take 60-120s)...")
+                reply = self.llm.generate("warmup ping")
+                if reply:
+                    print("[OK] Local LLM warm-up complete — ready for user queries")
+                else:
+                    print("[WARNING] Local LLM warm-up returned no reply")
+            except Exception as e:
+                print(f"[WARNING] Local LLM warm-up failed: {e}")
+        threading.Thread(target=_warm, daemon=True).start()
+
+    def _llm_context(self, user_id: Optional[str]) -> list:
+        """Build the last-3-turns conversation context for the LLM."""
+        if not user_id or user_id not in self.conversation_history:
+            return []
+        context = []
+        for turn in self.conversation_history[user_id][-3:]:
+            context.append({"role": "user", "content": turn["user_message"]})
+            context.append({"role": "assistant", "content": turn["bot_response"]})
+        return context
 
     def get_all_intents(self) -> list:
         """Return a list of available intent tags."""
@@ -265,9 +629,9 @@ class HybridChatbot:
             "responses": self.responses_map[intent_tag]
         }
 
-    def predict(self, user_input: str) -> Tuple[str, str, float, str]:
+    def predict(self, user_input: str, user_id: Optional[str] = None) -> Tuple[str, str, float, str]:
         """
-        Hierarchical prediction: NB first, then NN if needed
+        Hierarchical prediction: NB → NN → LLM (with scope gate) → static fallback
 
         Returns:
             (intent, response, confidence, model_used)
@@ -295,7 +659,26 @@ class HybridChatbot:
                 self.model_usage_stats["neural_network_used"] += 1
                 return nn_intent, response, nn_confidence, "Neural Network"
 
-        # Step 3: Use fallback response
+        # Step 3: LLM fallback (Claude or Ollama) — gated by ScopeGate first
+        if self.llm and self.llm.available:
+            allowed, reason = self.scope_gate.allows(user_input)
+            if not allowed:
+                self.model_usage_stats["scope_gate_blocked"] += 1
+                return self.FALLBACK_INTENT, self.scope_gate.refusal(), 0.0, f"ScopeGate ({reason})"
+
+            llm_reply = self.llm.generate(user_input, conversation_context=self._llm_context(user_id))
+            # LLM emitted the refusal token → out of scope per the model's own judgment
+            if llm_reply and LLM_REFUSAL_TOKEN in llm_reply:
+                self.model_usage_stats["scope_gate_blocked"] += 1
+                provider_label = "Claude" if isinstance(self.llm, ClaudeLLM) else "Ollama"
+                return self.FALLBACK_INTENT, self.scope_gate.refusal(), 0.0, f"{provider_label} (out-of-scope)"
+
+            if llm_reply:
+                self.model_usage_stats["llm_fallback_used"] += 1
+                provider_label = "Claude LLM" if isinstance(self.llm, ClaudeLLM) else "Local LLM"
+                return self.FALLBACK_INTENT, llm_reply, 0.0, provider_label
+
+        # Step 4: Static fallback
         response = random.choice(self.responses_map[self.FALLBACK_INTENT])
         self.model_usage_stats["fallback_used"] += 1
         return self.FALLBACK_INTENT, response, 0.0, "Fallback"
@@ -312,7 +695,7 @@ class HybridChatbot:
         Returns:
             (intent, response, confidence, model_used)
         """
-        intent, response, confidence, model_used = self.predict(user_input)
+        intent, response, confidence, model_used = self.predict(user_input, user_id=user_id)
 
         # Track conversation
         if user_id:
@@ -336,20 +719,21 @@ class HybridChatbot:
         if total == 0:
             return self.model_usage_stats.copy()
 
+        def pct(key: str) -> float:
+            return self.model_usage_stats.get(key, 0) / total * 100
+
         return {
             "total_predictions": total,
-            "naive_bayes_used": self.model_usage_stats["naive_bayes_used"],
-            "naive_bayes_percentage": (
-                self.model_usage_stats["naive_bayes_used"] / total * 100
-            ),
-            "neural_network_used": self.model_usage_stats["neural_network_used"],
-            "neural_network_percentage": (
-                self.model_usage_stats["neural_network_used"] / total * 100
-            ),
-            "fallback_used": self.model_usage_stats["fallback_used"],
-            "fallback_percentage": (
-                self.model_usage_stats["fallback_used"] / total * 100
-            )
+            "naive_bayes_used": self.model_usage_stats.get("naive_bayes_used", 0),
+            "naive_bayes_percentage": pct("naive_bayes_used"),
+            "neural_network_used": self.model_usage_stats.get("neural_network_used", 0),
+            "neural_network_percentage": pct("neural_network_used"),
+            "llm_fallback_used": self.model_usage_stats.get("llm_fallback_used", 0),
+            "llm_fallback_percentage": pct("llm_fallback_used"),
+            "scope_gate_blocked": self.model_usage_stats.get("scope_gate_blocked", 0),
+            "scope_gate_blocked_percentage": pct("scope_gate_blocked"),
+            "fallback_used": self.model_usage_stats.get("fallback_used", 0),
+            "fallback_percentage": pct("fallback_used"),
         }
 
     def get_history(self) -> dict:
@@ -458,16 +842,21 @@ You are a helpful starting point and information aggregator, not the final autho
 class NeuralNetworkTrainer:
     """Train neural network model for intent classification"""
 
-    VOCAB_SIZE = 1000
-    MAX_LEN = 20
-    EMBEDDING_DIM = 64
+    # Bumped for the 112-class dataset (sparse data per class):
+    # VOCAB_SIZE: 1000 -> 3000  (richer vocabulary coverage)
+    # MAX_LEN:    20 -> 30      (capture longer queries)
+    # EMBEDDING_DIM: 64 -> 256  (more representation capacity)
+    # BATCH_SIZE:  8 -> 32      (more stable gradients, faster training)
+    VOCAB_SIZE = 3000
+    MAX_LEN = 30
+    EMBEDDING_DIM = 256
     MAX_EPOCHS = 10000
-    BATCH_SIZE = 8
+    BATCH_SIZE = 32
 
-    # Early stopping: stop if val_loss doesn't improve for this many epochs
-    EARLY_STOPPING_PATIENCE = 150
-    # LR reduction: halve LR if val_loss stagnates for this many epochs
-    LR_REDUCE_PATIENCE = 50
+    # Early stopping: stop if val_accuracy doesn't improve for this many epochs
+    EARLY_STOPPING_PATIENCE = 200
+    # LR reduction: halve LR if val_accuracy stagnates for this many epochs
+    LR_REDUCE_PATIENCE = 75
     LR_REDUCE_FACTOR = 0.5
     LR_MIN = 1e-6
 
@@ -532,11 +921,11 @@ class NeuralNetworkTrainer:
                 input_length=NeuralNetworkTrainer.MAX_LEN,
                 name="embedding"
             ),
-            Bidirectional(LSTM(128, return_sequences=True), name="bilstm"),
+            Bidirectional(LSTM(256, return_sequences=True), name="bilstm"),
             GlobalAveragePooling1D(name="pooling"),
-            Dense(128, activation="relu", name="dense_1"),
+            Dense(256, activation="relu", name="dense_1"),
             Dropout(0.3, name="dropout_1"),
-            Dense(64, activation="relu", name="dense_2"),
+            Dense(128, activation="relu", name="dense_2"),
             Dropout(0.2, name="dropout_2"),
             Dense(num_classes, activation="softmax", name="output")
         ], name="IntentClassifier_BiLSTM")
@@ -550,15 +939,20 @@ class NeuralNetworkTrainer:
         print(model.summary())
 
         # Callbacks: early stopping + LR reduction on plateau
+        # Monitor val_accuracy (mode="max") instead of val_loss — for sparse
+        # multi-class data, val_loss can stay low while accuracy improves,
+        # causing restore_best_weights to roll back to a low-accuracy model.
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
-                monitor="val_loss",
+                monitor="val_accuracy",
+                mode="max",
                 patience=NeuralNetworkTrainer.EARLY_STOPPING_PATIENCE,
                 restore_best_weights=True,
                 verbose=1,
             ),
             tf.keras.callbacks.ReduceLROnPlateau(
-                monitor="val_loss",
+                monitor="val_accuracy",
+                mode="max",
                 factor=NeuralNetworkTrainer.LR_REDUCE_FACTOR,
                 patience=NeuralNetworkTrainer.LR_REDUCE_PATIENCE,
                 min_lr=NeuralNetworkTrainer.LR_MIN,
@@ -645,7 +1039,8 @@ class NeuralNetworkTrainer:
             json.dump({"temperature": temperature}, f)
 
         # Stats
-        best_epoch = int(np.argmin(history.history["val_loss"]))
+        # Best epoch by val_accuracy (matches EarlyStopping monitor)
+        best_epoch = int(np.argmax(history.history["val_accuracy"]))
         best_val_acc = history.history["val_accuracy"][best_epoch]
         final_acc = history.history["accuracy"][best_epoch]
 

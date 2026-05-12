@@ -9,6 +9,7 @@ import os
 import random
 import re
 import pickle
+import threading
 import urllib.request
 import urllib.error
 import numpy as np
@@ -17,6 +18,22 @@ import joblib
 
 import nltk
 from nltk.stem import WordNetLemmatizer
+
+# Load .env (optional — graceful fallback if python-dotenv missing)
+try:
+    from dotenv import load_dotenv
+    _DOTENV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env")
+    if os.path.exists(_DOTENV_PATH):
+        load_dotenv(_DOTENV_PATH)
+except ImportError:
+    pass
+
+# Anthropic SDK for Claude fallback (optional)
+try:
+    import anthropic
+    ANTHROPIC_AVAILABLE = True
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
 
 # Import advanced NLU engine
 try:
@@ -49,6 +66,62 @@ for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
 
 lemmatizer = WordNetLemmatizer()
 _NON_ALPHA_RE = r"[^a-z0-9\s]"
+
+# Shared refusal token — any LLM (Claude or Ollama) emits this when it
+# judges a query out of scope. The orchestrator intercepts and returns
+# a canned refusal in its place.
+LLM_REFUSAL_TOKEN = "[OUT_OF_SCOPE]"
+
+
+def build_scope_locked_prompt(
+    base_persona: str,
+    intent_list: list,
+    campus_glossary: Optional[list] = None,
+) -> str:
+    """
+    Combine the DIWA persona with the strict-scope protocol and the list of
+    allowed intent topics. Used by both ClaudeLLM and LocalLLM so the model
+    can't be tricked into off-topic answers.
+
+    Args:
+        campus_glossary: Optional list of (acronym, full_name) tuples. When provided,
+            injected as a glossary so the LLM doesn't have to guess at CvSU-specific
+            acronyms like CAFENR, CEMDS, CEIT.
+    """
+    glossary_section = ""
+    if campus_glossary:
+        glossary_section = (
+            "CAMPUS GLOSSARY — these are the authoritative names of CvSU "
+            "Indang campus locations and colleges. NEVER guess at these "
+            "acronyms; use ONLY the meanings below. If asked about an acronym "
+            "not in this list, say you're not sure and refer them to the "
+            "registrar or relevant office.\n\n"
+            + "\n".join(f"  - {acr}: {full}" for acr, full in campus_glossary)
+            + "\n\n"
+        )
+
+    scope_section = (
+        "STRICT SCOPE — you can ONLY answer questions about Cavite State "
+        "University (CvSU). Your knowledge surface is limited to these "
+        "topic categories:\n\n"
+        + "\n".join(f"  - {tag}" for tag in intent_list)
+        + "\n\n"
+        "REFUSAL PROTOCOL:\n"
+        f"- If the user asks ANYTHING outside CvSU scope (math, general "
+        f"knowledge, programming, jokes, other universities, current events, "
+        f"weather, recipes, translations, etc.), respond with EXACTLY this "
+        f"token and nothing else: {LLM_REFUSAL_TOKEN}\n"
+        "- Do not attempt to answer off-topic questions partially.\n"
+        "- Do not apologize before the token. Just output the token.\n\n"
+        "RESPONSE RULES (when in scope):\n"
+        "- Keep answers under 4 sentences unless the user asks for detail.\n"
+        "- Never fabricate tuition fees, deadlines, professor names, course codes, building names, or specific numbers — if uncertain, say so and direct the user to the relevant CvSU office.\n"
+        "- NEVER guess at acronyms. If an acronym isn't in the Campus Glossary above, say you're not sure and recommend asking the registrar.\n"
+        "- For time-sensitive info (deadlines, fees, schedules), always recommend verification with the proper office.\n"
+        "- Disambiguate campus when relevant (Indang vs. Imus vs. other satellite campuses).\n"
+        "- Respond in the same language as the user (English, Filipino, or Taglish).\n"
+    )
+    return (base_persona + "\n\n" + glossary_section + scope_section).strip()
 
 class NaiveBayesModel:
     """Fast Naive Bayes model"""
@@ -165,8 +238,10 @@ class LocalLLM:
 
     # Override with env vars: OLLAMA_BASE_URL, OLLAMA_MODEL
     DEFAULT_BASE_URL = "http://localhost:11434"
-    DEFAULT_MODEL = "llama3"
-    TIMEOUT_SECONDS = 15
+    DEFAULT_MODEL = "llama3.1"
+    # 8B models on CPU can take 60-120s on first call (cold start loads weights into RAM);
+    # subsequent calls are 2-15s. Set generously so cold start doesn't fail.
+    TIMEOUT_SECONDS = 180
 
     def __init__(
         self,
@@ -224,7 +299,169 @@ class LocalLLM:
             with urllib.request.urlopen(req, timeout=self.TIMEOUT_SECONDS) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
                 return data.get("message", {}).get("content", "").strip() or None
-        except Exception:
+        except urllib.error.URLError as e:
+            print(f"[WARNING] Ollama request failed: {e}")
+            return None
+        except Exception as e:
+            print(f"[WARNING] Ollama generate error: {type(e).__name__}: {e}")
+            return None
+
+
+class ScopeGate:
+    """
+    Pre-filter that blocks off-topic queries before they reach the LLM.
+
+    Cheaper and more reliable than letting the LLM decide — catches math
+    problems, programming questions, general-knowledge queries, etc. with
+    deterministic rules so the model never gets a chance to embarrass us
+    by answering them.
+    """
+
+    MAX_LENGTH = 800  # chars — anything longer is suspicious
+
+    # Math / computation patterns (lowercased input)
+    _MATH_KEYWORDS = re.compile(
+        r"\b(solve|calculate|compute|evaluate|simplify|integrate|"
+        r"differentiate|derivative|integral|equation|factorial|"
+        r"logarithm|sine|cosine|tangent|matrix|determinant|"
+        r"probability of|how much is|what is \d|whats \d)\b",
+        re.IGNORECASE,
+    )
+    _MATH_EXPRESSION = re.compile(r"\d+\s*[\+\-\*/\^x×÷]\s*\d+")
+    _EQUATION_LIKE = re.compile(r"[a-z]\s*[\+\-\*/=]\s*\d+", re.IGNORECASE)
+
+    # Off-topic keyword list (each must match as a whole phrase/word)
+    _OFFTOPIC = re.compile(
+        r"\b(capital of|weather in|recipe|cook|bake|"
+        r"celebrity|movie|netflix|tiktok|"
+        r"sports score|football|basketball game|nba|fifa|"
+        r"write code|debug|python|javascript|java code|c\+\+|"
+        r"write a poem|write a story|write a song|write me a|"
+        r"translate to|translate this|translation of|"
+        r"tell a joke|tell me a joke|funny joke|"
+        r"president of|prime minister|election|"
+        r"bitcoin|crypto|stock price|forex|"
+        r"horoscope|zodiac|tarot)\b",
+        re.IGNORECASE,
+    )
+
+    REFUSAL_MESSAGES = [
+        "I can only help with questions about Cavite State University — programs, admissions, fees, scholarships, campus services, and policies. Is there something CvSU-related I can help with?",
+        "That's outside my scope. I'm DIWA, the CvSU Digital Interface Web Assistant — I focus on Cavite State University topics like enrollment, courses, scholarships, and campus information. What would you like to know about CvSU?",
+        "I'm not able to answer that — I'm built to help with CvSU-related questions only (admissions, programs, fees, campus services). Please ask me something about Cavite State University.",
+    ]
+
+    def allows(self, text: str) -> Tuple[bool, str]:
+        """
+        Returns (allowed, reason). If allowed=False, reason names which rule fired.
+        """
+        if not text or not text.strip():
+            return False, "empty"
+        if len(text) > self.MAX_LENGTH:
+            return False, "too_long"
+        if self._MATH_KEYWORDS.search(text):
+            return False, "math_keyword"
+        if self._MATH_EXPRESSION.search(text):
+            return False, "math_expression"
+        if self._EQUATION_LIKE.search(text):
+            return False, "equation"
+        if self._OFFTOPIC.search(text):
+            return False, "offtopic_keyword"
+        return True, "ok"
+
+    def refusal(self) -> str:
+        """Return a randomly selected refusal message."""
+        return random.choice(self.REFUSAL_MESSAGES)
+
+
+class ClaudeLLM:
+    """
+    Claude API fallback — used when NB+NN are both below threshold and
+    the ScopeGate allowed the query through.
+
+    Hard-locks Claude to CvSU topics via system prompt + intent list.
+    Uses prompt caching so the large system prompt is ~0.1x cost on
+    repeated calls.
+
+    Returns None on any error so the caller can degrade to the static
+    fallback gracefully.
+    """
+
+    DEFAULT_MODEL = "claude-haiku-4-5"
+    MAX_TOKENS = 400
+    TIMEOUT_SECONDS = 12
+
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
+        system_prompt: str = "",
+    ):
+        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY", "").strip()
+        self.model = model or os.getenv("CLAUDE_MODEL", self.DEFAULT_MODEL)
+        # Single cached block — system prompt is stable, served at ~0.1x cost after first call
+        self.system_blocks = [
+            {
+                "type": "text",
+                "text": system_prompt,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ]
+        self.client = None
+        self.available = False
+
+        if not ANTHROPIC_AVAILABLE:
+            return
+        if not self.api_key:
+            return
+        try:
+            self.client = anthropic.Anthropic(
+                api_key=self.api_key,
+                timeout=self.TIMEOUT_SECONDS,
+            )
+            self.available = True
+        except Exception as e:
+            print(f"[WARNING] Claude client init failed: {e}")
+            self.available = False
+
+    def generate(
+        self,
+        user_message: str,
+        conversation_context: Optional[list] = None,
+    ) -> Optional[str]:
+        """
+        Returns Claude's reply, the REFUSAL_TOKEN if out of scope, or None on error.
+        """
+        if not self.available or not self.client:
+            return None
+
+        messages = []
+        if conversation_context:
+            for turn in conversation_context[-6:]:
+                role = turn.get("role")
+                content = turn.get("content")
+                if role in ("user", "assistant") and content:
+                    messages.append({"role": role, "content": content})
+        messages.append({"role": "user", "content": user_message})
+
+        try:
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=self.MAX_TOKENS,
+                system=self.system_blocks,
+                messages=messages,
+            )
+            text_parts = [b.text for b in response.content if getattr(b, "type", "") == "text"]
+            reply = "".join(text_parts).strip()
+            return reply or None
+        except anthropic.APIStatusError as e:
+            print(f"[WARNING] Claude API status error: {e.status_code} {getattr(e, 'message', '')}")
+            return None
+        except anthropic.APIConnectionError:
+            print("[WARNING] Claude API connection error")
+            return None
+        except Exception as e:
+            print(f"[WARNING] Claude generate failed: {e}")
             return None
 
 
@@ -298,23 +535,97 @@ class HybridChatbot:
             self.nlu_engine = None
             print("[WARNING] Advanced NLU Engine not available")
 
-        # Initialize local LLM for deep-fallback (fires only when NB+NN both fail)
-        print("\n[4/5] Initialising local LLM fallback (Ollama)...")
-        self.llm = LocalLLM(system_prompt=self._system_prompt_text())
-        if self.llm.available:
-            print(f"[OK] Local LLM ready  model={self.llm.model}  url={self.llm.base_url}")
+        # Initialize LLM fallback (Claude API by default, Ollama optional)
+        provider = os.getenv("LLM_PROVIDER", "claude").strip().lower()
+        self.scope_gate = ScopeGate()
+        self.llm = None
+        self.llm_provider = provider
+
+        # Build campus glossary so the LLM doesn't hallucinate on CvSU acronyms
+        # (e.g. asking about CAFENR shouldn't return "Cafeteria"). Pulls the
+        # canonical names from the campus_places module — single source of truth.
+        campus_glossary = self._build_campus_glossary()
+
+        # Build the scope-locked system prompt once — used by whichever LLM provider runs.
+        scope_locked_prompt = build_scope_locked_prompt(
+            base_persona=self._system_prompt_text(),
+            intent_list=list(self.responses_map.keys()),
+            campus_glossary=campus_glossary,
+        )
+
+        if provider == "claude":
+            print("\n[4/5] Initialising Claude API fallback...")
+            self.llm = ClaudeLLM(system_prompt=scope_locked_prompt)
+            if self.llm.available:
+                print(f"[OK] Claude LLM ready  model={self.llm.model}")
+            else:
+                if not ANTHROPIC_AVAILABLE:
+                    print("[WARNING] anthropic package not installed — pip install anthropic")
+                else:
+                    print("[WARNING] ANTHROPIC_API_KEY not set or invalid — Claude fallback disabled")
+        elif provider == "ollama":
+            print("\n[4/5] Initialising local LLM fallback (Ollama)...")
+            self.llm = LocalLLM(system_prompt=scope_locked_prompt)
+            if self.llm.available:
+                print(f"[OK] Local LLM ready  model={self.llm.model}  url={self.llm.base_url}")
+                # Warm-up in background so the first user query doesn't pay
+                # the 60-120s cold-start cost on CPU-only machines.
+                self._warm_up_llm_async()
+            else:
+                print("[WARNING] Local LLM not reachable — deep-fallback disabled")
+                print("          Start Ollama and run: ollama pull llama3.1")
         else:
-            print("[WARNING] Local LLM not reachable — deep-fallback disabled")
-            print("          Start Ollama and run: ollama pull llama3")
+            print(f"\n[4/5] LLM fallback disabled (LLM_PROVIDER={provider})")
 
         self.model_usage_stats["llm_fallback_used"] = 0
+        self.model_usage_stats["scope_gate_blocked"] = 0
 
         print("\n[5/5] Initialization complete")
         print("=" * 60)
         print(f"Strategy: NB threshold = {self.NB_CONFIDENCE_THRESHOLD:.0%}")
         print("         NN threshold = adaptive per-intent")
-        print(f"         LLM fallback = {'enabled' if self.llm.available else 'disabled'}")
+        llm_status = "enabled" if (self.llm and self.llm.available) else "disabled"
+        print(f"         LLM fallback = {llm_status} (provider={self.llm_provider})")
         print("=" * 60 + "\n")
+
+    def _build_campus_glossary(self) -> list:
+        """
+        Build a list of (acronym, full_name) tuples from the campus_places module.
+        Returns an empty list if campus_places can't be imported (graceful fallback).
+        """
+        try:
+            try:
+                from .campus_places import _PLACE_METADATA  # package import
+            except ImportError:
+                from campus_places import _PLACE_METADATA  # direct script run
+        except ImportError:
+            print("[WARNING] campus_places not importable — LLM has no campus glossary")
+            return []
+
+        glossary = []
+        for place_id, meta in _PLACE_METADATA.items():
+            short = meta.get("short", "")
+            full = meta.get("full", "")
+            # Skip generic entries and ones where short==full (no acronym to clarify)
+            if not short or not full or short == full or place_id == "main":
+                continue
+            glossary.append((short, full))
+        print(f"[OK] Campus glossary built — {len(glossary)} entries injected into LLM prompt")
+        return glossary
+
+    def _warm_up_llm_async(self):
+        """Fire a dummy LLM call in a background thread to load the model into memory."""
+        def _warm():
+            try:
+                print("[INFO] Warming up local LLM in background (first load can take 60-120s)...")
+                reply = self.llm.generate("warmup ping")
+                if reply:
+                    print("[OK] Local LLM warm-up complete — ready for user queries")
+                else:
+                    print("[WARNING] Local LLM warm-up returned no reply")
+            except Exception as e:
+                print(f"[WARNING] Local LLM warm-up failed: {e}")
+        threading.Thread(target=_warm, daemon=True).start()
 
     @staticmethod
     def _system_prompt_text() -> str:
@@ -378,12 +689,25 @@ class HybridChatbot:
             self.model_usage_stats["neural_network_used"] += 1
             return nn_intent, response, nn_confidence, "Neural Network", nlu_data
 
-        # Step 3: Local LLM — fires only when NB+NN are both below threshold
+        # Step 3: LLM fallback — fires only when NB+NN are both below threshold
         if self.llm and self.llm.available:
+            allowed, reason = self.scope_gate.allows(user_input)
+            if not allowed:
+                # Pre-filter blocked the query — don't even call the API
+                self.model_usage_stats["scope_gate_blocked"] += 1
+                return self.FALLBACK_INTENT, self.scope_gate.refusal(), 0.0, f"ScopeGate ({reason})", nlu_data
+
             llm_reply = self.llm.generate(user_input, conversation_context=self._llm_context(user_id))
+            # LLM emitted the refusal token → out of scope per the model's own judgment
+            if llm_reply and LLM_REFUSAL_TOKEN in llm_reply:
+                self.model_usage_stats["scope_gate_blocked"] += 1
+                provider_label = "Claude" if isinstance(self.llm, ClaudeLLM) else "Ollama"
+                return self.FALLBACK_INTENT, self.scope_gate.refusal(), 0.0, f"{provider_label} (out-of-scope)", nlu_data
+
             if llm_reply:
                 self.model_usage_stats["llm_fallback_used"] += 1
-                return self.FALLBACK_INTENT, llm_reply, 0.0, "Local LLM", nlu_data
+                provider_label = "Claude LLM" if isinstance(self.llm, ClaudeLLM) else "Local LLM"
+                return self.FALLBACK_INTENT, llm_reply, 0.0, provider_label, nlu_data
 
         # Step 4: Static fallback
         self.model_usage_stats["fallback_used"] += 1

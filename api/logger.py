@@ -92,6 +92,7 @@ class ChatLogger:
                     intent TEXT,
                     rating INTEGER CHECK(rating BETWEEN 1 AND 5),
                     helpful INTEGER CHECK(helpful IN (0, 1)),
+                    reason TEXT,
                     comment TEXT,
                     suggested_intent TEXT,
                     user_message TEXT,
@@ -99,11 +100,13 @@ class ChatLogger:
                 )
             """)
 
-            # Migrate existing DBs that predate the user_message column
+            # Idempotent migrations for older DBs
             cursor.execute("PRAGMA table_info(feedback)")
             fb_cols = [r[1] for r in cursor.fetchall()]
             if "user_message" not in fb_cols:
                 cursor.execute("ALTER TABLE feedback ADD COLUMN user_message TEXT")
+            if "reason" not in fb_cols:
+                cursor.execute("ALTER TABLE feedback ADD COLUMN reason TEXT")
 
             conn.commit()
             conn.close()
@@ -441,6 +444,7 @@ class ChatLogger:
         comment: Optional[str],
         suggested_intent: Optional[str],
         user_message: Optional[str] = None,
+        reason: Optional[str] = None,
     ) -> Optional[int]:
         """Log user feedback for a bot response. Returns the new feedback row ID."""
         try:
@@ -453,10 +457,10 @@ class ChatLogger:
 
                 cursor.execute("""
                     INSERT INTO feedback
-                    (timestamp, message_id, user_id, session_id, intent, rating, helpful, comment, suggested_intent, user_message)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (timestamp, message_id, user_id, session_id, intent, rating, helpful, reason, comment, suggested_intent, user_message)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (timestamp, message_id, user_id, session_id, intent,
-                       rating, helpful_int, comment, suggested_intent, user_message))
+                       rating, helpful_int, reason, comment, suggested_intent, user_message))
 
                 feedback_id = cursor.lastrowid
                 conn.commit()
@@ -520,7 +524,7 @@ class ChatLogger:
 
             # Recent comments
             cursor.execute("""
-                SELECT timestamp, intent, rating, helpful, comment, suggested_intent
+                SELECT timestamp, intent, rating, helpful, reason, comment, suggested_intent
                 FROM feedback
                 WHERE comment IS NOT NULL AND TRIM(comment) != ''
                 ORDER BY timestamp DESC
@@ -532,11 +536,31 @@ class ChatLogger:
                     "intent": r[1],
                     "rating": r[2],
                     "helpful": bool(r[3]) if r[3] is not None else None,
-                    "comment": r[4],
-                    "suggested_intent": r[5]
+                    "reason": r[4],
+                    "comment": r[5],
+                    "suggested_intent": r[6]
                 }
                 for r in cursor.fetchall()
             ]
+
+            # Reason-code breakdown (overall + split by thumbs direction)
+            cursor.execute("""
+                SELECT reason,
+                       helpful,
+                       COUNT(*) AS cnt
+                FROM feedback
+                WHERE reason IS NOT NULL AND TRIM(reason) != ''
+                GROUP BY reason, helpful
+                ORDER BY cnt DESC
+            """)
+            reason_rows = cursor.fetchall()
+            by_reason = []
+            for r in reason_rows:
+                by_reason.append({
+                    "reason": r[0],
+                    "helpful": bool(r[1]) if r[1] is not None else None,
+                    "count": r[2]
+                })
 
             conn.close()
 
@@ -546,7 +570,8 @@ class ChatLogger:
                 "helpful_pct": helpful_pct,
                 "by_intent": by_intent,
                 "low_rated_intents": low_rated,
-                "recent_comments": recent_comments
+                "recent_comments": recent_comments,
+                "by_reason": by_reason
             }
         except Exception as e:
             print(f"[ERROR] Error getting feedback stats: {e}")
@@ -604,6 +629,7 @@ class ChatLogger:
                     f.intent,
                     f.rating,
                     f.helpful,
+                    f.reason,
                     f.comment,
                     f.suggested_intent,
                     COALESCE(m.user_message, f.user_message) AS user_message,

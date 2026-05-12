@@ -117,17 +117,17 @@ print(f"✓ about_cvsu: +{n} patterns")
 
 add_responses("about_cvsu", [
     (
-        "Great question! Cavite State University (CvSU) is a premier state university in Cavite, Philippines, "
-        "established in 1906 and granted university status in 1998 via RA 8468. "
-        "It has 13 campuses across Cavite, serves over 22,000 students, and is a CHED Center of Excellence in Agriculture. "
-        "Its motto is 'Truth, Excellence, Service.' Anything specific you'd like to know about CvSU?"
+        "Cavite State University (CvSU) is a state university in Cavite, Philippines. Its origins trace back to 1906, "
+        "and it was granted university status in 1998 via RA 8468. CvSU operates multiple campuses across the province "
+        "of Cavite, with the main campus in Indang. Its motto is 'Truth, Excellence, Service' — Iskolar para sa Bayan. "
+        "For current statistics (enrollment, campus list, accreditations), please refer to www.cvsu.edu.ph. "
+        "Anything specific you'd like to know?"
     ),
     (
-        "CvSU — Cavite State University — is your Iskolar para sa Bayan institution in Cavite! "
-        "Founded in 1906 by the Thomasites, it became a full university in 1998. "
-        "With 13 campuses, 22,000+ students, and recognition as a Center of Excellence, "
-        "CvSU is one of the top-performing SUCs in the Philippines. "
-        "Salamat sa inyong tanong — what else would you like to know?"
+        "CvSU — Cavite State University — is your Iskolar para sa Bayan institution in Cavite, with roots dating back "
+        "to 1906 and university status granted in 1998 (RA 8468). The main campus is in Indang, Cavite, and CvSU operates "
+        "additional campuses across the province. For verified enrollment figures and the complete list of campuses, "
+        "please visit www.cvsu.edu.ph. Salamat sa inyong tanong — what else would you like to know?"
     ),
 ])
 
@@ -204,12 +204,12 @@ print(f"✓ library: +{n} patterns")
 
 add_responses("library", [
     (
-        "The Ladislao Diwa Memorial Library at CvSU Main Campus holds over 92,000 books, "
-        "periodicals, theses, and digital resources. "
-        "Library hours are typically 8AM–5PM on weekdays (verify with your campus). "
+        "The Ladislao Diwa Memorial Library at the CvSU Main Campus, and the libraries at other campuses, "
+        "provide books, periodicals, theses, and digital resources for students. "
         "To borrow books, present your CvSU ID and library card. "
-        "Students may borrow 2–3 books at a time for up to 3–7 days depending on the material. "
-        "Overdue fines apply. An e-Library portal is also available for digital resources."
+        "Library hours, borrowing limits, loan periods, and overdue fines vary per campus — "
+        "please verify the specifics with your campus librarian. "
+        "An e-Library portal may also be available — check www.cvsu.edu.ph."
     ),
     (
         "CvSU's library system provides access to books, journals, theses, and digital databases. "
@@ -500,7 +500,7 @@ add_intent("international_students", patterns=[
         "Contact the Cashier's Office for applicable fees.\n\n"
         "CONTACT:\n"
         "Office of Admissions | Email: admissions@cvsu.edu.ph\n"
-        "Phone: (046) 415-0010 | Website: www.cvsu.edu.ph"
+        "Website: www.cvsu.edu.ph (use the official directory for the current phone number)"
     ),
     (
         "CvSU welcomes foreign/international students subject to CHED rules. "
@@ -510,10 +510,11 @@ add_intent("international_students", patterns=[
         "Contact admissions@cvsu.edu.ph for full details."
     ),
     (
-        "Yes, CvSU accepts international students! "
-        "Requirements include apostilled academic records, passport, and a 9F student visa processed after admission. "
+        "Yes, CvSU accepts international students subject to CHED rules. "
+        "Typical requirements include apostilled academic records, a passport, and a 9F student visa processed after admission. "
         "Apply at the Office of Admissions, Main Campus, Indang, Cavite. "
-        "For tuition and specific requirements, contact admissions@cvsu.edu.ph or call (046) 415-0010."
+        "For tuition rates and the latest application requirements and contact numbers, "
+        "please reach out to admissions@cvsu.edu.ph or check www.cvsu.edu.ph."
     ),
 ])
 print("✓ international_students intent added")
@@ -603,17 +604,16 @@ add_responses("vision_mission", [
 # --- campus_location (1 existing) ---
 add_responses("campus_location", [
     (
-        "CvSU's Main Campus (Don Severino delas Alas Campus) is located in Indang, Cavite — "
-        "approximately 60 km south of Manila. "
-        "CvSU has 13 campuses across Cavite province including Imus, Bacoor, Naic, Carmona, "
-        "Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, and Alfonso. "
-        "Public transport (jeepney/bus) from Dasmarinas or Tagaytay connects to Indang main campus."
+        "CvSU's Main Campus (Don Severino delas Alas Campus) is located in Indang, Cavite. "
+        "CvSU also operates additional campuses across the province of Cavite. "
+        "Public transport (jeepney/bus) from Dasmarinas or Tagaytay connects to the Indang main campus. "
+        "For the complete and current list of CvSU campuses and their addresses, please visit www.cvsu.edu.ph."
     ),
     (
-        "Ang CvSU Main Campus ay nasa Indang, Cavite — mga 60 km mula Maynila. "
-        "Mayroon itong 13 campus sa buong lalawigan ng Cavite. "
-        "Maaaring sumasakay ng jeepney o bus papunta sa Indang mula Dasmarinas o Tagaytay. "
-        "Para sa ibang campus, makipag-ugnayan sa campus na pinaka-malapit sa inyo. "
+        "Ang CvSU Main Campus ay nasa Indang, Cavite. "
+        "Mayroon ding ibang campus ang CvSU sa lalawigan ng Cavite. "
+        "Maaaring sumakay ng jeepney o bus papunta sa Indang mula Dasmarinas o Tagaytay. "
+        "Para sa kumpleto at napapanahong listahan ng mga campus, bisitahin ang www.cvsu.edu.ph. "
         "Salamat sa inyong tanong!"
     ),
 ])
@@ -621,17 +621,17 @@ add_responses("campus_location", [
 # --- campus_facilities (1 existing) ---
 add_responses("campus_facilities", [
     (
-        "CvSU's facilities include the Ladislao Diwa Memorial Library (92,000+ volumes), "
+        "CvSU's facilities typically include the Ladislao Diwa Memorial Library, "
         "science and computer laboratories, a Health Service Unit, Guidance & Counseling office, "
-        "student dormitories (at select campuses), cafeteria, chapel, sports facilities, "
-        "and research centers like AREC, SPRINT, and BRITE. "
-        "CvSU is a Center of Excellence in Agriculture — facilities reflect this specialization."
+        "student dormitories (at select campuses), cafeteria, chapel, and sports facilities. "
+        "Available facilities vary per campus. "
+        "For the specific facilities at your campus of interest, please check www.cvsu.edu.ph."
     ),
     (
-        "Ang CvSU ay may kompletong pasilidad para sa mga estudyante: library na may 92,000+ libro, "
-        "science at computer labs, health clinic, guidance office, dormitoryo (sa ilang campus), "
-        "cafeteria, kapilya, sports facilities, at mga research center. "
-        "Para sa tiyak na pasilidad ng inyong campus, makipag-ugnayan sa student affairs office. "
+        "Karaniwang may library, science at computer labs, health clinic, guidance office, "
+        "dormitoryo (sa ilang campus), cafeteria, kapilya, at sports facilities ang CvSU. "
+        "Ang available na pasilidad ay nag-iiba bawat campus. "
+        "Para sa tiyak na pasilidad ng inyong campus, makipag-ugnayan sa student affairs office o bisitahin ang www.cvsu.edu.ph. "
         "Salamat sa inyong tanong!"
     ),
 ])
@@ -846,21 +846,16 @@ add_responses("events", [
 # --- contact_info (1 existing) ---
 add_responses("contact_info", [
     (
-        "CvSU CONTACT INFORMATION:\n"
-        "Main Campus (Indang): (046) 415-0010\n"
-        "General Email: info@cvsu.edu.ph\n"
-        "Admissions: admissions@cvsu.edu.ph\n"
-        "Registrar: registrarmain@cvsu.edu.ph\n"
-        "Official Website: www.cvsu.edu.ph\n"
-        "Facebook: facebook.com/CaviteStateUniversity (verify official page)\n\n"
-        "For campus-specific contacts (Imus, Bacoor, Naic, etc.), "
-        "visit www.cvsu.edu.ph and navigate to your campus page."
+        "For the most current CvSU contact information — phone numbers, emails for the Main Campus (Indang) "
+        "and other campuses, and office-specific contacts (Admissions, Registrar, OSAS, etc.) — "
+        "please refer to the official directory at www.cvsu.edu.ph. "
+        "The official Facebook page is also linked from the website (please verify it is the genuine page before messaging). "
+        "Telling me the office or campus you need will help me point you to the right department."
     ),
     (
-        "Para makipag-ugnayan sa CvSU: "
-        "Tawagan ang Main Campus sa (046) 415-0010 o mag-email sa info@cvsu.edu.ph. "
-        "Para sa Admissions: admissions@cvsu.edu.ph | Registrar: registrarmain@cvsu.edu.ph. "
-        "Bisitahin ang www.cvsu.edu.ph para sa contact info ng bawat campus. "
+        "Para sa pinakabagong contact information ng CvSU — phone numbers, emails ng Main Campus (Indang) "
+        "at ibang campus, at office-specific contacts — mangyaring bisitahin ang opisyal na directory sa www.cvsu.edu.ph. "
+        "Sabihin sa akin kung anong opisina o campus ang hinahanap ninyo para matulungan ko kayong matukoy ang tamang departamento. "
         "Salamat sa inyong tanong!"
     ),
 ])
@@ -868,18 +863,19 @@ add_responses("contact_info", [
 # --- registrar (1 existing) ---
 add_responses("registrar", [
     (
-        "The CvSU Registrar's Office handles all academic records including Transcript of Records (TOR), "
+        "The CvSU Registrar's Office handles academic records including Transcript of Records (TOR), "
         "Diploma, Certificate of Enrollment, Good Moral Certificate, and Grade Certificates. "
-        "REQUIREMENTS FOR TOR: Clearance slip, request form, payment of fees. "
-        "Processing time: 5–10 working days (varies). "
-        "Contact: registrarmain@cvsu.edu.ph | Phone: (046) 415-0010\n"
-        "Office Hours: Mon–Fri, 8AM–5PM (no noon break for some services)."
+        "Typical steps: secure a clearance slip, fill out the request form, and settle the applicable fees. "
+        "Processing time and exact fees vary by document and campus. "
+        "For the current registrar contact details, office hours, and processing schedule of your campus, "
+        "please refer to www.cvsu.edu.ph."
     ),
     (
-        "Para mag-request ng TOR, diploma, o iba pang dokumento mula sa CvSU Registrar: "
-        "kumuha ng clearance slip, punan ang request form, at bayaran ang applicable fees. "
-        "Processing time ay 5–10 araw ng trabaho. "
-        "Email: registrarmain@cvsu.edu.ph | Tel: (046) 415-0010. "
+        "Hinahawakan ng Registrar's Office ng CvSU ang mga academic records: TOR, diploma, "
+        "Certificate of Enrollment, Good Moral, atbp. "
+        "Karaniwang proseso: kumuha ng clearance slip, punan ang request form, at bayaran ang mga applicable fees. "
+        "Ang processing time at fees ay nag-iiba depende sa dokumento at campus. "
+        "Para sa pinakabagong contact at office hours, mangyaring bisitahin ang www.cvsu.edu.ph. "
         "Salamat sa inyong tanong!"
     ),
 ])
@@ -887,17 +883,18 @@ add_responses("registrar", [
 # --- student_organizations (1 existing) ---
 add_responses("student_organizations", [
     (
-        "CvSU has 84+ recognized student organizations covering academics, culture, arts, sports, "
-        "and advocacy. These include college-based organizations, the Supreme Student Government (SSG), "
+        "CvSU has a number of recognized student organizations covering academics, culture, arts, sports, "
+        "and advocacy. These typically include college-based organizations, a university-wide student government, "
         "literary and journalism orgs, debate clubs, cultural dance troupes, and more. "
         "To join: attend the organization fair during enrollment, or inquire directly with the org officers. "
-        "Registration is through the Office of Student Affairs & Services (OSAS)."
+        "Registration is handled through the Office of Student Affairs & Services (OSAS). "
+        "For the current list of recognized organizations, please check www.cvsu.edu.ph or OSAS at your campus."
     ),
     (
-        "Ang CvSU ay may 84+ recognized student organizations — mula sa academic orgs, "
+        "Ang CvSU ay may iba't ibang recognized student organizations — academic orgs, "
         "cultural groups, sports clubs, hanggang sa journalism at debate societies. "
         "Para sumali, dumalo sa org fair sa enrollment period o makipag-ugnayan sa OSAS. "
-        "Ang SSG (Supreme Student Government) ang pangunahing student council ng CvSU. "
+        "Para sa pinakabagong listahan ng mga recognized organization, bisitahin ang www.cvsu.edu.ph. "
         "Salamat sa inyong tanong!"
     ),
 ])
@@ -905,17 +902,16 @@ add_responses("student_organizations", [
 # --- campus_specific (1 existing) ---
 add_responses("campus_specific", [
     (
-        "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, "
-        "Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. "
-        "Each campus offers select programs — not all courses are available at every campus. "
-        "For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph "
-        "and click on your preferred campus."
+        "CvSU operates a Main Campus in Indang, along with additional campuses across the province of Cavite. "
+        "Each campus offers a selection of programs — not all courses are available at every campus. "
+        "For the current and complete list of CvSU campuses, the programs offered at each, and their contact details, "
+        "please visit www.cvsu.edu.ph and select the campus page you're interested in."
     ),
     (
-        "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, "
-        "Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. "
+        "Mayroong Main Campus sa Indang at iba pang campus ang CvSU sa buong lalawigan ng Cavite. "
         "Hindi lahat ng programa ay available sa bawat campus. "
-        "Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. "
+        "Para sa kumpleto at napapanahong listahan ng CvSU campuses at ng kanilang programs, "
+        "mangyaring bisitahin ang opisyal na website na www.cvsu.edu.ph. "
         "Salamat sa inyong tanong!"
     ),
 ])
