@@ -1,1 +1,210 @@
-{}
+{
+  "wp_plaza": {
+    "x": 717,
+    "y": 1692
+  },
+  "wp_gate1": {
+    "x": 857,
+    "y": 1686
+  },
+  "wp_mall": {
+    "x": 1124,
+    "y": 1846
+  },
+  "wp_gate3": {
+    "x": 1114,
+    "y": 1666
+  },
+  "wp_boys_dorm": {
+    "x": 1234,
+    "y": 1666
+  },
+  "wp_girls_dorm": {
+    "x": 1392,
+    "y": 1662
+  },
+  "wp_softball": {
+    "x": 807,
+    "y": 1579
+  },
+  "wp_clinic": {
+    "x": 588,
+    "y": 1479
+  },
+  "wp_ccj": {
+    "x": 567,
+    "y": 1409
+  },
+  "wp_coed": {
+    "x": 717,
+    "y": 1254
+  },
+  "wp_chapel": {
+    "x": 554,
+    "y": 1359
+  },
+  "wp_gate2": {
+    "x": 583,
+    "y": 1247
+  },
+  "wp_ceit": {
+    "x": 778,
+    "y": 1205
+  },
+  "wp_oval": {
+    "x": 787,
+    "y": 1454
+  },
+  "wp_admin": {
+    "x": 757,
+    "y": 1247
+  },
+  "wp_grad": {
+    "x": 1280,
+    "y": 1135
+  },
+  "wp_library": {
+    "x": 1338,
+    "y": 1189
+  },
+  "wp_osas": {
+    "x": 1064,
+    "y": 1475
+  },
+  "wp_bahay": {
+    "x": 1276,
+    "y": 1649
+  },
+  "wp_gym": {
+    "x": 1089,
+    "y": 1554
+  },
+  "wp_cas": {
+    "x": 1189,
+    "y": 1156
+  },
+  "wp_con": {
+    "x": 1230,
+    "y": 998
+  },
+  "wp_processing": {
+    "x": 1437,
+    "y": 1500
+  },
+  "wp_cafenr": {
+    "x": 1387,
+    "y": 1268
+  },
+  "wp_cemds": {
+    "x": 1407,
+    "y": 1316
+  },
+  "wp_research": {
+    "x": 1366,
+    "y": 1215
+  },
+  "wp_hostel": {
+    "x": 1429,
+    "y": 977
+  },
+  "wp_bano": {
+    "x": 1504,
+    "y": 820
+  },
+  "wp_das": {
+    "x": 1309,
+    "y": 706
+  },
+  "wp_rolle": {
+    "x": 1089,
+    "y": 1019
+  },
+  "wp_icon": {
+    "x": 1263,
+    "y": 845
+  },
+  "wp_cvmbs": {
+    "x": 1230,
+    "y": 666
+  },
+  "wp_star_farm": {
+    "x": 1209,
+    "y": 563
+  },
+  "wp_sw": {
+    "x": 766,
+    "y": 1728
+  },
+  "wp_south_row": {
+    "x": 986,
+    "y": 1678
+  },
+  "wp_west": {
+    "x": 612,
+    "y": 1720
+  },
+  "wp_int_w_admin": {
+    "x": 730,
+    "y": 1279
+  },
+  "wp_central": {
+    "x": 1039,
+    "y": 1388
+  },
+  "wp_int_e_mid": {
+    "x": 1201,
+    "y": 1429
+  },
+  "wp_north_ring": {
+    "x": 1375,
+    "y": 828
+  },
+  "wp_custom_1": {
+    "x": 983,
+    "y": 1022,
+    "neighbors": [
+      "wp_rolle",
+      "wp_cas"
+    ]
+  },
+  "wp_custom_2": {
+    "x": 1020,
+    "y": 1171,
+    "neighbors": [
+      "wp_custom_1",
+      "wp_rolle"
+    ]
+  },
+  "wp_custom_3": {
+    "x": 665,
+    "y": 1060,
+    "neighbors": [
+      "wp_ceit",
+      "wp_coed"
+    ]
+  },
+  "wp_custom_4": {
+    "x": 848,
+    "y": 1037,
+    "neighbors": [
+      "wp_custom_1",
+      "wp_custom_3"
+    ]
+  },
+  "wp_custom_5": {
+    "x": 874,
+    "y": 1190,
+    "neighbors": [
+      "wp_ceit",
+      "wp_admin"
+    ]
+  },
+  "wp_custom_6": {
+    "x": 942,
+    "y": 1183,
+    "neighbors": [
+      "wp_custom_5",
+      "wp_custom_2"
+    ]
+  }
+}
