@@ -76,148 +76,148 @@ _PLACE_METADATA: Dict[str, Dict[str, Any]] = {
 
     "plaza":          {"num": 1,  "short": "Plaza",         "full": "University Plaza (Laya't Diwa)",
                        "walk_minutes_from_gate": 1, "direction_from_gate": "Just inside Gate 1 on the south entrance.",
-                       "x": 806, "y": 1715},
+                       "x": 636, "y": 1670},
     "gate_1":         {"num": 2,  "short": "Gate 1",        "full": "Gate 1 (Main Gate)",
                        "walk_minutes_from_gate": 0, "direction_from_gate": "Gate 1 is the southern main entrance — you're here.",
-                       "x": 868, "y": 1670},
+                       "x": 639, "y": 1610},
     "softball":       {"num": 3,  "short": "Softball",      "full": "Softball Field",
                        "walk_minutes_from_gate": 2, "direction_from_gate": "From Gate 1, head west along the southern boundary.",
-                       "x": 746, "y": 1586},
+                       "x": 537, "y": 1400},
     "intl_house":     {"num": 4,  "short": "Intl House",    "full": "International House — Marketing",
                        "walk_minutes_from_gate": 1, "direction_from_gate": "From Gate 1, walk east a short distance.",
-                       "x": 943, "y": 1705},
+                       "x": 713, "y": 1612},
     "bleachers":      {"num": 5,  "short": "Bleachers",     "full": "Bleachers",
                        "walk_minutes_from_gate": 2, "direction_from_gate": "Walk north from Gate 1 toward the University Oval.",
-                       "x": 985, "y": 1628},
+                       "x": 781, "y": 1610},
     "open_court":     {"num": 6,  "short": "Open Court",    "full": "Open Court",
                        "walk_minutes_from_gate": 3, "direction_from_gate": "Walk north from Gate 1; the open court is east of the oval.",
-                       "x": 953, "y": 1581},
+                       "x": 781, "y": 1490},
     "oval":           {"num": 7,  "short": "Oval",          "full": "University Oval — Grandstand",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "Walk straight north from Gate 1; the oval is the central track.",
-                       "x": 900, "y": 1382},
+                       "x": 684, "y": 1265},
     "mall":           {"num": 8,  "short": "Mall",          "full": "University Mall",
                        "walk_minutes_from_gate": 2, "direction_from_gate": "From Gate 1, walk east along the southern row.",
-                       "x": 1124, "y": 1733},
+                       "x": 843, "y": 1610},
     "osas":           {"num": 9,  "short": "OSAS",          "full": "Office of Student Affairs and Services (OSAS) — University Registrar",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "From Gate 1, walk north past the oval; OSAS / Registrar is on the east side.",
-                       "x": 1122, "y": 1439},
+                       "x": 895, "y": 1370},
     "gym":            {"num": 10, "short": "Gymnasium",     "full": "College of Sports and Physical Education and Recreation — University Gymnasium",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "Walk north past the bleachers and open court; the gymnasium is on the east side.",
-                       "x": 1154, "y": 1563},
+                       "x": 928, "y": 1510},
     "boys_dorm":      {"num": 11, "short": "Boys Dorm",     "full": "Boy's Dormitory",
                        "walk_minutes_from_gate": 3, "direction_from_gate": "From Gate 1, walk east past the University Mall.",
-                       "x": 1246, "y": 1708},
+                       "x": 928, "y": 1610},
     "bahay_alumni":   {"num": 12, "short": "Bahay Alumni",  "full": "Bahay Alumni",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "Walk east past the mall and gymnasium; near the east dorm cluster.",
-                       "x": 1261, "y": 1601},
+                       "x": 990, "y": 1545},
     "girls_dorm":     {"num": 13, "short": "Girls Dorm",    "full": "Girl's Dormitory",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "Walk east along the southern row, past Bahay Alumni.",
-                       "x": 1368, "y": 1695},
+                       "x": 1052, "y": 1610},
     "ncrdec":         {"num": 14, "short": "NCRDEC",        "full": "National Coffee Research, Development, and Extension Center (NCRDEC)",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Walk east to the far edge of campus; NCRDEC is in the eastern strip.",
-                       "x": 1530, "y": 1568},
+                       "x": 1081, "y": 1370},
     "demo_farm":      {"num": 15, "short": "Demo Farm",     "full": "Technology Demonstration Farm",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Walk northeast past the gymnasium toward the agri zone.",
-                       "x": 1495, "y": 1399},
+                       "x": 1087, "y": 1275},
     "processing":     {"num": 16, "short": "Processing",    "full": "Fruits and Vegetable Processing Center",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Northeast section, next to the demo farm.",
-                       "x": 1368, "y": 1429},
+                       "x": 1009, "y": 1275},
     "cafenr":         {"num": 17, "short": "CAFENR",        "full": "College of Agriculture, Food, Environment, and Natural Resources (CAFENR)",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Walk north past Admin and the oval; CAFENR is in the central-east area.",
-                       "x": 1306, "y": 1300},
+                       "x": 960, "y": 1155},
     "dcs":            {"num": 18, "short": "DCS",           "full": "Department of Crop Science (DCS)",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Beside CAFENR in the central-east cluster.",
-                       "x": 1251, "y": 1327},
+                       "x": 928, "y": 1145},
     "cemds":          {"num": 19, "short": "CEMDS",         "full": "College of Economics, Management, and Development Studies (CEMDS)",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Walk north past Admin and CAFENR; CEMDS is north-central, east side.",
-                       "x": 1468, "y": 1292},
+                       "x": 1013, "y": 1040},
     "research_center":{"num": 20, "short": "Research",      "full": "Research Center",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Just north of CEMDS in the north-central area.",
-                       "x": 1443, "y": 1185},
+                       "x": 1006, "y": 950},
     "cthm":           {"num": 21, "short": "CTHM",          "full": "College of Tourism and Hospitality Management (CTHM)",
                        "walk_minutes_from_gate": 7, "direction_from_gate": "Walk north along the eastern road past CEMDS.",
-                       "x": 1420, "y": 1091},
+                       "x": 977, "y": 910},
     "cas":            {"num": 22, "short": "CAS",           "full": "College of Arts and Sciences (CAS)",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Walk north from Gate 1 past Admin and the oval; CAS is in the upper-central cluster.",
-                       "x": 1189, "y": 1088},
+                       "x": 876, "y": 910},
     "old_cemds":      {"num": 23, "short": "Old CEMDS",     "full": "Old CEMDS Building",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Walk north from Gate 1 past Admin; the Old CEMDS is west of CAS.",
-                       "x": 960, "y": 1088},
+                       "x": 762, "y": 910},
     "admin":          {"num": 24, "short": "Admin",         "full": "Administration Building — University Cashier",
                        "walk_minutes_from_gate": 3, "direction_from_gate": "Walk straight north from Gate 1 — the Administration Building is the first major structure.",
-                       "x": 851, "y": 1223},
+                       "x": 635, "y": 1015},
     "ceit":           {"num": 25, "short": "CEIT",          "full": "College of Engineering and Information Technology (CEIT)",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Walk north from Gate 1 then bear left past Admin; CEIT is near Gate 2.",
-                       "x": 754, "y": 1173},
+                       "x": 566, "y": 910},
     "child_dev":      {"num": 26, "short": "Child Dev",     "full": "Child Development Center",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Enter via Gate 2 on the west, or walk north-west from Gate 1.",
-                       "x": 622, "y": 1121},
+                       "x": 517, "y": 910},
     "gate_2":         {"num": 27, "short": "Gate 2",        "full": "Gate 2",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Gate 2 is the western entrance, on the side of CEIT and the Chapel.",
-                       "x": 582, "y": 1213},
+                       "x": 517, "y": 985},
     "chapel":         {"num": 28, "short": "Chapel",        "full": "University Chapel",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Enter via Gate 2 or walk west from the central road past Admin.",
-                       "x": 530, "y": 1354},
+                       "x": 511, "y": 1095},
     "ccj":            {"num": 29, "short": "CCJ",           "full": "College of Criminal Justice (CCJ)",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "On the western edge, south of the Chapel.",
-                       "x": 557, "y": 1439},
+                       "x": 511, "y": 1170},
     "clinic":         {"num": 30, "short": "Clinic",        "full": "University Clinic (Infirmary)",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "Walk west from Gate 1 along the southern road, then turn north.",
-                       "x": 607, "y": 1561},
+                       "x": 511, "y": 1265},
     "sci_hs":         {"num": 31, "short": "Sci HS",        "full": "Science Highschool",
                        "walk_minutes_from_gate": 4, "direction_from_gate": "Walk north from Gate 1, then west of the Administration Building.",
-                       "x": 726, "y": 1466},
+                       "x": 599, "y": 1145},
     "quadrangle":     {"num": 32, "short": "Quad",          "full": "Quadrangle",
                        "walk_minutes_from_gate": 3, "direction_from_gate": "The open area just south of the Administration Building.",
-                       "x": 699, "y": 1374},
+                       "x": 628, "y": 1140},
     "coed":           {"num": 33, "short": "CEd",           "full": "College of Education (CED)",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Walk north past Admin; CED is in the west-central cluster near CEIT.",
-                       "x": 677, "y": 1277},
+                       "x": 599, "y": 1060},
     "hostel":         {"num": 34, "short": "Hostel",        "full": "Hostel Tropicana",
                        "walk_minutes_from_gate": 8, "direction_from_gate": "Walk north past CEMDS and the Research Center; in the northeast cluster.",
-                       "x": 1430, "y": 1001},
+                       "x": 1048, "y": 870},
     "agri_eco":       {"num": 35, "short": "Agri-Eco",      "full": "CvSU Agri-Eco Park",
                        "walk_minutes_from_gate": 9, "direction_from_gate": "Walk north along the eastern road past CTHM and the hostel.",
-                       "x": 1552, "y": 949},
+                       "x": 1091, "y": 845},
     "saluysoy":       {"num": 36, "short": "Saluysoy",      "full": "Saluysoy",
                        "walk_minutes_from_gate": 9, "direction_from_gate": "Walk north past CTHM into the upper-east section.",
-                       "x": 1423, "y": 884},
+                       "x": 1039, "y": 780},
     "bano_resort":    {"num": 37, "short": "Baño Resort",   "full": "Baño De Señora Resort",
                        "walk_minutes_from_gate": 10, "direction_from_gate": "Walk north all the way past CTHM and the Agri-Eco area; the resort is at the northeast edge.",
-                       "x": 1493, "y": 797},
+                       "x": 1091, "y": 715},
     "icon":           {"num": 38, "short": "ICON",          "full": "International Convention Center (ICON)",
                        "walk_minutes_from_gate": 9, "direction_from_gate": "Walk far north past CAS and the library cluster.",
-                       "x": 1159, "y": 840},
+                       "x": 804, "y": 720},
     "con":            {"num": 39, "short": "CON",           "full": "College of Nursing (CON)",
                        "walk_minutes_from_gate": 8, "direction_from_gate": "Walk north past Admin and the library; CON is in the north-central area near CAS.",
-                       "x": 1211, "y": 1024},
+                       "x": 876, "y": 855},
     "cvmbs":          {"num": 40, "short": "CVMBS",         "full": "College of Veterinary Medicine and Biological Sciences (CVMBS)",
                        "walk_minutes_from_gate": 11, "direction_from_gate": "Walk far north past CAS, the library, and ICON; CVMBS is in the upper-north section.",
-                       "x": 1124, "y": 703},
+                       "x": 749, "y": 595},
     "star_farm":      {"num": 41, "short": "Star Farm",     "full": "CvSU Star Farm",
                        "walk_minutes_from_gate": 13, "direction_from_gate": "All the way north past CVMBS — the Star Farm is at the far northern tip.",
-                       "x": 1221, "y": 566},
+                       "x": 833, "y": 515},
     "das":            {"num": 42, "short": "DAS",           "full": "Department of Animal Science (DAS)",
                        "walk_minutes_from_gate": 11, "direction_from_gate": "Walk far north past CTHM and the Agri-Eco area; DAS is east of CVMBS.",
-                       "x": 1311, "y": 700},
+                       "x": 892, "y": 600},
     "gate_3":         {"num": 43, "short": "Gate 3",        "full": "Gate 3",
                        "walk_minutes_from_gate": 2, "direction_from_gate": "Gate 3 is the third entrance, on the south side near the dorm row.",
-                       "x": 1104, "y": 1650},
+                       "x": 807, "y": 1610},
     "lagoon":         {"num": 44, "short": "Lagoon",        "full": "Lagoon",
                        "walk_minutes_from_gate": 9, "direction_from_gate": "Walk north past Admin, the library, and CAS — the lagoon is the water feature in the north-central area.",
-                       "x": 1174, "y": 939},
+                       "x": 853, "y": 760},
     "library":        {"num": 45, "short": "Library",       "full": "Ladislao N. Diwa Memorial Library",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Walk north from Gate 1 past the Administration Building and CAFENR; the library is central.",
-                       "x": 1256, "y": 1225},
+                       "x": 918, "y": 1040},
     "gender_dev":     {"num": 46, "short": "GAD",           "full": "Gender and Development Research Center",
                        "walk_minutes_from_gate": 6, "direction_from_gate": "Walk north past Admin and the library; the GAD Research Center is in the central area near CAS.",
-                       "x": 1174, "y": 1190},
+                       "x": 853, "y": 975},
     "grad":           {"num": 47, "short": "Grad School",   "full": "Graduate School",
                        "walk_minutes_from_gate": 5, "direction_from_gate": "Walk north from Gate 1 past Admin; Graduate School is in the central area near the library.",
-                       "x": 1055, "y": 1233},
+                       "x": 736, "y": 1040},
     "rolle_hall":     {"num": 48, "short": "Rolle Hall",    "full": "S.M Rolle Hall",
                        "walk_minutes_from_gate": 8, "direction_from_gate": "Walk north past CAS into the upper-central area.",
-                       "x": 1055, "y": 912},
+                       "x": 778, "y": 760},
 }
 
 _PLACE_LABELS: Dict[str, str] = {pid: meta["full"] for pid, meta in _PLACE_METADATA.items()}
@@ -295,42 +295,6 @@ def reset_coord_overrides() -> None:
     """Delete the override file. Hardcoded defaults take effect at next reload."""
     if _OVERRIDE_PATH.exists():
         _OVERRIDE_PATH.unlink()
-
-
-# ---------------------------------------------------------------------------
-# Waypoint overrides — routing-graph nodes live on the frontend, but their
-# admin-edited positions are persisted on the backend so they sync across
-# clients. Backend just stores raw JSON; routing is computed in the browser.
-# ---------------------------------------------------------------------------
-
-_WAYPOINTS_PATH = _Path(__file__).resolve().parent.parent / "data" / "waypoints_override.json"
-
-
-def list_waypoint_overrides() -> Dict[str, Dict[str, int]]:
-    if not _WAYPOINTS_PATH.exists():
-        return {}
-    try:
-        return _json.loads(_WAYPOINTS_PATH.read_text(encoding="utf-8")) or {}
-    except (OSError, _json.JSONDecodeError):
-        return {}
-
-
-def save_waypoint_overrides(coords: Dict[str, Dict[str, int]]) -> int:
-    """Persist `coords` (waypoint_id -> {x, y}) merged with whatever's on disk."""
-    _WAYPOINTS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    existing = list_waypoint_overrides()
-    for wid, c in coords.items():
-        if not isinstance(c, dict):
-            continue
-        if "x" in c and "y" in c:
-            existing[wid] = {"x": int(c["x"]), "y": int(c["y"])}
-    _WAYPOINTS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
-    return len(existing)
-
-
-def reset_waypoint_overrides() -> None:
-    if _WAYPOINTS_PATH.exists():
-        _WAYPOINTS_PATH.unlink()
 
 
 # Apply any saved overrides immediately at import time.
@@ -781,5 +745,4 @@ __all__ = [
     "resolve_map_data", "resolve_directory",
     "build_place_meta", "campus_map_payload", "has_place",
     "save_coord_overrides", "list_coord_overrides", "reset_coord_overrides",
-    "save_waypoint_overrides", "list_waypoint_overrides", "reset_waypoint_overrides",
 ]

@@ -39,7 +39,7 @@ lemmatizer = WordNetLemmatizer()
 # SYSTEM INSTRUCTIONS / AGENT PERSONALITY
 # ============================================================================
 SYSTEM_INSTRUCTIONS = """
-You are Sevi, the CvSU Virtual Assistant - a helpful, friendly guide for Cavite State University.
+You are DIWA, the Digital Interface Web Assistant for Cavite State University - a helpful, friendly guide.
 
 1. IDENTITY AND SCOPE
 - You serve prospective students, current students, parents, faculty, and the general public.
@@ -118,7 +118,7 @@ You are a helpful starting point and information aggregator, not the final autho
 # ============================================================================
 app = FastAPI(
     title="CvSU Chatbot API",
-    description="REST API for Sevi, the CvSU Virtual Assistant",
+    description="REST API for DIWA, the Digital Interface Web Assistant for CvSU",
     version="1.0.0"
 )
 
@@ -143,15 +143,73 @@ class ChatRequest(BaseModel):
 from api.campus_places import (
     MapData,
     PlaceMeta,
+    Directory,
     resolve_map_data as _resolve_map_data,
+    resolve_directory as _resolve_directory,
     build_place_meta as _build_place_meta,
     campus_map_payload as _campus_map_payload,
     has_place as _has_place,
+    save_coord_overrides as _save_coord_overrides,
+    list_coord_overrides as _list_coord_overrides,
+    reset_coord_overrides as _reset_coord_overrides,
+    save_waypoint_overrides as _save_waypoint_overrides,
+    list_waypoint_overrides as _list_waypoint_overrides,
+    reset_waypoint_overrides as _reset_waypoint_overrides,
 )
+
+
+class CoordEntry(BaseModel):
+    x: int
+    y: int
+
+
+class CoordsUpdate(BaseModel):
+    """Body for PUT /map/coords. Keys are place_ids."""
+    coords: Dict[str, CoordEntry]
+
+
+def _is_header_line(line: str) -> bool:
+    s = line.strip()
+    if len(s) < 25:
+        return True
+    if s.endswith(":") and len(s) < 60:
+        return True
+    letters = [c for c in s if c.isalpha()]
+    return bool(letters) and all(c.isupper() for c in letters)
+
+
+def _trim_to_sentence(head: str, max_chars: int) -> str:
+    if len(head) <= max_chars:
+        return head
+    for terminator in (". ", "? ", "! "):
+        idx = head.find(terminator)
+        if 30 < idx < max_chars:
+            return head[: idx + 1].strip()
+    return head[:max_chars].rstrip() + "…"
+
+
+def _extract_summary(text: str, max_chars: int = 240) -> str:
+    """Pull the first meaningful paragraph or sentence from a response.
+
+    Skips header-like lines ("CvSU REGISTRAR SERVICES:", all-caps, ends with
+    a colon, or too short) so the UI summary never looks like just a heading.
+    """
+    if not text:
+        return ""
+    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+    for para in paragraphs:
+        if _is_header_line(para.split("\n", 1)[0]):
+            continue
+        return _trim_to_sentence(para.replace("\n", " ").strip(), max_chars)
+    if paragraphs:
+        return _trim_to_sentence(paragraphs[0].replace("\n", " "), max_chars)
+    return text[:max_chars].strip()
+
 
 class ChatResponse(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
     response: str
+    summary: Optional[str] = None      # short lead-in for UI cards / previews
     intent: str
     confidence: float
     model_used: Optional[str] = None
@@ -161,6 +219,7 @@ class ChatResponse(BaseModel):
     is_follow_up: Optional[bool] = None
     message_id: Optional[int] = None
     map_data: Optional[MapData] = None
+    directory: Optional[Directory] = None   # structured office/location card
 
 class IntentInfo(BaseModel):
     tag: str
@@ -224,7 +283,7 @@ async def root():
     """Root endpoint - API status."""
     return {
         "service": "CvSU Chatbot API",
-        "assistant_name": "Sevi",
+        "assistant_name": "DIWA",
         "status": "active",
         "version": "1.0.0",
         "documentation": "/docs"
@@ -286,6 +345,7 @@ async def chat_endpoint(request: ChatRequest):
 
     return ChatResponse(
         response=response,
+        summary=_extract_summary(response),
         intent=intent,
         confidence=confidence,
         model_used=model_used,
@@ -295,6 +355,7 @@ async def chat_endpoint(request: ChatRequest):
         is_follow_up=nlu_data.get("is_follow_up", False),
         message_id=message_id,
         map_data=_resolve_map_data(request.message, intent),
+        directory=_resolve_directory(intent),
     )
 
 @app.get("/intents", tags=["Intents"])
@@ -318,6 +379,63 @@ async def get_campus_map():
     times, or directions without recompiling the frontend.
     """
     return _campus_map_payload()
+
+@app.get("/map/coords", tags=["Map"])
+async def get_map_coords():
+    """Return all current effective marker coords + just the override layer.
+
+    The `coords` block is what /map serves (defaults merged with admin
+    overrides). The `overrides` block is just the admin-edited deltas on disk.
+    """
+    payload = _campus_map_payload()
+    coords = {
+        p.place_id: {"x": p.x, "y": p.y}
+        for p in payload["places"]
+        if p.x is not None and p.y is not None
+    }
+    return {"coords": coords, "overrides": _list_coord_overrides()}
+
+
+@app.put("/map/coords", tags=["Map"])
+async def put_map_coords(body: CoordsUpdate):
+    """Admin: persist marker (x, y) edits to data/coords_override.json.
+
+    Existing overrides are merged with the body so partial updates don't
+    overwrite untouched entries. Bad place_ids are silently ignored.
+    """
+    payload = {pid: {"x": e.x, "y": e.y} for pid, e in body.coords.items()}
+    applied = _save_coord_overrides(payload)
+    return {"status": "saved", "applied": applied, "overrides": _list_coord_overrides()}
+
+
+@app.delete("/map/coords", tags=["Map"])
+async def delete_map_coords():
+    """Admin: clear all marker overrides; fall back to hardcoded defaults."""
+    _reset_coord_overrides()
+    return {"status": "reset"}
+
+
+@app.get("/map/waypoints", tags=["Map"])
+async def get_map_waypoints():
+    """Return waypoint overrides only. Frontend merges these onto its
+    bundled WAYPOINTS graph for routing.
+    """
+    return {"overrides": _list_waypoint_overrides()}
+
+
+@app.put("/map/waypoints", tags=["Map"])
+async def put_map_waypoints(body: CoordsUpdate):
+    """Admin: persist waypoint (x, y) edits."""
+    payload = {wid: {"x": e.x, "y": e.y} for wid, e in body.coords.items()}
+    count = _save_waypoint_overrides(payload)
+    return {"status": "saved", "overrides": _list_waypoint_overrides(), "total": count}
+
+
+@app.delete("/map/waypoints", tags=["Map"])
+async def delete_map_waypoints():
+    _reset_waypoint_overrides()
+    return {"status": "reset"}
+
 
 @app.get("/map/{place_id}", response_model=PlaceMeta, tags=["Map"],
          responses={404: {"description": "Place not found"}})
@@ -422,6 +540,7 @@ async def batch_chat(requests: List[ChatRequest]):
 
         results.append(ChatResponse(
             response=response,
+            summary=_extract_summary(response),
             intent=intent,
             confidence=confidence,
             model_used=model_used,
@@ -429,6 +548,8 @@ async def batch_chat(requests: List[ChatRequest]):
             session_id=request.session_id,
             entities=nlu_data.get("entities", {}),
             is_follow_up=nlu_data.get("is_follow_up", False),
+            map_data=_resolve_map_data(request.message, intent),
+            directory=_resolve_directory(intent),
         ))
     return {"count": len(results), "results": results}
 

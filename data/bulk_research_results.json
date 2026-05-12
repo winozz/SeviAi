@@ -101,9 +101,9 @@
   ],
   "results": [
     {
-      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
+      "response": "CvSU ADMISSION REQUIREMENTS & PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
       "intent": "admissions_requirements",
-      "confidence": 0.9208220833605291,
+      "confidence": 0.9207166642588858,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -113,9 +113,9 @@
       "map_data": null
     },
     {
-      "response": "Great question! Cavite State University (CvSU) is a premier state university in Cavite, Philippines, established in 1906 and granted university status in 1998 via RA 8468. It has 13 campuses across Cavite, serves over 22,000 students, and is a CHED Center of Excellence in Agriculture. Its motto is 'Truth, Excellence, Service.' Anything specific you'd like to know about CvSU?",
+      "response": "CvSU — Cavite State University — is your Iskolar para sa Bayan institution in Cavite! Founded in 1906 by the Thomasites, it became a full university in 1998. With 13 campuses, 22,000+ students, and recognition as a Center of Excellence, CvSU is one of the top-performing SUCs in the Philippines. Salamat sa inyong tanong — what else would you like to know?",
       "intent": "about_cvsu",
-      "confidence": 0.7839320752638088,
+      "confidence": 0.7841396846830097,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -125,9 +125,9 @@
       "map_data": null
     },
     {
-      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
+      "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
       "intent": "admissions_requirements",
-      "confidence": 0.705426058677517,
+      "confidence": 0.7045128802145875,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -137,9 +137,9 @@
       "map_data": null
     },
     {
-      "response": "Ang CvSU entrance exam (CAT) ay sumasaklaw ng English, Math, Science, at Abstract Reasoning. Dalhin ang exam permit, 2 pencils (#2), at valid ID sa araw ng pagsusulit. Ang resulta ay ilalabas pagkatapos ng 1–2 linggo. Bisitahin ang www.cvsu.edu.ph para sa schedule at venue ng exam. Salamat sa inyong tanong!",
+      "response": "CvSU ENTRANCE EXAMINATION:\n\nABOUT:\n- Required for ALL freshman applicants\n- Placement examination determines program qualification\n- Step 5 in the 10-step admission process\n\nREGISTRATION:\n- Apply first at admission.cvsu.edu.ph\n- After document validation, schedule exam slot\n- Bring valid ID and exam permit\n\nEXAM CONTENT (typical coverage):\n- English Language Proficiency\n- Mathematics\n- Science (General)\n- Reading Comprehension\n- Abstract Reasoning\n\nWHAT TO BRING:\n- Exam permit/Notice\n- Valid ID\n- Pencils (No. 2)\n- Eraser\n- Calculator (if allowed)\n\nWHEN:\n- Multiple schedules per academic year\n- First Semester applications: Usually November-March\n- Check announcements at https://admission.cvsu.edu.ph\n\nRESULTS: Notice of Admission (NOA) sent to qualified applicants via email/portal.\n\nCONTACT: Registrar's Office (046) 415-0010",
       "intent": "admissions_exam",
-      "confidence": 0.8821317536784701,
+      "confidence": 0.8817377688102861,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -153,7 +153,7 @@
       "map_data": null
     },
     {
-      "response": "CvSU ENTRANCE EXAMINATION:\n\nABOUT:\n- Required for ALL freshman applicants\n- Placement examination determines program qualification\n- Step 5 in the 10-step admission process\n\nREGISTRATION:\n- Apply first at admission.cvsu.edu.ph\n- After document validation, schedule exam slot\n- Bring valid ID and exam permit\n\nEXAM CONTENT (typical coverage):\n- English Language Proficiency\n- Mathematics\n- Science (General)\n- Reading Comprehension\n- Abstract Reasoning\n\nWHAT TO BRING:\n- Exam permit/Notice\n- Valid ID\n- Pencils (No. 2)\n- Eraser\n- Calculator (if allowed)\n\nWHEN:\n- Multiple schedules per academic year\n- First Semester applications: Usually November-March\n- Check announcements at https://admission.cvsu.edu.ph\n\nRESULTS: Notice of Admission (NOA) sent to qualified applicants via email/portal.\n\nCONTACT: Registrar's Office (046) 415-0010",
+      "response": "The CvSU College Admission Test (CAT) covers English, Math, Science, and Abstract Reasoning. It is administered at the Main Campus and other testing centers. Bring your exam permit, 2 pencils (#2), and a valid ID. Results are typically released 1–2 weeks after the exam. Check www.cvsu.edu.ph for the exact schedule and testing venues per campus.",
       "intent": "admissions_exam",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -165,9 +165,9 @@
       "map_data": null
     },
     {
-      "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
+      "response": "CvSU ADMISSION REQUIREMENTS & PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
       "intent": "admissions_requirements",
-      "confidence": 0.8955889556990665,
+      "confidence": 0.8962083368024483,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -177,9 +177,9 @@
       "map_data": null
     },
     {
-      "response": "Ang CvSU entrance exam (CAT) ay sumasaklaw ng English, Math, Science, at Abstract Reasoning. Dalhin ang exam permit, 2 pencils (#2), at valid ID sa araw ng pagsusulit. Ang resulta ay ilalabas pagkatapos ng 1–2 linggo. Bisitahin ang www.cvsu.edu.ph para sa schedule at venue ng exam. Salamat sa inyong tanong!",
+      "response": "The CvSU College Admission Test (CAT) covers English, Math, Science, and Abstract Reasoning. It is administered at the Main Campus and other testing centers. Bring your exam permit, 2 pencils (#2), and a valid ID. Results are typically released 1–2 weeks after the exam. Check www.cvsu.edu.ph for the exact schedule and testing venues per campus.",
       "intent": "admissions_exam",
-      "confidence": 0.9429158666942545,
+      "confidence": 0.9426535074927966,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -193,45 +193,9 @@
       "map_data": null
     },
     {
-      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
-      "intent": "admissions_requirements",
-      "confidence": 0.9218895904680011,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
-      "intent": "admissions_requirements",
-      "confidence": 1.0,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
-      "intent": "admissions_requirements",
-      "confidence": 0.8534119168505218,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
       "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
       "intent": "admissions_requirements",
-      "confidence": 1.0,
+      "confidence": 0.9216171309864194,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -241,9 +205,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU ENTRANCE EXAMINATION:\n\nABOUT:\n- Required for ALL freshman applicants\n- Placement examination determines program qualification\n- Step 5 in the 10-step admission process\n\nREGISTRATION:\n- Apply first at admission.cvsu.edu.ph\n- After document validation, schedule exam slot\n- Bring valid ID and exam permit\n\nEXAM CONTENT (typical coverage):\n- English Language Proficiency\n- Mathematics\n- Science (General)\n- Reading Comprehension\n- Abstract Reasoning\n\nWHAT TO BRING:\n- Exam permit/Notice\n- Valid ID\n- Pencils (No. 2)\n- Eraser\n- Calculator (if allowed)\n\nWHEN:\n- Multiple schedules per academic year\n- First Semester applications: Usually November-March\n- Check announcements at https://admission.cvsu.edu.ph\n\nRESULTS: Notice of Admission (NOA) sent to qualified applicants via email/portal.\n\nCONTACT: Registrar's Office (046) 415-0010",
-      "intent": "admissions_exam",
-      "confidence": 0.6238984135764944,
+      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
+      "intent": "admissions_requirements",
+      "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -255,7 +219,7 @@
     {
       "response": "CvSU ADMISSION REQUIREMENTS & PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
       "intent": "admissions_requirements",
-      "confidence": 0.9610781759126946,
+      "confidence": 0.8519094139407379,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -265,7 +229,43 @@
       "map_data": null
     },
     {
-      "response": "Ang mga pangunahing requirements para sa CvSU admission ay: application form, Form 137/SF9, PSA birth certificate, good moral certificate, at 2x2 photos. Para sa mga transferee, kailangan din ng transcript at honorable dismissal. Para sa kumpletong proseso, bisitahin ang www.cvsu.edu.ph o makipag-ugnayan sa Admissions Office. Salamat sa inyong tanong!",
+      "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
+      "intent": "admissions_requirements",
+      "confidence": 1.0,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
+      "intent": "nlu_fallback",
+      "confidence": 0.0,
+      "model_used": "Fallback",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU ADMISSION REQUIREMENTS & PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
+      "intent": "admissions_requirements",
+      "confidence": 0.9609595783012455,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU ADMISSION REQUIREMENTS & PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
       "intent": "admissions_requirements",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -279,7 +279,7 @@
     {
       "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
       "intent": "admissions_requirements",
-      "confidence": 0.946967864926429,
+      "confidence": 0.9459143928571684,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -295,7 +295,7 @@
     {
       "response": "Libre ang tuition sa CvSU para sa mga Filipino undergraduate students dahil sa RA 10931! Pero may miscellaneous fees pa rin na kailangang bayaran (laboratory, library, ID, atbp.) na karaniwang ₱3,000–₱6,000 bawat semester depende sa kurso at campus. Bayaran ito sa Cashier's Office ng inyong campus. Salamat sa inyong tanong!",
       "intent": "tuition_fees",
-      "confidence": 0.882542016169709,
+      "confidence": 0.8818859613544311,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -313,9 +313,9 @@
       "map_data": null
     },
     {
-      "response": "Good news — CvSU tuition is FREE under RA 10931 (Universal Access to Quality Tertiary Education Act) for Filipino students in undergraduate programs! However, miscellaneous fees still apply (laboratory, library, student ID, etc.) — typically ₱3,000–₱6,000 per semester depending on your course and campus. Pay at the Cashier's Office on campus. Some fees may be payable online — check your campus.",
+      "response": "CvSU TUITION FEES & FREE EDUCATION:\n\nGREAT NEWS! CvSU is covered by RA 10931 (Universal Access to Quality Tertiary Education Act of 2017).\n\nFREE TUITION COVERAGE (For qualified Filipino undergraduate students):\n- ZERO tuition fee\n- ZERO miscellaneous fees including:\n  * Library fees\n  * Computer fees\n  * Laboratory fees\n  * School ID (1st copy)\n  * Athletic fees\n  * Admission fees\n  * Development fees\n  * Guidance fees\n  * Student handbook (1st copy)\n  * Entrance fees\n  * Registration fees\n  * Medical and dental fees\n  * Cultural fees\n\nREQUIREMENTS FOR FREE TUITION:\n- Filipino citizenship\n- Pass admission requirements\n- Maintain academic standing\n- Enrolled in undergraduate degree program\n- Not yet earned a bachelor's degree\n\nWHAT YOU MAY STILL PAY:\n- Replacement of school ID/handbook\n- Some optional fees (uniform, books)\n- Allowances (transportation, meals)\n- Graduate school tuition (NOT covered by RA 10931)\n\nGRADUATE PROGRAMS (Masters/PhD):\n- Tuition still applies\n- Approximately PHP 6,500-10,000 per unit\n- Scholarships and assistantships available\n\nSCHOLARSHIPS & FINANCIAL AID:\n- Tertiary Education Subsidy (TES) for stipends\n- Government scholarships\n- Private scholarships\n- Academic merit scholarships\n\nFor specific fee details, contact:\nCashier's Office: (046) 415-0010\nEmail: cashier@cvsu.edu.ph",
       "intent": "tuition_fees",
-      "confidence": 0.9996321201324463,
+      "confidence": 0.9256551861763,
       "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -330,9 +330,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU TUITION FEES & FREE EDUCATION:\n\nGREAT NEWS! CvSU is covered by RA 10931 (Universal Access to Quality Tertiary Education Act of 2017).\n\nFREE TUITION COVERAGE (For qualified Filipino undergraduate students):\n- ZERO tuition fee\n- ZERO miscellaneous fees including:\n  * Library fees\n  * Computer fees\n  * Laboratory fees\n  * School ID (1st copy)\n  * Athletic fees\n  * Admission fees\n  * Development fees\n  * Guidance fees\n  * Student handbook (1st copy)\n  * Entrance fees\n  * Registration fees\n  * Medical and dental fees\n  * Cultural fees\n\nREQUIREMENTS FOR FREE TUITION:\n- Filipino citizenship\n- Pass admission requirements\n- Maintain academic standing\n- Enrolled in undergraduate degree program\n- Not yet earned a bachelor's degree\n\nWHAT YOU MAY STILL PAY:\n- Replacement of school ID/handbook\n- Some optional fees (uniform, books)\n- Allowances (transportation, meals)\n- Graduate school tuition (NOT covered by RA 10931)\n\nGRADUATE PROGRAMS (Masters/PhD):\n- Tuition still applies\n- Approximately PHP 6,500-10,000 per unit\n- Scholarships and assistantships available\n\nSCHOLARSHIPS & FINANCIAL AID:\n- Tertiary Education Subsidy (TES) for stipends\n- Government scholarships\n- Private scholarships\n- Academic merit scholarships\n\nFor specific fee details, contact:\nCashier's Office: (046) 415-0010\nEmail: cashier@cvsu.edu.ph",
+      "response": "Good news — CvSU tuition is FREE under RA 10931 (Universal Access to Quality Tertiary Education Act) for Filipino students in undergraduate programs! However, miscellaneous fees still apply (laboratory, library, student ID, etc.) — typically ₱3,000–₱6,000 per semester depending on your course and campus. Pay at the Cashier's Office on campus. Some fees may be payable online — check your campus.",
       "intent": "tuition_fees",
-      "confidence": 0.9756083679110518,
+      "confidence": 0.9754849170837777,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -342,7 +342,7 @@
       "map_data": null
     },
     {
-      "response": "Libre ang tuition sa CvSU para sa mga Filipino undergraduate students dahil sa RA 10931! Pero may miscellaneous fees pa rin na kailangang bayaran (laboratory, library, ID, atbp.) na karaniwang ₱3,000–₱6,000 bawat semester depende sa kurso at campus. Bayaran ito sa Cashier's Office ng inyong campus. Salamat sa inyong tanong!",
+      "response": "Good news — CvSU tuition is FREE under RA 10931 (Universal Access to Quality Tertiary Education Act) for Filipino students in undergraduate programs! However, miscellaneous fees still apply (laboratory, library, student ID, etc.) — typically ₱3,000–₱6,000 per semester depending on your course and campus. Pay at the Cashier's Office on campus. Some fees may be payable online — check your campus.",
       "intent": "tuition_fees",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -358,9 +358,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU TUITION FEES & FREE EDUCATION:\n\nGREAT NEWS! CvSU is covered by RA 10931 (Universal Access to Quality Tertiary Education Act of 2017).\n\nFREE TUITION COVERAGE (For qualified Filipino undergraduate students):\n- ZERO tuition fee\n- ZERO miscellaneous fees including:\n  * Library fees\n  * Computer fees\n  * Laboratory fees\n  * School ID (1st copy)\n  * Athletic fees\n  * Admission fees\n  * Development fees\n  * Guidance fees\n  * Student handbook (1st copy)\n  * Entrance fees\n  * Registration fees\n  * Medical and dental fees\n  * Cultural fees\n\nREQUIREMENTS FOR FREE TUITION:\n- Filipino citizenship\n- Pass admission requirements\n- Maintain academic standing\n- Enrolled in undergraduate degree program\n- Not yet earned a bachelor's degree\n\nWHAT YOU MAY STILL PAY:\n- Replacement of school ID/handbook\n- Some optional fees (uniform, books)\n- Allowances (transportation, meals)\n- Graduate school tuition (NOT covered by RA 10931)\n\nGRADUATE PROGRAMS (Masters/PhD):\n- Tuition still applies\n- Approximately PHP 6,500-10,000 per unit\n- Scholarships and assistantships available\n\nSCHOLARSHIPS & FINANCIAL AID:\n- Tertiary Education Subsidy (TES) for stipends\n- Government scholarships\n- Private scholarships\n- Academic merit scholarships\n\nFor specific fee details, contact:\nCashier's Office: (046) 415-0010\nEmail: cashier@cvsu.edu.ph",
+      "response": "Good news — CvSU tuition is FREE under RA 10931 (Universal Access to Quality Tertiary Education Act) for Filipino students in undergraduate programs! However, miscellaneous fees still apply (laboratory, library, student ID, etc.) — typically ₱3,000–₱6,000 per semester depending on your course and campus. Pay at the Cashier's Office on campus. Some fees may be payable online — check your campus.",
       "intent": "tuition_fees",
-      "confidence": 0.9629557392908864,
+      "confidence": 0.963166587008989,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -391,9 +391,9 @@
       "map_data": null
     },
     {
-      "response": "Good news — CvSU tuition is FREE under RA 10931 (Universal Access to Quality Tertiary Education Act) for Filipino students in undergraduate programs! However, miscellaneous fees still apply (laboratory, library, student ID, etc.) — typically ₱3,000–₱6,000 per semester depending on your course and campus. Pay at the Cashier's Office on campus. Some fees may be payable online — check your campus.",
+      "response": "Libre ang tuition sa CvSU para sa mga Filipino undergraduate students dahil sa RA 10931! Pero may miscellaneous fees pa rin na kailangang bayaran (laboratory, library, ID, atbp.) na karaniwang ₱3,000–₱6,000 bawat semester depende sa kurso at campus. Bayaran ito sa Cashier's Office ng inyong campus. Salamat sa inyong tanong!",
       "intent": "tuition_fees",
-      "confidence": 0.917988706567567,
+      "confidence": 0.9182616682055685,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -423,10 +423,10 @@
       "map_data": null
     },
     {
-      "response": "CvSU offers and facilitates various scholarship programs including: CHED scholarships (merit-based), DOST-SEI scholarships (science & engineering), CvSU institutional grants, LGU scholarships (from your municipality), and private scholarships from partner organizations. Requirements typically include GWA of at least 1.75–2.0, good moral standing, and financial need (for some grants). Apply at the Scholarship Office or Office of Student Affairs. Contact: scholarship@cvsu.edu.ph",
-      "intent": "scholarship",
-      "confidence": 0.9913968443870544,
-      "model_used": "Neural Network",
+      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
+      "intent": "nlu_fallback",
+      "confidence": 0.0,
+      "model_used": "Fallback",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -435,7 +435,7 @@
       "map_data": null
     },
     {
-      "response": "CvSU SCHOLARSHIPS & FINANCIAL AID:\n\n1. RA 10931 - FREE TUITION LAW:\n   - All qualified undergrad Filipino students\n   - Covers tuition + miscellaneous fees\n   - Most accessible benefit\n\n2. TERTIARY EDUCATION SUBSIDY (TES):\n   - Cash subsidy for living expenses\n   - For students from low-income families\n   - Apply through UniFAST website\n\n3. GOVERNMENT SCHOLARSHIPS:\n   - DOST Science Scholarships (for STEM)\n   - CHED Scholarships (merit-based)\n   - PVAO (military dependents)\n   - Sangguniang Kabataan scholarships\n   - LGU/Provincial scholarships\n\n4. CvSU MERIT SCHOLARSHIPS:\n   - University Scholar (top GPA students)\n   - College Scholar (GPA-based)\n   - Academic excellence awards\n\n5. PRIVATE SCHOLARSHIPS:\n   - Corporate-sponsored\n   - Foundation grants\n   - Alumni-sponsored programs\n\n6. STUDENT ASSISTANTSHIP:\n   - Graduate student teaching/research assistantships\n   - Stipend + tuition discount\n\nHOW TO APPLY:\n- Visit Office of Student Affairs and Services (OSAS)\n- Check requirements per scholarship\n- Submit application before deadlines\n- Maintain required GPA\n\nCONTACT:\nOSAS - Scholarship Office\nEmail: osas@cvsu.edu.ph\nPhone: (046) 415-0010",
+      "response": "CvSU offers and facilitates various scholarship programs including: CHED scholarships (merit-based), DOST-SEI scholarships (science & engineering), CvSU institutional grants, LGU scholarships (from your municipality), and private scholarships from partner organizations. Requirements typically include GWA of at least 1.75–2.0, good moral standing, and financial need (for some grants). Apply at the Scholarship Office or Office of Student Affairs. Contact: scholarship@cvsu.edu.ph",
       "intent": "scholarship",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -447,9 +447,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU ADMISSION REQUIREMENTS & PROCESS:\n\nFRESHMAN APPLICANTS - REQUIRED DOCUMENTS:\n1. Duly accomplished CvSU Application Form (online)\n2. Form 138 (Grade 12 Report Card) - original\n3. Certificate of Good Moral Character\n4. PSA Birth Certificate (photocopy)\n5. 2x2 ID pictures (2 copies)\n6. Valid government ID (parents/guardian)\n\nADMISSION PROCEDURE (10 Steps):\n1. Monitor announcements (FB/website)\n2. Complete online application at admission.cvsu.edu.ph\n3. Schedule appointment for document validation\n4. Submit documents for review\n5. Take CvSU entrance exam\n6. Receive Notice of Admission (NOA) if qualified\n7. Department interview\n8. Get medical referral from Health Service Unit\n9. Complete medical examination\n10. Enroll at Campus Registrar\n\nTRANSFEREE APPLICANTS:\n- Transcript of Records (TOR) from previous school\n- Honorable Dismissal\n- Same documents as freshmen\n- Credit evaluation (2-3 weeks)\n- May require entrance exam\n\nAPPLICATION PORTAL: admission.cvsu.edu.ph\n\n2025 STATS: 7,490 admitted from 21,739 applicants (34.45% acceptance rate)\n\nCONTACT: registrarmain@cvsu.edu.ph",
+      "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
       "intent": "admissions_requirements",
-      "confidence": 0.7309888157847307,
+      "confidence": 0.731133609002711,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -459,10 +459,10 @@
       "map_data": null
     },
     {
-      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
-      "intent": "nlu_fallback",
-      "confidence": 0.0,
-      "model_used": "Fallback",
+      "response": "Ang CvSU ay nag-aalok ng iba't ibang scholarship: CHED, DOST-SEI, CvSU institutional grants, at LGU scholarships mula sa inyong munisipyo. Karaniwang requirement: GWA na hindi bababa sa 1.75–2.0 at magandang moral standing. Mag-apply sa Scholarship Office o OSAS. Email: scholarship@cvsu.edu.ph. Salamat sa inyong tanong!",
+      "intent": "scholarship",
+      "confidence": 0.9026251435279846,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -470,6 +470,18 @@
           "requirement"
         ]
       },
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU offers and facilitates various scholarship programs including: CHED scholarships (merit-based), DOST-SEI scholarships (science & engineering), CvSU institutional grants, LGU scholarships (from your municipality), and private scholarships from partner organizations. Requirements typically include GWA of at least 1.75–2.0, good moral standing, and financial need (for some grants). Apply at the Scholarship Office or Office of Student Affairs. Contact: scholarship@cvsu.edu.ph",
+      "intent": "scholarship",
+      "confidence": 1.0,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
       "is_follow_up": true,
       "message_id": null,
       "map_data": null
@@ -487,9 +499,21 @@
       "map_data": null
     },
     {
-      "response": "CvSU offers and facilitates various scholarship programs including: CHED scholarships (merit-based), DOST-SEI scholarships (science & engineering), CvSU institutional grants, LGU scholarships (from your municipality), and private scholarships from partner organizations. Requirements typically include GWA of at least 1.75–2.0, good moral standing, and financial need (for some grants). Apply at the Scholarship Office or Office of Student Affairs. Contact: scholarship@cvsu.edu.ph",
+      "response": "CvSU SCHOLARSHIPS & FINANCIAL AID:\n\n1. RA 10931 - FREE TUITION LAW:\n   - All qualified undergrad Filipino students\n   - Covers tuition + miscellaneous fees\n   - Most accessible benefit\n\n2. TERTIARY EDUCATION SUBSIDY (TES):\n   - Cash subsidy for living expenses\n   - For students from low-income families\n   - Apply through UniFAST website\n\n3. GOVERNMENT SCHOLARSHIPS:\n   - DOST Science Scholarships (for STEM)\n   - CHED Scholarships (merit-based)\n   - PVAO (military dependents)\n   - Sangguniang Kabataan scholarships\n   - LGU/Provincial scholarships\n\n4. CvSU MERIT SCHOLARSHIPS:\n   - University Scholar (top GPA students)\n   - College Scholar (GPA-based)\n   - Academic excellence awards\n\n5. PRIVATE SCHOLARSHIPS:\n   - Corporate-sponsored\n   - Foundation grants\n   - Alumni-sponsored programs\n\n6. STUDENT ASSISTANTSHIP:\n   - Graduate student teaching/research assistantships\n   - Stipend + tuition discount\n\nHOW TO APPLY:\n- Visit Office of Student Affairs and Services (OSAS)\n- Check requirements per scholarship\n- Submit application before deadlines\n- Maintain required GPA\n\nCONTACT:\nOSAS - Scholarship Office\nEmail: osas@cvsu.edu.ph\nPhone: (046) 415-0010",
       "intent": "scholarship",
-      "confidence": 1.0,
+      "confidence": 0.9268209959813444,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "Ang CvSU ay nag-aalok ng iba't ibang scholarship: CHED, DOST-SEI, CvSU institutional grants, at LGU scholarships mula sa inyong munisipyo. Karaniwang requirement: GWA na hindi bababa sa 1.75–2.0 at magandang moral standing. Mag-apply sa Scholarship Office o OSAS. Email: scholarship@cvsu.edu.ph. Salamat sa inyong tanong!",
+      "intent": "scholarship",
+      "confidence": 0.7807818050337636,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -501,32 +525,8 @@
     {
       "response": "CvSU SCHOLARSHIPS & FINANCIAL AID:\n\n1. RA 10931 - FREE TUITION LAW:\n   - All qualified undergrad Filipino students\n   - Covers tuition + miscellaneous fees\n   - Most accessible benefit\n\n2. TERTIARY EDUCATION SUBSIDY (TES):\n   - Cash subsidy for living expenses\n   - For students from low-income families\n   - Apply through UniFAST website\n\n3. GOVERNMENT SCHOLARSHIPS:\n   - DOST Science Scholarships (for STEM)\n   - CHED Scholarships (merit-based)\n   - PVAO (military dependents)\n   - Sangguniang Kabataan scholarships\n   - LGU/Provincial scholarships\n\n4. CvSU MERIT SCHOLARSHIPS:\n   - University Scholar (top GPA students)\n   - College Scholar (GPA-based)\n   - Academic excellence awards\n\n5. PRIVATE SCHOLARSHIPS:\n   - Corporate-sponsored\n   - Foundation grants\n   - Alumni-sponsored programs\n\n6. STUDENT ASSISTANTSHIP:\n   - Graduate student teaching/research assistantships\n   - Stipend + tuition discount\n\nHOW TO APPLY:\n- Visit Office of Student Affairs and Services (OSAS)\n- Check requirements per scholarship\n- Submit application before deadlines\n- Maintain required GPA\n\nCONTACT:\nOSAS - Scholarship Office\nEmail: osas@cvsu.edu.ph\nPhone: (046) 415-0010",
       "intent": "scholarship",
-      "confidence": 0.5680586612104562,
+      "confidence": 0.9288661775782184,
       "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "CvSU offers and facilitates various scholarship programs including: CHED scholarships (merit-based), DOST-SEI scholarships (science & engineering), CvSU institutional grants, LGU scholarships (from your municipality), and private scholarships from partner organizations. Requirements typically include GWA of at least 1.75–2.0, good moral standing, and financial need (for some grants). Apply at the Scholarship Office or Office of Student Affairs. Contact: scholarship@cvsu.edu.ph",
-      "intent": "scholarship",
-      "confidence": 0.7832577194578535,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "For OJT, internships, and post-graduation job placement, the Career and Placement Office (typically under OSAS) at your campus is the official channel — they coordinate with industry partners and announce job fair schedules. For working at CvSU as faculty or staff, watch the HRMO announcements on cvsu.edu.ph and the university's official social media. I don't have real-time job postings, so please verify current vacancies and event dates with HRMO or OSAS directly.",
-      "intent": "career_opportunity",
-      "confidence": 0.9998598098754883,
-      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -541,7 +541,7 @@
     {
       "response": "To apply to CvSU, freshmen need: accomplished application form, Form 137/SF9 (HS card), PSA birth certificate, good moral certificate, and 2x2 photos. Transferees additionally need a transcript of records and honorable dismissal. ALS passers must present their ALS certificate. Submit to the Admissions Office. Visit www.cvsu.edu.ph for the current application schedule.",
       "intent": "admissions_requirements",
-      "confidence": 1.0,
+      "confidence": 0.8748701531551533,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -551,10 +551,10 @@
       "map_data": null
     },
     {
-      "response": "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. Each campus offers select programs — not all courses are available at every campus. For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph and click on your preferred campus.",
+      "response": "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. Hindi lahat ng programa ay available sa bawat campus. Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. Salamat sa inyong tanong!",
       "intent": "campus_specific",
-      "confidence": 0.5711684340251273,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "confidence": 0.46910738945007324,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -565,7 +565,7 @@
     {
       "response": "CvSU COMPUTER SCIENCE & IT PROGRAMS:\n\nCOLLEGE: College of Engineering and Information Technology (established 1992)\n\nUNDERGRADUATE PROGRAMS:\n- BS Computer Science (BSCS)\n- BS Information Technology (BSIT)\n- BS Computer Engineering\n- BS Electronics Engineering\n\nKEY FEATURES:\n- 4-year program\n- Modern computing labs\n- Industry partnerships\n- Internship opportunities\n- CHED-recognized\n\nFOCUS AREAS:\n- Software development\n- Database systems\n- Networking and security\n- Web development\n- Mobile applications\n- Data analytics\n- Artificial intelligence\n\nWHERE OFFERED:\n- Indang (Main Campus)\n- Imus Campus\n- Bacoor Campus\n- Other selected campuses\n\nGRADUATE OPTION:\n- Master of Science in Computer Science\n\nFor curriculum details, contact: ceit@cvsu.edu.ph",
       "intent": "it_cs_courses",
-      "confidence": 0.8935026046555078,
+      "confidence": 0.8929895131478787,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -579,9 +579,9 @@
       "map_data": null
     },
     {
-      "response": "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. Hindi lahat ng programa ay available sa bawat campus. Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. Salamat sa inyong tanong!",
+      "response": "CvSU CAMPUSES (13 Total):\n\n1. INDANG (Main Campus) - Don Severino delas Alas\n   Established: 1906 | Size: 72 hectares\n   Offers: All 11 colleges, graduate programs\n\n2. NAIC - 1961\n   Originally: Cavite College of Fisheries\n   Focus: Fisheries, Hospitality, Education\n\n3. ROSARIO/CCAT - 1969\n   Originally: Cavite College of Arts and Trade\n   Focus: Engineering, IT, Trade Programs\n\n4. CAVITE CITY - 2001\n5. CARMONA - 2002\n6. IMUS - 2003 (Phone: 046-436-6584)\n   Programs: BSCS, BSIT, BSBA, BS Psych, BS Hospitality, Education\n\n7. TRECE MARTIRES - 2005\n8. SILANG - 2006\n9. TANZA - 2007\n10. BACOOR - 2008\n11. GENERAL TRIAS - 2012\n12. MARAGONDON - 2015\n13. DASMARIÃ‘AS LEARNING CENTER - 2023\n\nDIFFERENT CAMPUSES OFFER DIFFERENT PROGRAMS.\n\nTO FIND THE RIGHT CAMPUS:\n1. Check program offerings at each campus website\n2. Visit https://cvsu.edu.ph for campus list\n3. Contact your nearest campus directly\n\nMain campus has the most programs and the Graduate School.",
       "intent": "campus_specific",
-      "confidence": 0.7487936988702143,
+      "confidence": 0.7491835283172861,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -595,9 +595,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. Each campus offers select programs — not all courses are available at every campus. For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph and click on your preferred campus.",
+      "response": "CvSU CAMPUSES (13 Total):\n\n1. INDANG (Main Campus) - Don Severino delas Alas\n   Established: 1906 | Size: 72 hectares\n   Offers: All 11 colleges, graduate programs\n\n2. NAIC - 1961\n   Originally: Cavite College of Fisheries\n   Focus: Fisheries, Hospitality, Education\n\n3. ROSARIO/CCAT - 1969\n   Originally: Cavite College of Arts and Trade\n   Focus: Engineering, IT, Trade Programs\n\n4. CAVITE CITY - 2001\n5. CARMONA - 2002\n6. IMUS - 2003 (Phone: 046-436-6584)\n   Programs: BSCS, BSIT, BSBA, BS Psych, BS Hospitality, Education\n\n7. TRECE MARTIRES - 2005\n8. SILANG - 2006\n9. TANZA - 2007\n10. BACOOR - 2008\n11. GENERAL TRIAS - 2012\n12. MARAGONDON - 2015\n13. DASMARIÃ‘AS LEARNING CENTER - 2023\n\nDIFFERENT CAMPUSES OFFER DIFFERENT PROGRAMS.\n\nTO FIND THE RIGHT CAMPUS:\n1. Check program offerings at each campus website\n2. Visit https://cvsu.edu.ph for campus list\n3. Contact your nearest campus directly\n\nMain campus has the most programs and the Graduate School.",
       "intent": "campus_specific",
-      "confidence": 0.7093238808314418,
+      "confidence": 0.7092660022056172,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -607,10 +607,10 @@
       "map_data": null
     },
     {
-      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
-      "intent": "nlu_fallback",
-      "confidence": 0.0,
-      "model_used": "Fallback",
+      "response": "CvSU's College of Engineering and Information Technology (CEIT) offers BS Computer Science (BSCS), BS Information Technology (BSIT), BS Computer Engineering, and BS Electronics Engineering. These 4-year programs are available at Indang, Imus, Bacoor, and other campuses. Graduate option: Master of Science in Computer Science. Contact: ceit@cvsu.edu.ph",
+      "intent": "it_cs_courses",
+      "confidence": 0.7986869812011719,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -623,10 +623,10 @@
       "map_data": null
     },
     {
-      "response": "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. Hindi lahat ng programa ay available sa bawat campus. Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. Salamat sa inyong tanong!",
-      "intent": "campus_specific",
-      "confidence": 0.6202840323599036,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "response": "CvSU ONLINE & FLEXIBLE LEARNING PROGRAMS:\n\nETEEAP (Expanded Tertiary Education Equivalency and Accreditation Program):\n- For working professionals seeking a college degree through prior learning recognition\n- Credits work experience, training, and non-formal education toward a degree\n- Available for select programs — inquire at the Office of Academic Affairs\n- Requirements: Work portfolio, assessment/evaluation, applicable fees\n\nFLEXIBLE / BLENDED LEARNING:\n- Some programs offer hybrid delivery (face-to-face + online components)\n- Availability varies per campus and program per semester\n- Requires internet access and compatible device\n\nMODULAR DISTANCE LEARNING (MDL):\n- Learning modules delivered digitally or in print\n- Available for select programs as approved by CHED\n\nHOW TO APPLY FOR ETEEAP:\n1. Inquire at the Office of Academic Affairs (Main Campus)\n2. Submit your educational & professional portfolio\n3. Undergo assessment and evaluation\n4. Enroll if qualified\n\nCONTACT:\nOffice of Academic Affairs | Email: academic@cvsu.edu.ph\nWebsite: www.cvsu.edu.ph",
+      "intent": "online_programs",
+      "confidence": 0.692449688911438,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -639,10 +639,10 @@
       "map_data": null
     },
     {
-      "response": "CvSU offers 43 undergraduate programs across 11 colleges:\n\nCOLLEGES:\n1. College of Agriculture, Food, Environment and Natural Resources\n2. College of Arts and Sciences\n3. College of Criminal Justice\n4. College of Economics, Management and Development Studies\n5. College of Education\n6. College of Engineering and Information Technology\n7. College of Medicine (since 2022)\n8. College of Nursing\n9. College of Sports, Physical Education and Recreation\n10. College of Veterinary Medicine and Biomedical Sciences\n11. College of Tourism and Hospitality Management (newest, 2025)\n\nType a number (1â€“11) to see the specific programs for that college!",
+      "response": "CvSU offers programs across Agriculture, Engineering & IT, Education, Business, Arts & Sciences, Criminal Justice, and more. Key programs: BS Agriculture, BS Computer Science, BS Information Technology, BS Engineering (Civil, Electrical, Electronics, Computer, Agricultural), BS Criminology, BS Business Administration, BS Education, and graduate programs. Program availability varies per campus — check www.cvsu.edu.ph for your nearest campus offerings.",
       "intent": "courses_offered",
-      "confidence": 0.6045995791789636,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "confidence": 0.6838411092758179,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -657,7 +657,7 @@
     {
       "response": "CvSU offers 43 undergraduate programs across 11 colleges:\n\nCOLLEGES:\n1. College of Agriculture, Food, Environment and Natural Resources\n2. College of Arts and Sciences\n3. College of Criminal Justice\n4. College of Economics, Management and Development Studies\n5. College of Education\n6. College of Engineering and Information Technology\n7. College of Medicine (since 2022)\n8. College of Nursing\n9. College of Sports, Physical Education and Recreation\n10. College of Veterinary Medicine and Biomedical Sciences\n11. College of Tourism and Hospitality Management (newest, 2025)\n\nType a number (1â€“11) to see the specific programs for that college!",
       "intent": "courses_offered",
-      "confidence": 0.9079893113158453,
+      "confidence": 0.9062495039871243,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -683,9 +683,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU offers 43 undergraduate programs across 11 colleges:\n\nCOLLEGES:\n1. College of Agriculture, Food, Environment and Natural Resources\n2. College of Arts and Sciences\n3. College of Criminal Justice\n4. College of Economics, Management and Development Studies\n5. College of Education\n6. College of Engineering and Information Technology\n7. College of Medicine (since 2022)\n8. College of Nursing\n9. College of Sports, Physical Education and Recreation\n10. College of Veterinary Medicine and Biomedical Sciences\n11. College of Tourism and Hospitality Management (newest, 2025)\n\nType a number (1â€“11) to see the specific programs for that college!",
+      "response": "CvSU offers programs across Agriculture, Engineering & IT, Education, Business, Arts & Sciences, Criminal Justice, and more. Key programs: BS Agriculture, BS Computer Science, BS Information Technology, BS Engineering (Civil, Electrical, Electronics, Computer, Agricultural), BS Criminology, BS Business Administration, BS Education, and graduate programs. Program availability varies per campus — check www.cvsu.edu.ph for your nearest campus offerings.",
       "intent": "courses_offered",
-      "confidence": 0.9163887959102186,
+      "confidence": 0.9161431616363458,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -695,9 +695,21 @@
       "map_data": null
     },
     {
-      "response": "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. Each campus offers select programs — not all courses are available at every campus. For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph and click on your preferred campus.",
-      "intent": "campus_specific",
-      "confidence": 0.5698963541857102,
+      "response": "I'm sorry, I didn't quite understand that. Could you rephrase your question? You can ask me about CvSU admissions, programs, tuition fees, scholarships, campus facilities, contact info, or events.",
+      "intent": "nlu_fallback",
+      "confidence": 0.0,
+      "model_used": "Fallback",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "Ang CvSU ay nag-aalok ng iba't ibang programa sa Agriculture, Engineering, IT, Edukasyon, Negosyo, at iba pa. Kasama na rito ang BS Agriculture, BSCS, BSIT, iba't ibang Engineering, BS Criminology, at marami pang iba. Ang availability ng bawat programa ay depende sa campus — bisitahin ang www.cvsu.edu.ph para sa kumpletong listahan. Salamat sa inyong tanong!",
+      "intent": "courses_offered",
+      "confidence": 0.8628751836038536,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -709,19 +721,7 @@
     {
       "response": "Ang CvSU ay nag-aalok ng iba't ibang programa sa Agriculture, Engineering, IT, Edukasyon, Negosyo, at iba pa. Kasama na rito ang BS Agriculture, BSCS, BSIT, iba't ibang Engineering, BS Criminology, at marami pang iba. Ang availability ng bawat programa ay depende sa campus — bisitahin ang www.cvsu.edu.ph para sa kumpletong listahan. Salamat sa inyong tanong!",
       "intent": "courses_offered",
-      "confidence": 0.8634882555155446,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "Ang CvSU ay nag-aalok ng iba't ibang programa sa Agriculture, Engineering, IT, Edukasyon, Negosyo, at iba pa. Kasama na rito ang BS Agriculture, BSCS, BSIT, iba't ibang Engineering, BS Criminology, at marami pang iba. Ang availability ng bawat programa ay depende sa campus — bisitahin ang www.cvsu.edu.ph para sa kumpletong listahan. Salamat sa inyong tanong!",
-      "intent": "courses_offered",
-      "confidence": 0.7120816736024332,
+      "confidence": 0.7109614405017538,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -735,9 +735,9 @@
       "map_data": null
     },
     {
-      "response": "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. Hindi lahat ng programa ay available sa bawat campus. Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. Salamat sa inyong tanong!",
+      "response": "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. Each campus offers select programs — not all courses are available at every campus. For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph and click on your preferred campus.",
       "intent": "campus_specific",
-      "confidence": 0.7669766508881998,
+      "confidence": 0.7656582791069347,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -751,10 +751,10 @@
       "map_data": null
     },
     {
-      "response": "Ang enrollment schedule ng CvSU ay inihahayag sa www.cvsu.edu.ph at sa opisyal na Facebook page. Sa pangkalahatan: first semester — Hunyo hanggang Hulyo; second semester — Nobyembre hanggang Disyembre; summer — Abril hanggang Mayo. Para sa tiyak na petsa, subaybayan ang opisyal na announcements ng CvSU. Salamat sa inyong tanong!",
+      "response": "CvSU ENROLLMENT SCHEDULE (Academic Year 2025-2026):\n\nFIRST SEMESTER:\n- Application opens: November 2024\n- Entrance exams: November-March\n- Notice of Admission: April-May\n- Enrollment: July-August 2025\n- Classes begin: August 2025\n\nSECOND SEMESTER:\n- Enrollment: December 2025-January 2026\n- Classes begin: January 2026\n\nSUMMER TERM:\n- Enrollment: May 2026\n- Classes: May-July 2026\n\nIMPORTANT DATES:\n- Late enrollment: Subject to penalties\n- Add/Drop period: First 2 weeks of classes\n- Final exams: Last week of semester\n\nCHECK SPECIFIC DATES:\nVisit: https://cvsu.edu.ph or campus website\nCall: (046) 415-0010\nEmail: registrarmain@cvsu.edu.ph\n\nNOTE: Specific dates may vary by campus. Always check the academic calendar of your specific CvSU campus.",
       "intent": "enrollment_schedule",
-      "confidence": 0.6338982591039879,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "confidence": 0.9328650236129761,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -765,7 +765,7 @@
     {
       "response": "CvSU ENROLLMENT PROCEDURE:\n\nAFTER ADMISSION (NOA received):\n\n1. PRE-ENROLLMENT:\n   - Receive Notice of Admission (NOA)\n   - Attend department interview/orientation\n   - Complete medical examination\n   - Get medical clearance\n\n2. ACADEMIC ADVISING:\n   - Meet with department adviser\n   - Discuss curriculum and course load\n   - Get program of study\n\n3. REGISTRATION:\n   - Online enrollment via student portal\n   - Select courses for the semester\n   - Print Certificate of Registration (COR)\n\n4. PAYMENT (Misc fees only - tuition is FREE under RA 10931):\n   - Pay miscellaneous fees at Cashier's Office\n   - Get official receipt\n\n5. FINALIZATION:\n   - Submit COR to Registrar\n   - Get student ID\n   - Receive class schedule\n\nFOR CONTINUING STUDENTS:\n- Online registration through student portal\n- Selection of subjects with adviser approval\n- Payment of fees if applicable\n- COR submission\n\nCONTACT: Office of the University Registrar\nEmail: registrarmain@cvsu.edu.ph\nPhone: (046) 415-0010",
       "intent": "enrollment_procedure",
-      "confidence": 0.8954336001309042,
+      "confidence": 0.895836171688341,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -782,10 +782,10 @@
       "map_data": null
     },
     {
-      "response": "CvSU ENROLLMENT PROCEDURE:\n\nAFTER ADMISSION (NOA received):\n\n1. PRE-ENROLLMENT:\n   - Receive Notice of Admission (NOA)\n   - Attend department interview/orientation\n   - Complete medical examination\n   - Get medical clearance\n\n2. ACADEMIC ADVISING:\n   - Meet with department adviser\n   - Discuss curriculum and course load\n   - Get program of study\n\n3. REGISTRATION:\n   - Online enrollment via student portal\n   - Select courses for the semester\n   - Print Certificate of Registration (COR)\n\n4. PAYMENT (Misc fees only - tuition is FREE under RA 10931):\n   - Pay miscellaneous fees at Cashier's Office\n   - Get official receipt\n\n5. FINALIZATION:\n   - Submit COR to Registrar\n   - Get student ID\n   - Receive class schedule\n\nFOR CONTINUING STUDENTS:\n- Online registration through student portal\n- Selection of subjects with adviser approval\n- Payment of fees if applicable\n- COR submission\n\nCONTACT: Office of the University Registrar\nEmail: registrarmain@cvsu.edu.ph\nPhone: (046) 415-0010",
-      "intent": "enrollment_procedure",
-      "confidence": 0.721894384374649,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "response": "For questions about enrollment, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly.",
+      "intent": "enrollment",
+      "confidence": 0.724628746509552,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -808,7 +808,7 @@
     {
       "response": "Ang enrollment schedule ng CvSU ay inihahayag sa www.cvsu.edu.ph at sa opisyal na Facebook page. Sa pangkalahatan: first semester — Hunyo hanggang Hulyo; second semester — Nobyembre hanggang Disyembre; summer — Abril hanggang Mayo. Para sa tiyak na petsa, subaybayan ang opisyal na announcements ng CvSU. Salamat sa inyong tanong!",
       "intent": "enrollment_schedule",
-      "confidence": 0.9114355436047757,
+      "confidence": 0.9103796607356568,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -820,7 +820,7 @@
     {
       "response": "CvSU ENROLLMENT PROCEDURE:\n\nAFTER ADMISSION (NOA received):\n\n1. PRE-ENROLLMENT:\n   - Receive Notice of Admission (NOA)\n   - Attend department interview/orientation\n   - Complete medical examination\n   - Get medical clearance\n\n2. ACADEMIC ADVISING:\n   - Meet with department adviser\n   - Discuss curriculum and course load\n   - Get program of study\n\n3. REGISTRATION:\n   - Online enrollment via student portal\n   - Select courses for the semester\n   - Print Certificate of Registration (COR)\n\n4. PAYMENT (Misc fees only - tuition is FREE under RA 10931):\n   - Pay miscellaneous fees at Cashier's Office\n   - Get official receipt\n\n5. FINALIZATION:\n   - Submit COR to Registrar\n   - Get student ID\n   - Receive class schedule\n\nFOR CONTINUING STUDENTS:\n- Online registration through student portal\n- Selection of subjects with adviser approval\n- Payment of fees if applicable\n- COR submission\n\nCONTACT: Office of the University Registrar\nEmail: registrarmain@cvsu.edu.ph\nPhone: (046) 415-0010",
       "intent": "enrollment_procedure",
-      "confidence": 0.7190314266592917,
+      "confidence": 0.7090138545651408,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -830,7 +830,7 @@
       "map_data": null
     },
     {
-      "response": "I'm sorry, I didn't quite understand that. Could you rephrase your question? You can ask me about CvSU admissions, programs, tuition fees, scholarships, campus facilities, contact info, or events.",
+      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
       "intent": "nlu_fallback",
       "confidence": 0.0,
       "model_used": "Fallback",
@@ -846,6 +846,30 @@
       "map_data": null
     },
     {
+      "response": "For questions about enrollment, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly.",
+      "intent": "enrollment",
+      "confidence": 0.7337958812713623,
+      "model_used": "Neural Network",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU ACADEMIC POLICIES & GRADING SYSTEM:\n\nGRADING SCALE (1.0–5.0):\n1.0 = Excellent | 1.25 = Superior | 1.5 = Very Good\n1.75 = Good | 2.0 = Satisfactory | 2.25 = Fairly Satisfactory\n2.5 = Passing | 2.75 = Conditional Pass | 3.0 = Passed (75%)\n5.0 = Failed | INC = Incomplete | W = Withdrawn\n\nMINIMUM PASSING GRADE: 3.0 (75%)\n\nGWA: Weighted average of all course grades × credit units\n\nINCOMPLETE (INC):\n- Must be completed within 1 academic year\n- Becomes 5.0 (Failed) if not resolved\n\nLEAVE OF ABSENCE (LOA):\n- Approved by the Dean; maximum 2 consecutive semesters\n- Submit LOA form to the Registrar's Office\n\nSHIFTING:\n- Requires Dean's approval; subject to slot availability\n- May need to retake non-credited subjects\n\nRETENTION: Varies per college — consult your department for specific GWA requirements.\n\nContact the Registrar's Office for official grade records and policy clarifications.",
+      "intent": "academic_policies",
+      "confidence": 0.8402165961097193,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
       "response": "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
       "intent": "nlu_fallback",
       "confidence": 0.0,
@@ -858,93 +882,9 @@
       "map_data": null
     },
     {
-      "response": "At CvSU, the passing grade is 3.0 (equivalent to 75%). Grades run on a 1.0–5.0 scale where 1.0 is Excellent and 5.0 is Failed. GWA is the weighted average of all your grades. An INC (Incomplete) must be resolved within one year or it becomes 5.0. For LOA, shifting, or retention policies, coordinate with your Dean's office and the Registrar.",
-      "intent": "academic_policies",
-      "confidence": 0.8402385137911278,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "CvSU's academic retention standards are governed by the University Student Handbook and the applicable CHED Memorandum Orders for each program. In general, students must maintain a satisfactory General Weighted Average (GWA) and must not accumulate more than the allowed number of failing grades per semester. Students who fall below the required academic standing may be placed on academic probation, given a load restriction, or, in severe cases, recommended for dismissal from the program. Specific GWA cutoffs and the number of allowable failures differ by college and program. I strongly recommend consulting your College's Student Handbook or the Registrar for your program's exact retention rules.",
-      "intent": "retention_policy",
-      "confidence": 0.6809330295354946,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "At CvSU, the passing grade is 3.0 (equivalent to 75%). Grades run on a 1.0–5.0 scale where 1.0 is Excellent and 5.0 is Failed. GWA is the weighted average of all your grades. An INC (Incomplete) must be resolved within one year or it becomes 5.0. For LOA, shifting, or retention policies, coordinate with your Dean's office and the Registrar.",
-      "intent": "academic_policies",
-      "confidence": 0.866622788904384,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "CvSU's academic retention standards are governed by the University Student Handbook and the applicable CHED Memorandum Orders for each program. In general, students must maintain a satisfactory General Weighted Average (GWA) and must not accumulate more than the allowed number of failing grades per semester. Students who fall below the required academic standing may be placed on academic probation, given a load restriction, or, in severe cases, recommended for dismissal from the program. Specific GWA cutoffs and the number of allowable failures differ by college and program. I strongly recommend consulting your College's Student Handbook or the Registrar for your program's exact retention rules.",
-      "intent": "retention_policy",
-      "confidence": 0.8822493875961667,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "At CvSU, the passing grade is 3.0 (equivalent to 75%). Grades run on a 1.0–5.0 scale where 1.0 is Excellent and 5.0 is Failed. GWA is the weighted average of all your grades. An INC (Incomplete) must be resolved within one year or it becomes 5.0. For LOA, shifting, or retention policies, coordinate with your Dean's office and the Registrar.",
-      "intent": "academic_policies",
-      "confidence": 0.9386242124287648,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "To shift programs at CvSU, secure a shifting form from the Registrar's Office, get endorsement from your current dean, and apply to the receiving college. Shifting is usually done before or during enrollment period.",
-      "intent": "shifting",
-      "confidence": 0.6549322441555353,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "Program shifting at CvSU requires approval from both the current and target college dean. Submit required documents (shifting form, grades, personal statement) to the Registrar during the open shifting period.",
-      "intent": "shifting",
-      "confidence": 0.7805163768015291,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
       "response": "Ang passing grade sa CvSU ay 3.0 (75%). Gumagamit ang CvSU ng 1.0–5.0 grading scale. Ang GWA ay kinukuha mula sa weighted average ng lahat ng iyong grades. Ang INC grade ay kailangang ayusin sa loob ng isang taon. Para sa LOA, course shifting, o retention policy, makipag-ugnayan sa iyong Dean at sa Registrar's Office. Salamat sa inyong tanong!",
       "intent": "academic_policies",
-      "confidence": 0.8587668360013984,
+      "confidence": 0.8666121825179037,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -956,7 +896,7 @@
     {
       "response": "If you're concerned about your academic standing, the first step is to visit your Campus Registrar or your program's academic adviser — they can tell you your current GWA, what the retention cutoff is for your specific program, and whether you are at risk of academic probation or dismissal. CvSU also has an appeals process for students facing academic disqualification; this is handled through the Office of the Registrar and the Dean's Office. Would you like guidance on which office to contact, or do you have a more specific question about grades or program policies?",
       "intent": "retention_policy",
-      "confidence": 0.8632901233130552,
+      "confidence": 0.8819304347913534,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -966,9 +906,57 @@
       "map_data": null
     },
     {
-      "response": "Academic retention at CvSU follows the University Student Handbook provisions on Scholastic Standing. Key points: (1) INC (Incomplete) grades must typically be completed within the prescribed period — unresolved INCs may convert to failing marks; (2) students on academic probation often carry a reduced study load; (3) dismissal from a program may result from repeated failures beyond the threshold set by your college. Maximum residency rules (how many years you may take to finish a degree) also apply per CHED guidelines. Please verify the exact figures with your Registrar or academic adviser, as rules vary by program and year level.",
+      "response": "At CvSU, the passing grade is 3.0 (equivalent to 75%). Grades run on a 1.0–5.0 scale where 1.0 is Excellent and 5.0 is Failed. GWA is the weighted average of all your grades. An INC (Incomplete) must be resolved within one year or it becomes 5.0. For LOA, shifting, or retention policies, coordinate with your Dean's office and the Registrar.",
+      "intent": "academic_policies",
+      "confidence": 0.9385747628806249,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "To shift programs at CvSU, secure a shifting form from the Registrar's Office, get endorsement from your current dean, and apply to the receiving college. Shifting is usually done before or during enrollment period.",
+      "intent": "shifting",
+      "confidence": 0.9209843873977661,
+      "model_used": "Neural Network",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "To shift programs at CvSU, secure a shifting form from the Registrar's Office, get endorsement from your current dean, and apply to the receiving college. Shifting is usually done before or during enrollment period.",
+      "intent": "shifting",
+      "confidence": 0.7773654711185711,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU ACADEMIC POLICIES & GRADING SYSTEM:\n\nGRADING SCALE (1.0–5.0):\n1.0 = Excellent | 1.25 = Superior | 1.5 = Very Good\n1.75 = Good | 2.0 = Satisfactory | 2.25 = Fairly Satisfactory\n2.5 = Passing | 2.75 = Conditional Pass | 3.0 = Passed (75%)\n5.0 = Failed | INC = Incomplete | W = Withdrawn\n\nMINIMUM PASSING GRADE: 3.0 (75%)\n\nGWA: Weighted average of all course grades × credit units\n\nINCOMPLETE (INC):\n- Must be completed within 1 academic year\n- Becomes 5.0 (Failed) if not resolved\n\nLEAVE OF ABSENCE (LOA):\n- Approved by the Dean; maximum 2 consecutive semesters\n- Submit LOA form to the Registrar's Office\n\nSHIFTING:\n- Requires Dean's approval; subject to slot availability\n- May need to retake non-credited subjects\n\nRETENTION: Varies per college — consult your department for specific GWA requirements.\n\nContact the Registrar's Office for official grade records and policy clarifications.",
+      "intent": "academic_policies",
+      "confidence": 0.858617003620056,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU's academic retention standards are governed by the University Student Handbook and the applicable CHED Memorandum Orders for each program. In general, students must maintain a satisfactory General Weighted Average (GWA) and must not accumulate more than the allowed number of failing grades per semester. Students who fall below the required academic standing may be placed on academic probation, given a load restriction, or, in severe cases, recommended for dismissal from the program. Specific GWA cutoffs and the number of allowable failures differ by college and program. I strongly recommend consulting your College's Student Handbook or the Registrar for your program's exact retention rules.",
       "intent": "retention_policy",
-      "confidence": 0.872352736035191,
+      "confidence": 0.8624666571202156,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -978,10 +966,22 @@
       "map_data": null
     },
     {
-      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
-      "intent": "nlu_fallback",
-      "confidence": 0.0,
-      "model_used": "Fallback",
+      "response": "If you're concerned about your academic standing, the first step is to visit your Campus Registrar or your program's academic adviser — they can tell you your current GWA, what the retention cutoff is for your specific program, and whether you are at risk of academic probation or dismissal. CvSU also has an appeals process for students facing academic disqualification; this is handled through the Office of the Registrar and the Dean's Office. Would you like guidance on which office to contact, or do you have a more specific question about grades or program policies?",
+      "intent": "retention_policy",
+      "confidence": 0.8718634622802334,
+      "model_used": "Naive Bayes (NLU Enhanced)",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "Ang CvSU Main Campus ay nasa Indang, Cavite — mga 60 km mula Maynila. Mayroon itong 13 campus sa buong lalawigan ng Cavite. Maaaring sumasakay ng jeepney o bus papunta sa Indang mula Dasmarinas o Tagaytay. Para sa ibang campus, makipag-ugnayan sa campus na pinaka-malapit sa inyo. Salamat sa inyong tanong!",
+      "intent": "campus_location",
+      "confidence": 0.7873281836509705,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -992,7 +992,7 @@
     {
       "response": "CvSU's facilities include the Ladislao Diwa Memorial Library (92,000+ volumes), science and computer laboratories, a Health Service Unit, Guidance & Counseling office, student dormitories (at select campuses), cafeteria, chapel, sports facilities, and research centers like AREC, SPRINT, and BRITE. CvSU is a Center of Excellence in Agriculture — facilities reflect this specialization.",
       "intent": "campus_facilities",
-      "confidence": 0.7024475073830931,
+      "confidence": 0.7022039089793323,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1002,10 +1002,10 @@
       "map_data": null
     },
     {
-      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
-      "intent": "nlu_fallback",
-      "confidence": 0.0,
-      "model_used": "Fallback",
+      "response": "CvSU's library system provides access to books, journals, theses, and digital databases. Visit the Ladislao Diwa Memorial Library at the Main Campus, or your campus library for local resources. Bring your student ID to register for a library card. Borrowing rules, schedules, and fines vary per campus — check with your librarian for details. Salamat sa inyong tanong!",
+      "intent": "library",
+      "confidence": 0.6807951927185059,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -1018,7 +1018,7 @@
       "map_data": null
     },
     {
-      "response": "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
+      "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
       "intent": "nlu_fallback",
       "confidence": 0.0,
       "model_used": "Fallback",
@@ -1034,9 +1034,9 @@
       "map_data": null
     },
     {
-      "response": "Ang CvSU ay may kompletong pasilidad para sa mga estudyante: library na may 92,000+ libro, science at computer labs, health clinic, guidance office, dormitoryo (sa ilang campus), cafeteria, kapilya, sports facilities, at mga research center. Para sa tiyak na pasilidad ng inyong campus, makipag-ugnayan sa student affairs office. Salamat sa inyong tanong!",
+      "response": "CvSU's facilities include the Ladislao Diwa Memorial Library (92,000+ volumes), science and computer laboratories, a Health Service Unit, Guidance & Counseling office, student dormitories (at select campuses), cafeteria, chapel, sports facilities, and research centers like AREC, SPRINT, and BRITE. CvSU is a Center of Excellence in Agriculture — facilities reflect this specialization.",
       "intent": "campus_facilities",
-      "confidence": 0.7341812526323417,
+      "confidence": 0.7329801416761783,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1050,7 +1050,7 @@
       "map_data": null
     },
     {
-      "response": "CvSU FACILITIES & RESOURCES:\n\nACADEMIC:\n- Ladislao Diwa Memorial Library and Museum (92,000+ books)\n- Computer laboratories\n- Science laboratories\n- Specialized research centers\n\nRESEARCH CENTERS:\n- Affiliated Renewable Energy Center (AREC) - biogas technology\n- National Coffee Research, Development and Extension Center\n- Sugar Palm Research, Information, and Trade Center (SPRINT)\n- Bee Research, Innovation, Trade, and Extension Center (BRITE)\n- Simulation, Modelling and Measurement Laboratory (SiMM Lab)\n\nSTUDENT SERVICES:\n- Health Service Unit\n- Guidance and Counseling\n- Student dormitories (selected campuses)\n- Cafeteria/canteen\n- Chapel\n- Sports facilities (CvSU Green Hornets)\n- 84+ student organizations\n\nSPECIAL DESIGNATIONS:\n- Center of Excellence in Agriculture (2016)\n- Top-performing state university (AACCUP)\n- Hosts Southern Tagalog Agriculture Research Consortium",
+      "response": "Ang CvSU ay may kompletong pasilidad para sa mga estudyante: library na may 92,000+ libro, science at computer labs, health clinic, guidance office, dormitoryo (sa ilang campus), cafeteria, kapilya, sports facilities, at mga research center. Para sa tiyak na pasilidad ng inyong campus, makipag-ugnayan sa student affairs office. Salamat sa inyong tanong!",
       "intent": "campus_facilities",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -1078,10 +1078,10 @@
       "map_data": null
     },
     {
-      "response": "May dormitoryo ang CvSU sa ilang campus, kasama na ang Main Campus sa Indang. Limitado ang slots, kaya mag-apply nang maaga. Kailangan ng COR, medical clearance, barangay clearance, at pahintulot ng magulang. Para sa detalye ng bayad at patakaran, makipag-ugnayan sa OSAS office ng inyong campus. Salamat sa inyong tanong!",
-      "intent": "dormitory",
-      "confidence": 0.6965302752287147,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "response": "I'm sorry, I didn't quite understand that. Could you rephrase your question? You can ask me about CvSU admissions, programs, tuition fees, scholarships, campus facilities, contact info, or events.",
+      "intent": "nlu_fallback",
+      "confidence": 0.0,
+      "model_used": "Fallback",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {
@@ -1098,9 +1098,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU's facilities include the Ladislao Diwa Memorial Library (92,000+ volumes), science and computer laboratories, a Health Service Unit, Guidance & Counseling office, student dormitories (at select campuses), cafeteria, chapel, sports facilities, and research centers like AREC, SPRINT, and BRITE. CvSU is a Center of Excellence in Agriculture — facilities reflect this specialization.",
+      "response": "Ang CvSU ay may kompletong pasilidad para sa mga estudyante: library na may 92,000+ libro, science at computer labs, health clinic, guidance office, dormitoryo (sa ilang campus), cafeteria, kapilya, sports facilities, at mga research center. Para sa tiyak na pasilidad ng inyong campus, makipag-ugnayan sa student affairs office. Salamat sa inyong tanong!",
       "intent": "campus_facilities",
-      "confidence": 0.7813255586527766,
+      "confidence": 0.7803857293547934,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1116,7 +1116,7 @@
     {
       "response": "CvSU MAIN CAMPUS LOCATION:\n\nDon Severino delas Alas Campus\nIndang, Cavite, Philippines\n(60 km / 37 miles southwest of Manila)\n\nCAMPUS SIZE: 72 hectares\n\nCvSU has 13 campuses across Cavite Province:\n1. Indang (Main Campus) - established 1906\n2. Naic - 1961\n3. Rosario/CCAT - 1969\n4. Cavite City - 2001\n5. Carmona - 2002\n6. Imus - 2003\n7. Trece Martires - 2005\n8. Silang - 2006\n9. Tanza - 2007\n10. Bacoor - 2008\n11. General Trias - 2012\n12. Maragondon - 2015\n13. DasmariÃ±as Learning Center - 2023\n\nFor directions, visit: https://cvsu.edu.ph",
       "intent": "campus_location",
-      "confidence": 0.9201003467066933,
+      "confidence": 0.9194080088596711,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1130,9 +1130,9 @@
       "map_data": null
     },
     {
-      "response": "May dormitoryo ang CvSU sa ilang campus, kasama na ang Main Campus sa Indang. Limitado ang slots, kaya mag-apply nang maaga. Kailangan ng COR, medical clearance, barangay clearance, at pahintulot ng magulang. Para sa detalye ng bayad at patakaran, makipag-ugnayan sa OSAS office ng inyong campus. Salamat sa inyong tanong!",
+      "response": "CvSU offers student dormitories at select campuses with limited slots. To apply, get an application form from the OSAS office and submit: COR, medical clearance, barangay clearance, photos, and parent consent. Fees vary by campus. Curfew and visitation rules apply. Contact OSAS or your campus Student Affairs office for current availability and rates.",
       "intent": "dormitory",
-      "confidence": 0.7447492150134746,
+      "confidence": 0.7441788961772015,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1144,7 +1144,7 @@
     {
       "response": "Para mag-request ng TOR, diploma, o iba pang dokumento mula sa CvSU Registrar: kumuha ng clearance slip, punan ang request form, at bayaran ang applicable fees. Processing time ay 5–10 araw ng trabaho. Email: registrarmain@cvsu.edu.ph | Tel: (046) 415-0010. Salamat sa inyong tanong!",
       "intent": "registrar",
-      "confidence": 0.9808585900970161,
+      "confidence": 0.9807111605639965,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1158,9 +1158,9 @@
       "map_data": null
     },
     {
-      "response": "The CvSU Registrar's Office handles all academic records including Transcript of Records (TOR), Diploma, Certificate of Enrollment, Good Moral Certificate, and Grade Certificates. REQUIREMENTS FOR TOR: Clearance slip, request form, payment of fees. Processing time: 5–10 working days (varies). Contact: registrarmain@cvsu.edu.ph | Phone: (046) 415-0010\nOffice Hours: Mon–Fri, 8AM–5PM (no noon break for some services).",
+      "response": "Para mag-request ng TOR, diploma, o iba pang dokumento mula sa CvSU Registrar: kumuha ng clearance slip, punan ang request form, at bayaran ang applicable fees. Processing time ay 5–10 araw ng trabaho. Email: registrarmain@cvsu.edu.ph | Tel: (046) 415-0010. Salamat sa inyong tanong!",
       "intent": "registrar",
-      "confidence": 0.7239731197622729,
+      "confidence": 0.7230683315767945,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1177,9 +1177,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU CONTACT INFORMATION:\nMain Campus (Indang): (046) 415-0010\nGeneral Email: info@cvsu.edu.ph\nAdmissions: admissions@cvsu.edu.ph\nRegistrar: registrarmain@cvsu.edu.ph\nOfficial Website: www.cvsu.edu.ph\nFacebook: facebook.com/CaviteStateUniversity (verify official page)\n\nFor campus-specific contacts (Imus, Bacoor, Naic, etc.), visit www.cvsu.edu.ph and navigate to your campus page.",
+      "response": "Para makipag-ugnayan sa CvSU: Tawagan ang Main Campus sa (046) 415-0010 o mag-email sa info@cvsu.edu.ph. Para sa Admissions: admissions@cvsu.edu.ph | Registrar: registrarmain@cvsu.edu.ph. Bisitahin ang www.cvsu.edu.ph para sa contact info ng bawat campus. Salamat sa inyong tanong!",
       "intent": "contact_info",
-      "confidence": 0.7116875986917153,
+      "confidence": 0.7115886729259709,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1193,34 +1193,46 @@
       "map_data": null
     },
     {
+      "response": "CvSU has 84+ recognized student organizations covering academics, culture, arts, sports, and advocacy. These include college-based organizations, the Supreme Student Government (SSG), literary and journalism orgs, debate clubs, cultural dance troupes, and more. To join: attend the organization fair during enrollment, or inquire directly with the org officers. Registration is through the Office of Student Affairs & Services (OSAS).",
+      "intent": "student_organizations",
+      "confidence": 0.9464640617370605,
+      "model_used": "Neural Network",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "CvSU student IDs are processed at the Office of Student Affairs (OSA). Bring your registration form, 1x1 photos, and any required fees. For lost IDs, submit an affidavit of loss.",
+      "intent": "student_id",
+      "confidence": 0.9312403798103333,
+      "model_used": "Neural Network",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
+      "response": "Career-related services at CvSU include OJT/internship coordination, job fairs, employer linkages, resume help, and graduate tracer studies — these run through OSAS and the Career and Placement Office at your campus. CvSU also publishes its own faculty and staff vacancies through HRMO on the official website. For up-to-date openings, dates, and application requirements, please confirm with the relevant office since these change throughout the year.",
+      "intent": "career_opportunity",
+      "confidence": 0.9087936878204346,
+      "model_used": "Neural Network",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
       "response": "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
       "intent": "nlu_fallback",
       "confidence": 0.0,
       "model_used": "Fallback",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "To get or replace your CvSU student ID, visit the Student Affairs Office with your registration form and ID photos. Lost ID replacements require a notarized affidavit of loss.",
-      "intent": "student_id",
-      "confidence": 0.5981598496437073,
-      "model_used": "Neural Network",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "For OJT, internships, and post-graduation job placement, the Career and Placement Office (typically under OSAS) at your campus is the official channel — they coordinate with industry partners and announce job fair schedules. For working at CvSU as faculty or staff, watch the HRMO announcements on cvsu.edu.ph and the university's official social media. I don't have real-time job postings, so please verify current vacancies and event dates with HRMO or OSAS directly.",
-      "intent": "career_opportunity",
-      "confidence": 0.9545883536338806,
-      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -1230,18 +1242,6 @@
     },
     {
       "response": "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU.",
-      "intent": "nlu_fallback",
-      "confidence": 0.0,
-      "model_used": "Fallback",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
       "intent": "nlu_fallback",
       "confidence": 0.0,
       "model_used": "Fallback",
@@ -1257,9 +1257,9 @@
       "map_data": null
     },
     {
-      "response": "Para mag-request ng TOR, diploma, o iba pang dokumento mula sa CvSU Registrar: kumuha ng clearance slip, punan ang request form, at bayaran ang applicable fees. Processing time ay 5–10 araw ng trabaho. Email: registrarmain@cvsu.edu.ph | Tel: (046) 415-0010. Salamat sa inyong tanong!",
+      "response": "CvSU REGISTRAR SERVICES:\n\nOFFICE: Office of the University Registrar (OUR)\nLOCATION: Main Campus - Indang\nEMAIL: registrarmain@cvsu.edu.ph\nPHONE: (046) 415-0010\n\nDOCUMENTS YOU CAN REQUEST:\n1. Transcript of Records (TOR) - Form 137\n2. Certificate of Enrollment\n3. Certificate of Good Moral Character\n4. Certified True Copy of Diploma\n5. Honorable Dismissal\n6. Authentication of records\n7. Special Order (for graduates)\n\nHOW TO REQUEST:\n1. Fill out request form (online or in-person)\n2. Pay processing fees at Cashier (if applicable)\n3. Submit requirements:\n   - Valid ID\n   - Official receipt\n   - 1x1 ID picture\n4. Wait for processing (3-7 working days for most documents)\n5. Claim documents OR have them mailed\n\nFEES:\n- TOR: PHP 50/page (some included free for qualified students)\n- Certifications: PHP 30-100\n- Authentication: Additional fees apply\n\nPROCESSING TIME:\n- Standard: 3-7 working days\n- Rush requests: May be available with additional fee\n\nFor follow-up: registrarmain@cvsu.edu.ph",
       "intent": "registrar",
-      "confidence": 0.8141863678237187,
+      "confidence": 0.8138168514739335,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1273,10 +1273,10 @@
       "map_data": null
     },
     {
-      "response": "Great question! Cavite State University (CvSU) is a premier state university in Cavite, Philippines, established in 1906 and granted university status in 1998 via RA 8468. It has 13 campuses across Cavite, serves over 22,000 students, and is a CHED Center of Excellence in Agriculture. Its motto is 'Truth, Excellence, Service.' Anything specific you'd like to know about CvSU?",
-      "intent": "about_cvsu",
-      "confidence": 0.6636944839842144,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "response": "CvSU has 14 campuses across Cavite: Main (Indang), Bacoor, Imus, Silang, Naic, Tanza, Rosario, Trece Martires, Carmona, General Trias, Cavite City, Alfonso, Amadeo, and Maragondon. Each campus offers selected programs.",
+      "intent": "campus_branches",
+      "confidence": 0.7212177515029907,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -1285,9 +1285,9 @@
       "map_data": null
     },
     {
-      "response": "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. Each campus offers select programs — not all courses are available at every campus. For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph and click on your preferred campus.",
+      "response": "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. Hindi lahat ng programa ay available sa bawat campus. Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. Salamat sa inyong tanong!",
       "intent": "campus_specific",
-      "confidence": 0.7787009279463003,
+      "confidence": 0.7813125546430221,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1299,7 +1299,7 @@
     {
       "response": "CvSU CAMPUSES (13 Total):\n\n1. INDANG (Main Campus) - Don Severino delas Alas\n   Established: 1906 | Size: 72 hectares\n   Offers: All 11 colleges, graduate programs\n\n2. NAIC - 1961\n   Originally: Cavite College of Fisheries\n   Focus: Fisheries, Hospitality, Education\n\n3. ROSARIO/CCAT - 1969\n   Originally: Cavite College of Arts and Trade\n   Focus: Engineering, IT, Trade Programs\n\n4. CAVITE CITY - 2001\n5. CARMONA - 2002\n6. IMUS - 2003 (Phone: 046-436-6584)\n   Programs: BSCS, BSIT, BSBA, BS Psych, BS Hospitality, Education\n\n7. TRECE MARTIRES - 2005\n8. SILANG - 2006\n9. TANZA - 2007\n10. BACOOR - 2008\n11. GENERAL TRIAS - 2012\n12. MARAGONDON - 2015\n13. DASMARIÃ‘AS LEARNING CENTER - 2023\n\nDIFFERENT CAMPUSES OFFER DIFFERENT PROGRAMS.\n\nTO FIND THE RIGHT CAMPUS:\n1. Check program offerings at each campus website\n2. Visit https://cvsu.edu.ph for campus list\n3. Contact your nearest campus directly\n\nMain campus has the most programs and the Graduate School.",
       "intent": "campus_specific",
-      "confidence": 0.9134334420423366,
+      "confidence": 0.9100969523333265,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1309,7 +1309,7 @@
       "map_data": null
     },
     {
-      "response": "CvSU has 13 campuses across Cavite: Main Campus (Indang), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, Maragondon, Ternate, Alfonso, and Cavite City. Each campus offers select programs — not all courses are available at every campus. For programs, contact info, and directions for a specific campus, visit www.cvsu.edu.ph and click on your preferred campus.",
+      "response": "Ang CvSU ay may 13 campus sa lalawigan ng Cavite: Indang (Main), Imus, Bacoor, Naic, Carmona, Silang, Rosario, Trece Martires, Tanza, at iba pa. Hindi lahat ng programa ay available sa bawat campus. Para sa tiyak na impormasyon ng bawat campus, bisitahin ang www.cvsu.edu.ph. Salamat sa inyong tanong!",
       "intent": "campus_specific",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -1337,10 +1337,22 @@
       "map_data": null
     },
     {
+      "response": "I'm not sure I understand. Try asking about CvSU admissions, programs, tuition fees, or campus services!",
+      "intent": "nlu_fallback",
+      "confidence": 0.0,
+      "model_used": "Fallback",
+      "user_id": "bulk_researcher",
+      "session_id": "research_session_001",
+      "entities": {},
+      "is_follow_up": true,
+      "message_id": null,
+      "map_data": null
+    },
+    {
       "response": "Greetings! I'm here to assist you with information about CvSU - admissions, programs, fees, and more. How may I help?",
       "intent": "greeting",
-      "confidence": 0.5929493354362555,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "confidence": 0.837513267993927,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -1351,7 +1363,7 @@
     {
       "response": "Hello! I'm here to answer your CvSU questions. Try asking about admissions requirements, tuition fees, scholarship programs, enrollment schedules, or campus facilities!",
       "intent": "chitchat",
-      "confidence": 0.5523798278683346,
+      "confidence": 0.8148311833214194,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1361,22 +1373,10 @@
       "map_data": null
     },
     {
-      "response": "Hi! I'm Sevi, your CvSU Virtual Assistant. I can help you with admissions, courses, tuition fees, scholarships, enrollment, campus info, and more. What would you like to know?",
-      "intent": "chitchat",
-      "confidence": 0.8151004747455074,
-      "model_used": "Naive Bayes (NLU Enhanced)",
-      "user_id": "bulk_researcher",
-      "session_id": "research_session_001",
-      "entities": {},
-      "is_follow_up": true,
-      "message_id": null,
-      "map_data": null
-    },
-    {
-      "response": "CvSU — Cavite State University — is your Iskolar para sa Bayan institution in Cavite! Founded in 1906 by the Thomasites, it became a full university in 1998. With 13 campuses, 22,000+ students, and recognition as a Center of Excellence, CvSU is one of the top-performing SUCs in the Philippines. Salamat sa inyong tanong — what else would you like to know?",
-      "intent": "about_cvsu",
-      "confidence": 0.5705880542519347,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "response": "I'm sorry, I didn't quite understand that. Could you rephrase your question? You can ask me about CvSU admissions, programs, tuition fees, scholarships, campus facilities, contact info, or events.",
+      "intent": "nlu_fallback",
+      "confidence": 0.0,
+      "model_used": "Fallback",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},
@@ -1387,7 +1387,7 @@
     {
       "response": "Hi there! I'm the CvSU chatbot. What would you like to know about Cavite State University?",
       "intent": "greeting",
-      "confidence": 0.7037146274726607,
+      "confidence": 0.7024314050516546,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1397,7 +1397,7 @@
       "map_data": null
     },
     {
-      "response": "Hi there! I'm the CvSU chatbot. What would you like to know about Cavite State University?",
+      "response": "Greetings! I'm here to assist you with information about CvSU - admissions, programs, fees, and more. How may I help?",
       "intent": "greeting",
       "confidence": 1.0,
       "model_used": "Naive Bayes (NLU Enhanced)",
@@ -1413,9 +1413,9 @@
       "map_data": null
     },
     {
-      "response": "Take care! Don't hesitate to ask if you need more help with CvSU.",
+      "response": "Goodbye! Feel free to come back anytime. Iskolar para sa Bayan!",
       "intent": "goodbye",
-      "confidence": 0.7990658147941253,
+      "confidence": 0.7983662492604567,
       "model_used": "Naive Bayes (NLU Enhanced)",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
@@ -1427,8 +1427,8 @@
     {
       "response": "You're welcome! Is there anything else you'd like to know about CvSU?",
       "intent": "thanks",
-      "confidence": 0.685391646799036,
-      "model_used": "Naive Bayes (NLU Enhanced)",
+      "confidence": 0.6754748821258545,
+      "model_used": "Neural Network",
       "user_id": "bulk_researcher",
       "session_id": "research_session_001",
       "entities": {},

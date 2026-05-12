@@ -1,6 +1,6 @@
 {
   "greeting": [
-    "Hello! Welcome to CvSU Virtual Assistant. How can I help you today?",
+    "Hello! Welcome to DIWA, the CvSU Digital Interface Web Assistant. How can I help you today?",
     "Hi there! I'm the CvSU chatbot. What would you like to know about Cavite State University?",
     "Greetings! I'm here to assist you with information about CvSU - admissions, programs, fees, and more. How may I help?"
   ],
@@ -120,9 +120,9 @@
     "I'm here to help with CvSU-related questions. Try asking about: admissions, programs offered, tuition fees, scholarships, campus locations, or how to contact CvSU."
   ],
   "chitchat": [
-    "Hi! I'm Sevi, your CvSU Virtual Assistant. I can help you with admissions, courses, tuition fees, scholarships, enrollment, campus info, and more. What would you like to know?",
+    "Hi! I'm DIWA, your CvSU Digital Interface Web Assistant. I can help you with admissions, courses, tuition fees, scholarships, enrollment, campus info, and more. What would you like to know?",
     "Hello! I'm here to answer your CvSU questions. Try asking about admissions requirements, tuition fees, scholarship programs, enrollment schedules, or campus facilities!",
-    "I'm Sevi, the CvSU chatbot! I specialize in Cavite State University information. Ask me anything about admissions, programs, fees, scholarships, or campus life."
+    "I'm DIWA, the CvSU chatbot! I specialize in Cavite State University information. Ask me anything about admissions, programs, fees, scholarships, or campus life."
   ],
   "nstp": [
     "NATIONAL SERVICE TRAINING PROGRAM (NSTP) AT CvSU:\n\nNSTP is MANDATORY for all first-year college students — 2 semesters (NSTP 1 & NSTP 2).\n\nTHREE COMPONENTS (choose one):\n- ROTC: Reserve Officers' Training Corps — military/AFP training\n- CWTS: Civic Welfare Training Service — community development projects\n- LTS: Literacy Training Service — teaching literacy in communities\n\nENROLLMENT:\n- Register during first-year enrollment\n- Coordinate with your college/department for available components\n- Some campuses may offer limited components — check with OSAS\n\nCOMPLETION:\n- NSTP certificate is REQUIRED for graduation\n- Must complete both NSTP 1 and NSTP 2\n\nCONTACT: Office of Student Affairs & Services (OSAS) or your department adviser.",
@@ -191,5 +191,15 @@
   "student_id": [
     "To get or replace your CvSU student ID, visit the Student Affairs Office with your registration form and ID photos. Lost ID replacements require a notarized affidavit of loss.",
     "CvSU student IDs are processed at the Office of Student Affairs (OSA). Bring your registration form, 1x1 photos, and any required fees. For lost IDs, submit an affidavit of loss."
+  ],
+  "enrollment": [
+    "For questions about enrollment, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly."
+  ],
+  "campus_branches": [
+    "CvSU has 14 campuses across Cavite: Main (Indang), Bacoor, Imus, Silang, Naic, Tanza, Rosario, Trece Martires, Carmona, General Trias, Cavite City, Alfonso, Amadeo, and Maragondon. Each campus offers selected programs.",
+    "Cavite State University operates multiple campuses throughout Cavite province. The main campus is in Indang. Visit cvsu.edu.ph for the complete list of campuses and their offered programs."
+  ],
+  "courses": [
+    "For questions about courses, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly."
   ]
 }

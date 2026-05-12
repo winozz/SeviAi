@@ -61,16 +61,16 @@
         "uy hello",
         "hello CvSU",
         "hi CvSU",
-        "good morning Sevi",
-        "hello Sevi",
-        "hi Sevi",
-        "hey Sevi",
+        "good morning DIWA",
+        "hello DIWA",
+        "hi DIWA",
+        "hey DIWA",
         "maligayang pagdating",
-        "hoy Sevi",
-        "Sevi good morning",
-        "Sevi good afternoon",
-        "Sevi good evening",
-        "yo Sevi",
+        "hoy DIWA",
+        "DIWA good morning",
+        "DIWA good afternoon",
+        "DIWA good evening",
+        "yo DIWA",
         "let's start",
         "let's begin",
         "hi there",
@@ -102,13 +102,13 @@
         "Can I ask about hi there",
         "Hello, I have a question about CvSU",
         "Kumusta CvSU?",
-        "Hi Sevi! Can you help me?",
+        "Hi DIWA! Can you help me?",
         "kamusta po",
         "magandang araw",
-        "good day Sevi"
+        "good day DIWA"
       ],
       "responses": [
-        "Hello! Welcome to CvSU Virtual Assistant. How can I help you today?",
+        "Hello! Welcome to DIWA, the CvSU Digital Interface Web Assistant. How can I help you today?",
         "Hi there! I'm the CvSU chatbot. What would you like to know about Cavite State University?",
         "Greetings! I'm here to assist you with information about CvSU - admissions, programs, fees, and more. How may I help?"
       ]
@@ -343,10 +343,10 @@
         "salamat po",
         "maraming salamat",
         "thanks a lot",
-        "thank you Sevi",
+        "thank you DIWA",
         "salamat",
         "thank you so much",
-        "thanks Sevi",
+        "thanks DIWA",
         "maraming salamat po",
         "sige salamat",
         "ok salamat",
@@ -2003,7 +2003,9 @@
         "Can you tell me Is there a full scholarship at CvSU? for freshmen?",
         "Gusto ko pong malaman ang cvsu graduation schedule for freshmen?",
         "Gusto ko pong malaman ang What scholarships are available at CvSU?",
-        "Can I ask about Is there a full scholarship at CvSU? for CvSU Bacoor?"
+        "Can I ask about Is there a full scholarship at CvSU? for CvSU Bacoor?",
+        "Is there a working student program at CvSU?",
+        "May scholarship ba sa CvSU para sa mahirap na estudyante?"
       ],
       "responses": [
         "CvSU SCHOLARSHIPS & FINANCIAL AID:\n\n1. RA 10931 - FREE TUITION LAW:\n   - All qualified undergrad Filipino students\n   - Covers tuition + miscellaneous fees\n   - Most accessible benefit\n\n2. TERTIARY EDUCATION SUBSIDY (TES):\n   - Cash subsidy for living expenses\n   - For students from low-income families\n   - Apply through UniFAST website\n\n3. GOVERNMENT SCHOLARSHIPS:\n   - DOST Science Scholarships (for STEM)\n   - CHED Scholarships (merit-based)\n   - PVAO (military dependents)\n   - Sangguniang Kabataan scholarships\n   - LGU/Provincial scholarships\n\n4. CvSU MERIT SCHOLARSHIPS:\n   - University Scholar (top GPA students)\n   - College Scholar (GPA-based)\n   - Academic excellence awards\n\n5. PRIVATE SCHOLARSHIPS:\n   - Corporate-sponsored\n   - Foundation grants\n   - Alumni-sponsored programs\n\n6. STUDENT ASSISTANTSHIP:\n   - Graduate student teaching/research assistantships\n   - Stipend + tuition discount\n\nHOW TO APPLY:\n- Visit Office of Student Affairs and Services (OSAS)\n- Check requirements per scholarship\n- Submit application before deadlines\n- Maintain required GPA\n\nCONTACT:\nOSAS - Scholarship Office\nEmail: osas@cvsu.edu.ph\nPhone: (046) 415-0010",
@@ -2727,16 +2729,16 @@
         "hehe",
         "haha",
         "lmao",
-        "what is sevi",
-        "who is sevi",
-        "is sevi a bot",
-        "sevi",
-        "hey sevi",
-        "hi sevi",
-        "hello sevi",
-        "sevi help",
-        "sevi what can you do",
-        "sevi are you a robot",
+        "what is diwa",
+        "who is diwa",
+        "is diwa a bot",
+        "diwa",
+        "hey diwa",
+        "hi diwa",
+        "hello diwa",
+        "diwa help",
+        "diwa what can you do",
+        "diwa are you a robot",
         "May shifting ba sa CvSU? Gusto ko pong magpalit ng course.",
         "enrollment?",
         "are you a robot?",
@@ -2912,9 +2914,9 @@
         "Sana matulungan mo ako sa cvsu free tution"
       ],
       "responses": [
-        "Hi! I'm Sevi, your CvSU Virtual Assistant. I can help you with admissions, courses, tuition fees, scholarships, enrollment, campus info, and more. What would you like to know?",
+        "Hi! I'm DIWA, your CvSU Digital Interface Web Assistant. I can help you with admissions, courses, tuition fees, scholarships, enrollment, campus info, and more. What would you like to know?",
         "Hello! I'm here to answer your CvSU questions. Try asking about admissions requirements, tuition fees, scholarship programs, enrollment schedules, or campus facilities!",
-        "I'm Sevi, the CvSU chatbot! I specialize in Cavite State University information. Ask me anything about admissions, programs, fees, scholarships, or campus life."
+        "I'm DIWA, the CvSU chatbot! I specialize in Cavite State University information. Ask me anything about admissions, programs, fees, scholarships, or campus life."
       ]
     },
     {
@@ -3835,6 +3837,34 @@
       ],
       "responses": [
         "For questions about enrollment, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly."
+      ]
+    },
+    {
+      "tag": "campus_branches",
+      "patterns": [
+        "How many campuses does CvSU have?",
+        "What courses are offered at CvSU Bacoor?",
+        "What programs are available at CvSU Imus?",
+        "Is there a CvSU campus in Carmona?",
+        "What is the difference between CvSU Main and CvSU Bacoor?"
+      ],
+      "responses": [
+        "CvSU has 14 campuses across Cavite: Main (Indang), Bacoor, Imus, Silang, Naic, Tanza, Rosario, Trece Martires, Carmona, General Trias, Cavite City, Alfonso, Amadeo, and Maragondon. Each campus offers selected programs.",
+        "Cavite State University operates multiple campuses throughout Cavite province. The main campus is in Indang. Visit cvsu.edu.ph for the complete list of campuses and their offered programs."
+      ]
+    },
+    {
+      "tag": "courses",
+      "patterns": [
+        "Meron bang BSIT sa CvSU?",
+        "May BS Nursing ba sa CvSU Bacoor?",
+        "Anong courses ang meron sa CvSU?",
+        "Does CvSU have a law school?",
+        "Does CvSU offer criminology?",
+        "What are the available strands in CvSU senior high?"
+      ],
+      "responses": [
+        "For questions about courses, please visit the CvSU official website at cvsu.edu.ph or contact the relevant office directly."
       ]
     }
   ]

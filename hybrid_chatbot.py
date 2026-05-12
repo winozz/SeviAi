@@ -18,11 +18,13 @@ from nltk.stem import WordNetLemmatizer
 
 from intents_db import load_intents, build_responses_map
 
+_NON_ALPHA_RE = r"[^a-z0-9\s]"
+
 # TensorFlow imports (optional - graceful fallback if not available)
 try:
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
-    from tensorflow.keras.layers import Dense, Dropout, Embedding, GlobalAveragePooling1D
+    from tensorflow.keras.layers import Dense, Dropout, Embedding, GlobalAveragePooling1D, Bidirectional, LSTM
     from tensorflow.keras.preprocessing.text import Tokenizer
     from tensorflow.keras.preprocessing.sequence import pad_sequences
     from sklearn.preprocessing import LabelEncoder
@@ -66,7 +68,7 @@ class NaiveBayesModel:
     def _preprocess(text: str) -> str:
         """Preprocess text"""
         text = text.lower()
-        text = re.sub(r"[^a-z0-9\s]", "", text)
+        text = re.sub(_NON_ALPHA_RE, "", text)
         tokens = nltk.word_tokenize(text)
         return " ".join([lemmatizer.lemmatize(t) for t in tokens])
 
@@ -99,13 +101,22 @@ class NeuralNetworkModel:
         else:
             self.adaptive_thresholds = {}
 
+        # Temperature scalar for confidence calibration (T=1 = uncalibrated)
+        temp_path = os.path.join(model_dir, "nn_temperature.json")
+        if os.path.exists(temp_path):
+            with open(temp_path, "r", encoding="utf-8") as f:
+                self.temperature: float = json.load(f).get("temperature", 1.0)
+            print(f"[OK] Temperature scaling T={self.temperature:.4f}")
+        else:
+            self.temperature = 1.0
+
     def get_threshold(self, intent: str) -> float:
         """Return the calibrated confidence threshold for a given intent."""
         return self.adaptive_thresholds.get(intent, self.DEFAULT_CONFIDENCE_THRESHOLD)
 
     def predict(self, text: str) -> Tuple[str, float]:
         """
-        Predict intent and confidence.
+        Predict intent and confidence with temperature scaling.
 
         Returns:
             (intent, confidence)
@@ -115,8 +126,12 @@ class NeuralNetworkModel:
         padded = pad_sequences(seq, maxlen=self.MAX_LEN, padding="post")
 
         proba = self.model.predict(padded, verbose=0)[0]
-        confidence = float(np.max(proba))
+        if abs(self.temperature - 1.0) > 1e-6:
+            scaled = np.power(np.clip(proba, 1e-7, 1.0), 1.0 / self.temperature)
+            proba = scaled / scaled.sum()
+
         intent_idx = int(np.argmax(proba))
+        confidence = float(proba[intent_idx])
         intent = self.label_encoder.classes_[intent_idx]
 
         return intent, confidence
@@ -125,7 +140,7 @@ class NeuralNetworkModel:
     def _preprocess(text: str) -> str:
         """Preprocess text"""
         text = text.lower()
-        text = re.sub(r"[^a-z0-9\s]", "", text)
+        text = re.sub(_NON_ALPHA_RE, "", text)
         tokens = nltk.word_tokenize(text)
         return " ".join([lemmatizer.lemmatize(t) for t in tokens])
 
@@ -136,7 +151,7 @@ class HybridChatbot:
     Strategy: Use fast NB first, fallback to accurate NN if uncertain
     """
 
-    NB_CONFIDENCE_THRESHOLD = 0.55  # If NB confidence > 55%, use it; otherwise defer to NN
+    NB_CONFIDENCE_THRESHOLD = 0.70  # If NB confidence > 70%, use it; otherwise defer to NN
     NN_CONFIDENCE_THRESHOLD = 0.50  # NN minimum confidence threshold
     FALLBACK_INTENT = "nlu_fallback"
 
@@ -366,7 +381,7 @@ class HybridChatbot:
     @property
     def system_instructions(self) -> str:
         """System instructions for the chatbot"""
-        return """You are Sevi, the CvSU Virtual Assistant - a helpful, friendly guide for Cavite State University.
+        return """You are DIWA, the Digital Interface Web Assistant for Cavite State University - a helpful, friendly guide.
 
 1. IDENTITY AND SCOPE
 - You serve prospective students, current students, parents, faculty, and the general public.
@@ -509,7 +524,7 @@ class NeuralNetworkTrainer:
         print(f"[OK] Encoded {num_classes} intent classes")
 
         # Build model
-        print("\n[4/5] Building neural network...")
+        print("\n[4/5] Building neural network (Bidirectional LSTM)...")
         model = Sequential([
             Embedding(
                 input_dim=NeuralNetworkTrainer.VOCAB_SIZE,
@@ -517,13 +532,14 @@ class NeuralNetworkTrainer:
                 input_length=NeuralNetworkTrainer.MAX_LEN,
                 name="embedding"
             ),
+            Bidirectional(LSTM(128, return_sequences=True), name="bilstm"),
             GlobalAveragePooling1D(name="pooling"),
             Dense(128, activation="relu", name="dense_1"),
-            Dropout(0.4, name="dropout_1"),
+            Dropout(0.3, name="dropout_1"),
             Dense(64, activation="relu", name="dense_2"),
-            Dropout(0.3, name="dropout_2"),
+            Dropout(0.2, name="dropout_2"),
             Dense(num_classes, activation="softmax", name="output")
-        ], name="IntentClassifier")
+        ], name="IntentClassifier_BiLSTM")
 
         model.compile(
             optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
@@ -551,9 +567,18 @@ class NeuralNetworkTrainer:
         ]
 
         # Stratified split — ensures every intent has val samples
-        x_train, x_val, y_train, y_val = train_test_split(
-            padded, y, test_size=0.2, random_state=42, stratify=encoded_labels
+        x_train, x_val, y_train, y_val, y_train_raw, _ = train_test_split(
+            padded, y, encoded_labels, test_size=0.2, random_state=42, stratify=encoded_labels
         )
+
+        # Class weight balancing — counters imbalanced intents (5 vs 426 patterns)
+        from sklearn.utils.class_weight import compute_class_weight
+        class_weights_arr = compute_class_weight(
+            class_weight="balanced",
+            classes=np.unique(y_train_raw),
+            y=y_train_raw,
+        )
+        class_weight_dict = dict(enumerate(class_weights_arr))
 
         # Train
         print(f"\n[5/5] Training model (max {NeuralNetworkTrainer.MAX_EPOCHS} epochs, "
@@ -564,6 +589,7 @@ class NeuralNetworkTrainer:
             batch_size=NeuralNetworkTrainer.BATCH_SIZE,
             validation_data=(x_val, y_val),
             callbacks=callbacks,
+            class_weight=class_weight_dict,
             verbose=1,
         )
 
@@ -581,12 +607,28 @@ class NeuralNetworkTrainer:
                 per_class_max[label] = []
             per_class_max[label].append(conf)
 
-        # Threshold per intent = 80th percentile of its own softmax scores,
-        # clamped between 0.35 and 0.85 so no intent is too easy or too hard.
+        # Threshold per intent = 60th percentile of its own softmax scores,
+        # clamped between 0.30 and 0.65 so NN is given a fair chance to fire.
         adaptive_thresholds = {}
         for label, scores in per_class_max.items():
-            p80 = float(np.percentile(scores, 80))
-            adaptive_thresholds[label] = round(min(max(p80, 0.35), 0.85), 4)
+            p60 = float(np.percentile(scores, 60))
+            adaptive_thresholds[label] = round(min(max(p60, 0.30), 0.65), 4)
+
+        # Temperature scaling — power scaling on softmax outputs, no sub-model needed
+        print("[+] Calibrating temperature scalar on validation set...")
+        from scipy.optimize import minimize_scalar
+
+        proba_val = model.predict(x_val, verbose=0)
+
+        def nll(temp):
+            scaled = np.power(np.clip(proba_val, 1e-7, 1.0), 1.0 / max(temp, 0.01))
+            calibrated = scaled / scaled.sum(axis=1, keepdims=True)
+            true_idx = np.argmax(y_val, axis=1)
+            return -np.mean(np.log(calibrated[np.arange(len(true_idx)), true_idx] + 1e-7))
+
+        result = minimize_scalar(nll, bounds=(0.1, 10.0), method="bounded")
+        temperature = float(round(result.x, 4))
+        print(f"[OK] Temperature T = {temperature:.4f}  (1.0 = uncalibrated)")
 
         # Save
         print("\n" + "=" * 60)
@@ -599,6 +641,8 @@ class NeuralNetworkTrainer:
             pickle.dump(label_encoder, f)
         with open(os.path.join(output_dir, "nn_thresholds.json"), "w", encoding="utf-8") as f:
             json.dump(adaptive_thresholds, f, indent=2, ensure_ascii=False)
+        with open(os.path.join(output_dir, "nn_temperature.json"), "w", encoding="utf-8") as f:
+            json.dump({"temperature": temperature}, f)
 
         # Stats
         best_epoch = int(np.argmin(history.history["val_loss"]))
@@ -609,6 +653,7 @@ class NeuralNetworkTrainer:
         print(f"  Training Accuracy:   {final_acc:.2%}  (epoch {best_epoch + 1})")
         print(f"  Validation Accuracy: {best_val_acc:.2%}  (best epoch)")
         print(f"  Epochs run:          {actual_epochs}")
+        print(f"  Temperature:         {temperature:.4f}")
         print(f"  Adaptive thresholds: {len(adaptive_thresholds)} intents calibrated")
         print("=" * 60 + "\n")
 
@@ -618,6 +663,6 @@ class NeuralNetworkTrainer:
     def _preprocess(text: str) -> str:
         """Preprocess text"""
         text = text.lower()
-        text = re.sub(r"[^a-z0-9\s]", "", text)
+        text = re.sub(_NON_ALPHA_RE, "", text)
         tokens = nltk.word_tokenize(text)
         return " ".join([lemmatizer.lemmatize(t) for t in tokens])
