@@ -114,19 +114,104 @@ SEASONS: List[Season] = [
 ]
 
 
+def load_seasons_from_db() -> List[Season]:
+    """Load seasons from the DB `seasons` table.
+
+    Returns an empty list if the table is missing or empty so callers can fall
+    back to the hardcoded SEASONS list.
+    """
+    import json as _json
+    try:
+        from .db import get_conn  # type: ignore[import]
+        with get_conn() as conn:
+            rows = conn.execute(
+                "SELECT key, label, reason, months, tags FROM seasons ORDER BY sort_order"
+            ).fetchall()
+    except Exception:
+        return []
+
+    if not rows:
+        return []
+
+    result: List[Season] = []
+    for row in rows:
+        try:
+            months = _json.loads(row["months"])
+            tags = _json.loads(row["tags"])
+        except Exception:
+            continue
+        result.append(Season(key=row["key"], label=row["label"], reason=row["reason"], tags=tags))
+    return result
+
+
+# Month -> Season-index map built once from whatever source is active.
+# Rebuilt lazily on first call to _season_for.
+_MONTH_TO_SEASON: "dict[int, Season] | None" = None
+
+
+def _build_month_map(seasons: List[Season]) -> "dict[int, Season]":
+    """Build month -> Season mapping from the season list.
+
+    The mapping is derived from SEASONS order + known month ranges.
+    When using DB seasons, we store months as JSON on the row so we re-derive
+    the map from that. For the fallback SEASONS list we hardcode the same logic.
+    """
+    # Try to use months metadata from DB rows (stored as JSON on season objects).
+    # Fall back to positional mapping for hardcoded SEASONS.
+    import json as _json
+    try:
+        from .db import get_conn  # type: ignore[import]
+        with get_conn() as conn:
+            rows = conn.execute(
+                "SELECT key, months FROM seasons ORDER BY sort_order"
+            ).fetchall()
+        mapping: dict[int, Season] = {}
+        season_by_key = {s.key: s for s in seasons}
+        for row in rows:
+            try:
+                months_list = _json.loads(row["months"])
+            except Exception:
+                continue
+            season = season_by_key.get(row["key"])
+            if season is None:
+                continue
+            for m in months_list:
+                mapping[m] = season
+        if mapping:
+            return mapping
+    except Exception:
+        pass
+
+    # Hardcoded fallback matching the positional SEASONS list
+    return {
+        5: seasons[0], 6: seasons[0],
+        7: seasons[1], 8: seasons[1],
+        9: seasons[2], 10: seasons[2],
+        11: seasons[3], 12: seasons[3],
+        1: seasons[4], 2: seasons[4], 3: seasons[4], 4: seasons[4],
+    }
+
+
 def _season_for(today: date) -> Season:
-    """Map a calendar month to a Season based on the CvSU academic calendar."""
+    """Map a calendar month to a Season based on the CvSU academic calendar.
+
+    Tries the DB first; falls back to the hardcoded SEASONS list.
+    """
+    global _MONTH_TO_SEASON
+
+    db_seasons = load_seasons_from_db()
+    active_seasons = db_seasons if db_seasons else SEASONS
+
+    if _MONTH_TO_SEASON is None or (db_seasons and len(_MONTH_TO_SEASON) == 0):
+        _MONTH_TO_SEASON = _build_month_map(active_seasons)
+
     m = today.month
-    if m in (5, 6):
-        return SEASONS[0]  # 1st sem registration (May 15 – June 30)
-    if m in (7, 8):
-        return SEASONS[1]  # 1st sem just started (July 1)
-    if m in (9, 10):
-        return SEASONS[2]  # 1st sem midterms
-    if m in (11, 12):
-        return SEASONS[3]  # 2nd sem registration (Nov 15 – Dec 31) + 1st sem commencement
-    # January – April: 2nd sem ongoing (starts Jan 2, commencement May 25-26)
-    return SEASONS[4]
+    season = _MONTH_TO_SEASON.get(m)
+    if season is not None:
+        return season
+
+    # Ultimate fallback — last season covers Jan-Apr
+    return active_seasons[-1]
 
 
 def recommend(

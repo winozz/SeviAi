@@ -42,12 +42,27 @@ def train_naive_bayes():
     print("  NAIVE BAYES CLASSIFIER TRAINING")
     print("=" * 70)
 
-    # Load intents
-    print("\n[1/4] Loading intents from data/cavsu_intents.json...")
-    with open("data/cavsu_intents.json", "r", encoding="utf-8") as f:
-        intents_data = json.load(f)
+    # Load intents — prefer DB, fall back to JSON
+    db_path = "data/cavsu_intents.db"
+    json_path = "data/cavsu_intents.json"
 
-    intents = intents_data["intents"]
+    intents = None
+    if os.path.exists(db_path):
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            from intents_db import load_intents_from_db
+            intents = load_intents_from_db(db_path)
+            print(f"\n[1/4] Loading intents from {db_path} (SQLite)...")
+        except Exception as exc:
+            print(f"\n[1/4] DB load failed ({exc}), falling back to JSON...")
+            intents = None
+
+    if intents is None:
+        print(f"\n[1/4] Loading intents from {json_path}...")
+        with open(json_path, "r", encoding="utf-8") as f:
+            intents_data = json.load(f)
+        intents = intents_data["intents"]
+
     training_patterns = []
     training_labels = []
     responses_map = defaultdict(list)

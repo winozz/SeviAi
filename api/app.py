@@ -143,6 +143,7 @@ class ChatRequest(BaseModel):
     session_id: Optional[str] = None
 
 # Campus map (48 official locations) — see api/campus_places.py
+# All functions are now DB-primary with hardcoded fallback.
 from api.campus_places import (
     MapData,
     PlaceMeta,
@@ -152,6 +153,7 @@ from api.campus_places import (
     build_place_meta as _build_place_meta,
     campus_map_payload as _campus_map_payload,
     has_place as _has_place,
+    get_all_places as _get_all_places,
     save_coord_overrides as _save_coord_overrides,
     list_coord_overrides as _list_coord_overrides,
     reset_coord_overrides as _reset_coord_overrides,
@@ -163,6 +165,14 @@ from api.campus_places import (
     upsert_custom_marker as _upsert_custom_marker,
     delete_custom_marker as _delete_custom_marker,
 )
+
+from api.db import ensure_schema as _ensure_db_schema
+
+# Ensure all DB tables exist at startup (idempotent)
+try:
+    _ensure_db_schema()
+except Exception:
+    pass
 
 
 class CoordEntry(BaseModel):
@@ -437,7 +447,7 @@ async def get_map_coords():
     """Return all current effective marker coords + just the override layer.
 
     The `coords` block is what /map serves (defaults merged with admin
-    overrides). The `overrides` block is just the admin-edited deltas on disk.
+    overrides). The `overrides` block is the DB (or JSON-file) overrides.
     """
     payload = _campus_map_payload()
     coords = {
@@ -450,7 +460,7 @@ async def get_map_coords():
 
 @app.put("/map/coords", tags=["Map"])
 async def put_map_coords(body: CoordsUpdate):
-    """Admin: persist marker (x, y) edits to data/coords_override.json.
+    """Admin: persist marker (x, y) edits to DB (and JSON fallback).
 
     Existing overrides are merged with the body so partial updates don't
     overwrite untouched entries. Bad place_ids are silently ignored.
@@ -462,23 +472,23 @@ async def put_map_coords(body: CoordsUpdate):
 
 @app.delete("/map/coords", tags=["Map"])
 async def delete_map_coords():
-    """Admin: clear all marker overrides; fall back to hardcoded defaults."""
+    """Admin: clear all marker overrides from DB and JSON file."""
     _reset_coord_overrides()
     return {"status": "reset"}
 
 
 @app.get("/map/waypoints", tags=["Map"])
 async def get_map_waypoints():
-    """Return waypoint overrides only. Frontend merges these onto its
-    bundled WAYPOINTS graph for routing.
+    """Return waypoint overrides from DB (falls back to JSON file).
+    Frontend merges these onto its bundled WAYPOINTS graph for routing.
     """
     return {"overrides": _list_waypoint_overrides()}
 
 
 @app.put("/map/waypoints", tags=["Map"])
 async def put_map_waypoints(body: WaypointsUpdate):
-    """Admin: persist waypoint (x, y) edits. Entries for custom waypoints
-    may include a `neighbors` array to splice them into the routing graph."""
+    """Admin: persist waypoint (x, y) edits to DB and JSON file.
+    Entries for custom waypoints may include a `neighbors` array."""
     payload: Dict[str, Dict[str, Any]] = {}
     for wid, e in body.coords.items():
         entry: Dict[str, Any] = {"x": e.x, "y": e.y}
@@ -491,13 +501,14 @@ async def put_map_waypoints(body: WaypointsUpdate):
 
 @app.delete("/map/waypoints", tags=["Map"])
 async def delete_map_waypoints():
+    """Admin: clear all waypoints from DB and JSON file."""
     _reset_waypoint_overrides()
     return {"status": "reset"}
 
 
 @app.delete("/map/waypoints/{waypoint_id}", tags=["Map"])
 async def delete_map_waypoint(waypoint_id: str):
-    """Admin: drop a single waypoint override (used for custom waypoints)."""
+    """Admin: drop a single waypoint from DB and JSON file."""
     removed = _delete_waypoint_override(waypoint_id)
     return {"status": "deleted" if removed else "not_found", "waypoint_id": waypoint_id}
 
@@ -508,12 +519,13 @@ async def delete_map_waypoint(waypoint_id: str):
 
 @app.get("/map/custom_markers", tags=["Map"])
 async def get_custom_markers():
+    """Return custom markers from DB (falls back to JSON file)."""
     return {"markers": _list_custom_markers()}
 
 
 @app.post("/map/custom_markers", tags=["Map"])
 async def post_custom_marker(body: CustomMarkerCreate):
-    """Admin: add or update a custom marker."""
+    """Admin: add or update a custom marker in DB and JSON file."""
     try:
         entry = _upsert_custom_marker(body.model_dump(exclude_none=True))
     except ValueError as exc:
@@ -523,6 +535,7 @@ async def post_custom_marker(body: CustomMarkerCreate):
 
 @app.delete("/map/custom_markers/{marker_id}", tags=["Map"])
 async def remove_custom_marker(marker_id: str):
+    """Admin: delete a custom marker from DB and JSON file."""
     removed = _delete_custom_marker(marker_id)
     return {"status": "deleted" if removed else "not_found", "marker_id": marker_id}
 
@@ -1055,7 +1068,7 @@ async def create_intent(body: CandidateIntent, force: bool = False):
     import json as _json
     from pathlib import Path as _Path
     try:
-        from intents_db import load_intents as _load_intents, create_intents_database as _create_db
+        from intents_db import load_intents as _load_intents
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"intents_db unavailable: {exc}")
 
@@ -1074,28 +1087,52 @@ async def create_intent(body: CandidateIntent, force: bool = False):
             },
         )
 
+    # Write directly to DB (source of truth)
+    try:
+        import sqlite3
+        db_path = _Path("data/cavsu_intents.db")
+        conn = sqlite3.connect(str(db_path))
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT OR IGNORE INTO intents (tag, description, active) VALUES (?, ?, ?)",
+            (body.tag, "", 1),
+        )
+        intent_id = cur.execute(
+            "SELECT id FROM intents WHERE tag = ?", (body.tag,)
+        ).fetchone()["id"]
+        for pattern in body.patterns:
+            cur.execute(
+                "INSERT INTO patterns (intent_id, pattern_text) VALUES (?, ?)",
+                (intent_id, pattern),
+            )
+        for response in body.responses:
+            cur.execute(
+                "INSERT INTO responses (intent_id, response_text) VALUES (?, ?)",
+                (intent_id, response),
+            )
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"DB write failed: {exc}")
+
+    # Also sync to JSON as a backup export
     json_path = _Path("data/cavsu_intents.json")
-    if not json_path.exists():
-        raise HTTPException(status_code=500, detail="data/cavsu_intents.json missing")
-
-    raw = _json.loads(json_path.read_text(encoding="utf-8"))
-    intents_list = raw.get("intents", [])
-    intents_list.append({
-        "tag": body.tag,
-        "patterns": body.patterns,
-        "responses": body.responses,
-    })
-    raw["intents"] = intents_list
-
-    # Atomic write: rename a tmp file so a crash mid-write doesn't corrupt
-    # the canonical intent file.
-    tmp = json_path.with_suffix(json_path.suffix + ".tmp")
-    tmp.write_text(_json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
-    tmp.replace(json_path)
-
-    # Rebuild the SQLite mirror so the /intents endpoint immediately
-    # surfaces the new tag (chat won't use it until retrain).
-    _create_db(json_path=str(json_path), recreate=True)
+    try:
+        if json_path.exists():
+            raw = _json.loads(json_path.read_text(encoding="utf-8"))
+        else:
+            raw = {"intents": []}
+        raw.setdefault("intents", []).append({
+            "tag": body.tag,
+            "patterns": body.patterns,
+            "responses": body.responses,
+        })
+        tmp = json_path.with_suffix(json_path.suffix + ".tmp")
+        tmp.write_text(_json.dumps(raw, ensure_ascii=False, indent=2), encoding="utf-8")
+        tmp.replace(json_path)
+    except Exception:
+        pass  # JSON backup is best-effort; DB is the source of truth
 
     return {
         "status": "saved",

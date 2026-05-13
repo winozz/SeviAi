@@ -86,7 +86,10 @@ pip install -r requirements.txt
 # 3. Download NLTK data (required on first run)
 python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('wordnet')"
 
-# 4. Start the API (model files are already in repo — no retraining needed)
+# 4. Seed the database (campus places, waypoints, seasons, etc.)
+python scripts/seed_db.py
+
+# 5. Start the API (model files are already in repo — no retraining needed)
 uvicorn api.app:app --host 0.0.0.0 --port 8009
 ```
 

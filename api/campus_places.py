@@ -220,162 +220,225 @@ _PLACE_METADATA: Dict[str, Dict[str, Any]] = {
                        "x": 1055, "y": 912},
 }
 
-_PLACE_LABELS: Dict[str, str] = {pid: meta["full"] for pid, meta in _PLACE_METADATA.items()}
-
-
-# ---------------------------------------------------------------------------
-# Runtime coordinate override (writable by the admin map editor)
-# ---------------------------------------------------------------------------
-# The admin UI can drag markers into place and persist them to
-# data/coords_override.json. On startup and after every PUT we merge those
-# overrides onto _PLACE_METADATA so the chatbot's /map endpoint serves the
-# admin-edited positions. The hardcoded defaults above stay as fallbacks.
-
 import json as _json
 from pathlib import Path as _Path
 
+# Legacy JSON paths — kept only for backward-compatible fallback reads.
 _OVERRIDE_PATH = _Path(__file__).resolve().parent.parent / "data" / "coords_override.json"
+_WAYPOINTS_PATH = _Path(__file__).resolve().parent.parent / "data" / "waypoints_override.json"
+_CUSTOM_MARKERS_PATH = _Path(__file__).resolve().parent.parent / "data" / "custom_markers.json"
 
 
-def _apply_overrides() -> int:
-    """Merge data/coords_override.json onto _PLACE_METADATA in place."""
-    if not _OVERRIDE_PATH.exists():
-        return 0
+# ---------------------------------------------------------------------------
+# DB connection helper (lazy import to avoid circular deps at module level)
+# ---------------------------------------------------------------------------
+
+def _get_conn():
+    from .db import get_conn
+    return get_conn()
+
+
+# ---------------------------------------------------------------------------
+# Campus places — DB-primary, hardcoded _PLACE_METADATA as fallback
+# ---------------------------------------------------------------------------
+
+def _load_places_from_db() -> Dict[str, Dict[str, Any]]:
+    """Load campus places from the DB. Returns {} if unavailable."""
     try:
-        data = _json.loads(_OVERRIDE_PATH.read_text(encoding="utf-8"))
-    except (OSError, _json.JSONDecodeError):
-        return 0
-    applied = 0
-    for pid, coords in (data or {}).items():
-        if pid not in _PLACE_METADATA:
-            continue
-        if not isinstance(coords, dict):
-            continue
-        if "x" in coords:
-            _PLACE_METADATA[pid]["x"] = int(coords["x"])
-        if "y" in coords:
-            _PLACE_METADATA[pid]["y"] = int(coords["y"])
-        applied += 1
-    return applied
+        with _get_conn() as conn:
+            rows = conn.execute(
+                "SELECT place_id, label, num, short, full, walk_minutes, direction, x, y"
+                " FROM campus_places"
+            ).fetchall()
+    except Exception:
+        return {}
+    if not rows:
+        return {}
+    return {
+        row["place_id"]: {
+            "num": row["num"],
+            "short": row["short"],
+            "full": row["full"],
+            "walk_minutes_from_gate": row["walk_minutes"],
+            "direction_from_gate": row["direction"],
+            "x": row["x"],
+            "y": row["y"],
+        }
+        for row in rows
+    }
+
+
+def get_all_places() -> Dict[str, Dict[str, Any]]:
+    """Return the live campus-places dict — DB-primary, hardcoded fallback."""
+    return _load_places_from_db() or _PLACE_METADATA
+
+
+def _place_labels() -> Dict[str, str]:
+    """Derive place_id -> full-name mapping from the live places dict."""
+    return {pid: meta["full"] for pid, meta in get_all_places().items()}
+
+
+def save_place_to_db(place_id: str, meta: Dict[str, Any]) -> None:
+    """Upsert a single place record into the campus_places table."""
+    try:
+        label = meta.get("full") or meta.get("short") or place_id
+        with _get_conn() as conn:
+            conn.execute(
+                "INSERT OR REPLACE INTO campus_places"
+                " (place_id, label, num, short, full, walk_minutes, direction, x, y)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (place_id, label, meta.get("num"), meta.get("short"), meta.get("full"),
+                 meta.get("walk_minutes_from_gate"), meta.get("direction_from_gate"),
+                 meta.get("x"), meta.get("y")),
+            )
+    except Exception:
+        pass
+
+
+# ---------------------------------------------------------------------------
+# Coordinate overrides — DB-primary
+# ---------------------------------------------------------------------------
+
+def list_coord_overrides() -> Dict[str, Dict[str, int]]:
+    try:
+        with _get_conn() as conn:
+            rows = conn.execute("SELECT place_id, x, y FROM map_coords_overrides").fetchall()
+        if rows:
+            return {row["place_id"]: {"x": int(row["x"]), "y": int(row["y"])} for row in rows}
+    except Exception:
+        pass
+    # Fallback: read legacy JSON
+    if _OVERRIDE_PATH.exists():
+        try:
+            return _json.loads(_OVERRIDE_PATH.read_text(encoding="utf-8")) or {}
+        except (OSError, _json.JSONDecodeError):
+            pass
+    return {}
 
 
 def save_coord_overrides(coords: Dict[str, Dict[str, int]]) -> int:
-    """Persist `coords` to the override file and re-apply to live metadata.
-
-    `coords` shape: {place_id: {"x": int, "y": int}}.
-    Returns the number of places updated.
-    """
-    _OVERRIDE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    # Merge with whatever is already on disk so partial saves don't clobber.
-    existing: Dict[str, Dict[str, int]] = {}
-    if _OVERRIDE_PATH.exists():
-        try:
-            existing = _json.loads(_OVERRIDE_PATH.read_text(encoding="utf-8")) or {}
-        except (OSError, _json.JSONDecodeError):
-            existing = {}
-    for pid, c in coords.items():
-        if pid not in _PLACE_METADATA:
-            continue
-        existing[pid] = {"x": int(c["x"]), "y": int(c["y"])}
-    _OVERRIDE_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
-    return _apply_overrides()
-
-
-def list_coord_overrides() -> Dict[str, Dict[str, int]]:
-    """Return the on-disk overrides (raw, before merging)."""
-    if not _OVERRIDE_PATH.exists():
-        return {}
+    places = get_all_places()
+    applied = 0
     try:
-        return _json.loads(_OVERRIDE_PATH.read_text(encoding="utf-8")) or {}
-    except (OSError, _json.JSONDecodeError):
-        return {}
+        with _get_conn() as conn:
+            for pid, c in coords.items():
+                if pid not in places or not isinstance(c, dict):
+                    continue
+                conn.execute(
+                    "INSERT OR REPLACE INTO map_coords_overrides (place_id, x, y) VALUES (?, ?, ?)",
+                    (pid, int(c["x"]), int(c["y"])),
+                )
+                applied += 1
+    except Exception:
+        pass
+    return applied
 
 
 def reset_coord_overrides() -> None:
-    """Delete the override file. Hardcoded defaults take effect at next reload."""
-    if _OVERRIDE_PATH.exists():
-        _OVERRIDE_PATH.unlink()
-
-
-# ---------------------------------------------------------------------------
-# Waypoint overrides — routing-graph nodes live on the frontend, but their
-# admin-edited positions are persisted on the backend so they sync across
-# clients. Backend just stores raw JSON; routing is computed in the browser.
-# ---------------------------------------------------------------------------
-
-_WAYPOINTS_PATH = _Path(__file__).resolve().parent.parent / "data" / "waypoints_override.json"
-
-
-def list_waypoint_overrides() -> Dict[str, Dict[str, int]]:
-    if not _WAYPOINTS_PATH.exists():
-        return {}
     try:
-        return _json.loads(_WAYPOINTS_PATH.read_text(encoding="utf-8")) or {}
-    except (OSError, _json.JSONDecodeError):
-        return {}
+        with _get_conn() as conn:
+            conn.execute("DELETE FROM map_coords_overrides")
+    except Exception:
+        pass
+
+
+# ---------------------------------------------------------------------------
+# Waypoint overrides — DB-primary
+# ---------------------------------------------------------------------------
+
+def list_waypoint_overrides() -> Dict[str, Dict[str, Any]]:
+    try:
+        with _get_conn() as conn:
+            rows = conn.execute("SELECT waypoint_id, x, y, neighbors FROM map_waypoints").fetchall()
+        if rows:
+            result: Dict[str, Any] = {}
+            for row in rows:
+                entry: Dict[str, Any] = {"x": int(row["x"]), "y": int(row["y"])}
+                if row["neighbors"] and row["neighbors"] != "[]":
+                    entry["neighbors"] = _json.loads(row["neighbors"])
+                result[row["waypoint_id"]] = entry
+            return result
+    except Exception:
+        pass
+    # Fallback: read legacy JSON
+    if _WAYPOINTS_PATH.exists():
+        try:
+            return _json.loads(_WAYPOINTS_PATH.read_text(encoding="utf-8")) or {}
+        except (OSError, _json.JSONDecodeError):
+            pass
+    return {}
 
 
 def save_waypoint_overrides(coords: Dict[str, Any]) -> int:
-    """Persist `coords` (waypoint_id -> {x, y, neighbors?}) merged with disk.
-
-    Entries may also carry an optional `neighbors` list so admin-created
-    custom waypoints (e.g. `wp_custom_<n>`) ship their adjacency along
-    with their coords — the frontend uses that to splice them into the
-    routing graph.
-    """
-    _WAYPOINTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     existing = list_waypoint_overrides()
     for wid, c in coords.items():
-        if not isinstance(c, dict):
-            continue
-        if "x" not in c or "y" not in c:
+        if not isinstance(c, dict) or "x" not in c or "y" not in c:
             continue
         entry: Dict[str, Any] = {"x": int(c["x"]), "y": int(c["y"])}
         if isinstance(c.get("neighbors"), list):
             entry["neighbors"] = [str(n) for n in c["neighbors"] if isinstance(n, str)]
         existing[wid] = entry
-    _WAYPOINTS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
+    try:
+        with _get_conn() as conn:
+            for wid, e in existing.items():
+                neighbors = e.get("neighbors", [])
+                conn.execute(
+                    "INSERT OR REPLACE INTO map_waypoints (waypoint_id, x, y, neighbors) VALUES (?, ?, ?, ?)",
+                    (wid, float(e["x"]), float(e["y"]), _json.dumps(neighbors)),
+                )
+    except Exception:
+        pass
     return len(existing)
 
 
 def delete_waypoint_override(waypoint_id: str) -> bool:
-    """Remove a single waypoint entry. Returns True if it existed."""
-    existing = list_waypoint_overrides()
-    if waypoint_id not in existing:
+    try:
+        with _get_conn() as conn:
+            cur = conn.execute("DELETE FROM map_waypoints WHERE waypoint_id = ?", (waypoint_id,))
+            return cur.rowcount > 0
+    except Exception:
         return False
-    del existing[waypoint_id]
-    _WAYPOINTS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
-    return True
 
 
 def reset_waypoint_overrides() -> None:
-    if _WAYPOINTS_PATH.exists():
-        _WAYPOINTS_PATH.unlink()
+    try:
+        with _get_conn() as conn:
+            conn.execute("DELETE FROM map_waypoints")
+    except Exception:
+        pass
 
 
 # ---------------------------------------------------------------------------
-# Custom markers — admin-created buildings that don't exist in the hardcoded
-# campus map. Stored separately so they never collide with the 48 canonical
-# places. The shape mirrors the frontend `Building` interface enough for the
-# UI to render and route to them.
+# Custom markers — DB-primary
 # ---------------------------------------------------------------------------
-
-_CUSTOM_MARKERS_PATH = (
-    _Path(__file__).resolve().parent.parent / "data" / "custom_markers.json"
-)
-
 
 def list_custom_markers() -> Dict[str, Dict[str, Any]]:
-    if not _CUSTOM_MARKERS_PATH.exists():
-        return {}
     try:
-        return _json.loads(_CUSTOM_MARKERS_PATH.read_text(encoding="utf-8")) or {}
-    except (OSError, _json.JSONDecodeError):
-        return {}
+        with _get_conn() as conn:
+            rows = conn.execute("SELECT id, name, abbr, x, y, num FROM map_custom_markers").fetchall()
+        if rows:
+            result: Dict[str, Any] = {}
+            for row in rows:
+                entry: Dict[str, Any] = {
+                    "id": row["id"], "name": row["name"], "abbr": row["abbr"],
+                    "x": row["x"], "y": row["y"],
+                }
+                if row["num"] is not None:
+                    entry["num"] = row["num"]
+                result[row["id"]] = entry
+            return result
+    except Exception:
+        pass
+    # Fallback: read legacy JSON
+    if _CUSTOM_MARKERS_PATH.exists():
+        try:
+            return _json.loads(_CUSTOM_MARKERS_PATH.read_text(encoding="utf-8")) or {}
+        except (OSError, _json.JSONDecodeError):
+            pass
+    return {}
 
 
 def upsert_custom_marker(marker: Dict[str, Any]) -> Dict[str, Any]:
-    """Insert or update a custom marker. Expects {id, name, x, y, abbr?}."""
     mid = str(marker.get("id", "")).strip()
     name = str(marker.get("name", "")).strip()
     if not mid or not name:
@@ -386,35 +449,35 @@ def upsert_custom_marker(marker: Dict[str, Any]) -> Dict[str, Any]:
     except (KeyError, TypeError, ValueError):
         raise ValueError("custom marker requires integer x, y")
     entry: Dict[str, Any] = {
-        "id": mid,
-        "name": name,
+        "id": mid, "name": name,
         "abbr": str(marker.get("abbr") or name)[:48],
-        "x": x,
-        "y": y,
+        "x": x, "y": y,
     }
-    if marker.get("num") is not None:
+    num = marker.get("num")
+    if num is not None:
         try:
-            entry["num"] = int(marker["num"])
+            entry["num"] = int(num)
         except (TypeError, ValueError):
             pass
-    existing = list_custom_markers()
-    existing[mid] = entry
-    _CUSTOM_MARKERS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    _CUSTOM_MARKERS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
+    try:
+        with _get_conn() as conn:
+            conn.execute(
+                "INSERT OR REPLACE INTO map_custom_markers (id, name, abbr, x, y, num)"
+                " VALUES (?, ?, ?, ?, ?, ?)",
+                (mid, name, entry["abbr"], x, y, entry.get("num")),
+            )
+    except Exception:
+        pass
     return entry
 
 
 def delete_custom_marker(marker_id: str) -> bool:
-    existing = list_custom_markers()
-    if marker_id not in existing:
+    try:
+        with _get_conn() as conn:
+            cur = conn.execute("DELETE FROM map_custom_markers WHERE id = ?", (marker_id,))
+            return cur.rowcount > 0
+    except Exception:
         return False
-    del existing[marker_id]
-    _CUSTOM_MARKERS_PATH.write_text(_json.dumps(existing, indent=2), encoding="utf-8")
-    return True
-
-
-# Apply any saved overrides immediately at import time.
-_apply_overrides()
 
 
 # ---------------------------------------------------------------------------
@@ -806,20 +869,23 @@ def resolve_map_data(message: str, intent: str) -> Optional[MapData]:
     msg = message.lower()
     has_location_kw = any(_matches_term(msg, kw) for kw in _LOCATION_KEYWORDS)
 
+    labels = _place_labels()
+
     # 1. Keyword match in the message — most specific
     if intent == "campus_location" or has_location_kw:
         for pid, keywords in _PLACE_KEYWORDS:
             if any(_matches_term(msg, kw) for kw in keywords):
-                return MapData(place_id=pid, label=_PLACE_LABELS[pid])
+                if pid in labels:
+                    return MapData(place_id=pid, label=labels[pid])
 
     # 2. Intent default
     pid = _INTENT_TO_PLACE.get(intent)
-    if pid and pid in _PLACE_LABELS:
-        return MapData(place_id=pid, label=_PLACE_LABELS[pid])
+    if pid and pid in labels:
+        return MapData(place_id=pid, label=labels[pid])
 
     # 3. Special case: explicit "where" without a recognised place
     if intent == "campus_location":
-        return MapData(place_id="main", label=_PLACE_LABELS["main"])
+        return MapData(place_id="main", label=labels.get("main", "CvSU Campus"))
 
     return None
 
@@ -830,10 +896,12 @@ def resolve_directory(intent: str) -> Optional[Directory]:
 
 
 def build_place_meta(place_id: str) -> PlaceMeta:
-    meta = _PLACE_METADATA[place_id]
+    places = get_all_places()
+    meta = places[place_id]
+    labels = _place_labels()
     return PlaceMeta(
         place_id=place_id,
-        label=_PLACE_LABELS[place_id],
+        label=labels[place_id],
         num=meta["num"],
         short=meta["short"],
         full=meta["full"],
@@ -844,15 +912,16 @@ def build_place_meta(place_id: str) -> PlaceMeta:
 
 
 def campus_map_payload() -> Dict[str, Any]:
+    places = get_all_places()
     return {
         "gate": _GATE,
         "viewbox": _CAMPUS_VIEWBOX,
-        "places": [build_place_meta(pid) for pid in _PLACE_METADATA.keys()],
+        "places": [build_place_meta(pid) for pid in places.keys()],
     }
 
 
 def has_place(place_id: str) -> bool:
-    return place_id in _PLACE_METADATA
+    return place_id in get_all_places()
 
 
 # Re-exported for convenience
