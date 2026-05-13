@@ -3,8 +3,9 @@ CvSU Chatbot REST API
 FastAPI-based endpoint for integration with web applications
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, List, Dict, Any
 import asyncio
@@ -28,6 +29,9 @@ from .hybrid_chatbot import HybridChatbot
 # Seasonal topic recommender + intent-onboarding sanitation checks
 from .topic_recommender import recommend as _recommend_topics
 from .intent_curation import sanitize_candidate_intent as _sanitize_candidate_intent
+
+import logging as _logging
+_logger = _logging.getLogger("diwa.api")
 
 # Download NLTK resources (idempotent — no-op if already present)
 for resource, kind in [('punkt_tab', 'tokenizers'), ('wordnet', 'corpora')]:
@@ -119,25 +123,25 @@ You are a helpful starting point and information aggregator, not the final autho
 # ============================================================================
 # FastAPI Application
 # ============================================================================
+_is_production = os.getenv("RENDER", "") != "" or os.getenv("PRODUCTION", "") != ""
 app = FastAPI(
-    title="CvSU Chatbot API",
-    description="REST API for DIWA, the Digital Interface Web Assistant for CvSU",
-    version="1.0.0"
+    title="DIWA API",
+    version="1.0.0",
+    docs_url=None if _is_production else "/docs",
+    redoc_url=None if _is_production else "/redoc",
+    openapi_url=None if _is_production else "/openapi.json",
 )
 
-# Enable CORS for web app integration
-_cors_origins = os.getenv("CORS_ORIGINS", "*")
-_allowed_origins = (
-    [o.strip() for o in _cors_origins.split(",")]
-    if _cors_origins != "*"
-    else ["*"]
-)
+# Enable CORS — explicit origins only (never wildcard in production).
+# Default to localhost dev server; override via CORS_ORIGINS env var.
+_cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173")
+_allowed_origins = [o.strip() for o in _cors_origins.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_allowed_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "X-Admin-Pin"],
 )
 
 # ============================================================================
@@ -257,13 +261,8 @@ class ChatResponse(BaseModel):
     response: str
     summary: Optional[str] = None      # short lead-in for UI cards / previews
     intent: str
-    confidence: float
-    model_used: Optional[str] = None
     user_id: Optional[str] = None
     session_id: Optional[str] = None
-    entities: Optional[dict] = None
-    is_follow_up: Optional[bool] = None
-    message_id: Optional[int] = None
     map_data: Optional[MapData] = None
     directory: Optional[Directory] = None   # structured office/location card
 
@@ -274,13 +273,9 @@ class IntentInfo(BaseModel):
     sample_patterns: List[str]
 
 class ModelInfo(BaseModel):
+    """Sanitized model info — no internal details exposed."""
     model_config = ConfigDict(protected_namespaces=())
-    model_name: str
-    accuracy: float
     total_intents: int
-    total_patterns: int
-    model_size_kb: float
-    system_instructions: str
 
 class FeedbackRequest(BaseModel):
     message_id: Optional[int] = None
@@ -350,20 +345,19 @@ chat_logger = ChatLogger(log_dir="logs", db_path="logs/chat_history.db")
 async def root():
     """Root endpoint - API status."""
     return {
-        "service": "CvSU Chatbot API",
-        "assistant_name": "DIWA",
+        "service": "DIWA API",
         "status": "active",
-        "version": "1.0.0",
-        "documentation": "/docs"
     }
 
 @app.get("/health", tags=["Health"])
 async def health_check():
-    """Health check endpoint."""
+    """Health check endpoint. Reports model and LLM readiness without leaking internals."""
+    llm_ok = bool(chatbot.llm and chatbot.llm.available)
     return {
         "status": "healthy",
-        "model_loaded": chatbot.nb_model is not None,
-        "intents_available": len(chatbot.responses_map)
+        "classifier_ready": chatbot.nb_model is not None,
+        "llm_provider": chatbot.llm_provider,
+        "llm_ready": llm_ok,
     }
 
 @app.post("/chat", response_model=ChatResponse, tags=["Chat"],
@@ -415,13 +409,8 @@ async def chat_endpoint(request: ChatRequest):
         response=response,
         summary=_extract_summary(response),
         intent=intent,
-        confidence=confidence,
-        model_used=model_used,
         user_id=request.user_id,
         session_id=request.session_id,
-        entities=nlu_data.get("entities", {}),
-        is_follow_up=nlu_data.get("is_follow_up", False),
-        message_id=message_id,
         map_data=_resolve_map_data(request.message, intent),
         directory=_resolve_directory(intent),
     )
@@ -464,7 +453,7 @@ async def get_map_coords():
     return {"coords": coords, "overrides": _list_coord_overrides()}
 
 
-@app.put("/map/coords", tags=["Map"])
+@app.put("/map/coords", tags=["Map"], dependencies=[Depends(require_admin)])
 async def put_map_coords(body: CoordsUpdate):
     """Admin: persist marker (x, y) edits to DB (and JSON fallback).
 
@@ -476,7 +465,7 @@ async def put_map_coords(body: CoordsUpdate):
     return {"status": "saved", "applied": applied, "overrides": _list_coord_overrides()}
 
 
-@app.delete("/map/coords", tags=["Map"])
+@app.delete("/map/coords", tags=["Map"], dependencies=[Depends(require_admin)])
 async def delete_map_coords():
     """Admin: clear all marker overrides from DB and JSON file."""
     _reset_coord_overrides()
@@ -491,7 +480,7 @@ async def get_map_waypoints():
     return {"overrides": _list_waypoint_overrides()}
 
 
-@app.put("/map/waypoints", tags=["Map"])
+@app.put("/map/waypoints", tags=["Map"], dependencies=[Depends(require_admin)])
 async def put_map_waypoints(body: WaypointsUpdate):
     """Admin: persist waypoint (x, y) edits to DB and JSON file.
     Entries for custom waypoints may include a `neighbors` array."""
@@ -505,14 +494,14 @@ async def put_map_waypoints(body: WaypointsUpdate):
     return {"status": "saved", "overrides": _list_waypoint_overrides(), "total": count}
 
 
-@app.delete("/map/waypoints", tags=["Map"])
+@app.delete("/map/waypoints", tags=["Map"], dependencies=[Depends(require_admin)])
 async def delete_map_waypoints():
     """Admin: clear all waypoints from DB and JSON file."""
     _reset_waypoint_overrides()
     return {"status": "reset"}
 
 
-@app.delete("/map/waypoints/{waypoint_id}", tags=["Map"])
+@app.delete("/map/waypoints/{waypoint_id}", tags=["Map"], dependencies=[Depends(require_admin)])
 async def delete_map_waypoint(waypoint_id: str):
     """Admin: drop a single waypoint from DB and JSON file."""
     removed = _delete_waypoint_override(waypoint_id)
@@ -529,7 +518,7 @@ async def get_custom_markers():
     return {"markers": _list_custom_markers()}
 
 
-@app.post("/map/custom_markers", tags=["Map"])
+@app.post("/map/custom_markers", tags=["Map"], dependencies=[Depends(require_admin)])
 async def post_custom_marker(body: CustomMarkerCreate):
     """Admin: add or update a custom marker in DB and JSON file."""
     try:
@@ -539,7 +528,7 @@ async def post_custom_marker(body: CustomMarkerCreate):
     return {"status": "saved", "marker": entry, "markers": _list_custom_markers()}
 
 
-@app.delete("/map/custom_markers/{marker_id}", tags=["Map"])
+@app.delete("/map/custom_markers/{marker_id}", tags=["Map"], dependencies=[Depends(require_admin)])
 async def remove_custom_marker(marker_id: str):
     """Admin: delete a custom marker from DB and JSON file."""
     removed = _delete_custom_marker(marker_id)
@@ -567,25 +556,12 @@ async def get_intent(intent_tag: str):
 
 @app.get("/model/info", response_model=ModelInfo, tags=["Model"])
 async def model_info():
-    """Get information about the trained model."""
+    """Get sanitized model information (no internal details exposed)."""
     return ModelInfo(
-        model_name=chatbot.model_name,
-        accuracy=chatbot.accuracy,
         total_intents=chatbot.total_intents,
-        total_patterns=chatbot.total_patterns,
-        model_size_kb=chatbot.model_size_kb,
-        system_instructions=chatbot.system_instructions
     )
 
-@app.get("/model/instructions", tags=["Model"])
-async def get_instructions():
-    """Get agent system instructions."""
-    return {
-        "instructions": chatbot.system_instructions,
-        "version": "1.0.0"
-    }
-
-@app.post("/model/reload", tags=["Model"])
+@app.post("/model/reload", tags=["Model"], dependencies=[Depends(require_admin)])
 async def reload_model():
     """Hot-reload all model artifacts from disk without restarting the server."""
     global chatbot
@@ -593,12 +569,7 @@ async def reload_model():
         model_dir=MODEL_DIR,
         responses_path=os.path.join(MODEL_DIR, "responses_map.json")
     )
-    return {
-        "status": "reloaded",
-        "total_intents": chatbot.total_intents,
-        "total_patterns": chatbot.total_patterns,
-        "accuracy": chatbot.accuracy,
-    }
+    return {"status": "reloaded"}
 
 @app.get("/conversation/{user_id}", tags=["Conversation"])
 async def get_conversation_history(user_id: str):
@@ -651,12 +622,8 @@ async def batch_chat(requests: List[ChatRequest]):
             response=response,
             summary=_extract_summary(response),
             intent=intent,
-            confidence=confidence,
-            model_used=model_used,
             user_id=request.user_id,
             session_id=request.session_id,
-            entities=nlu_data.get("entities", {}),
-            is_follow_up=nlu_data.get("is_follow_up", False),
             map_data=_resolve_map_data(request.message, intent),
             directory=_resolve_directory(intent),
         ))
@@ -666,7 +633,7 @@ async def batch_chat(requests: List[ChatRequest]):
 # Logging Endpoints
 # ============================================================================
 
-@app.get("/logs/user/{user_id}", tags=["Logging"])
+@app.get("/logs/user/{user_id}", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def get_user_logs(user_id: str, limit: int = 50):
     """Get chat history for a specific user"""
     history = chat_logger.get_user_history(user_id, limit)
@@ -676,7 +643,7 @@ async def get_user_logs(user_id: str, limit: int = 50):
         "messages": history
     }
 
-@app.get("/logs/session/{session_id}", tags=["Logging"])
+@app.get("/logs/session/{session_id}", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def get_session_logs(session_id: str):
     """Get all messages in a specific session"""
     history = chat_logger.get_session_history(session_id)
@@ -686,7 +653,7 @@ async def get_session_logs(session_id: str):
         "messages": history
     }
 
-@app.get("/logs/intents", tags=["Logging"])
+@app.get("/logs/intents", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def get_intent_logs():
     """Get statistics for all intents"""
     stats = chat_logger.get_intent_statistics()
@@ -695,7 +662,7 @@ async def get_intent_logs():
         "intents": stats
     }
 
-@app.get("/logs/sessions", tags=["Logging"])
+@app.get("/logs/sessions", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def get_sessions_list(user_id: Optional[str] = None, limit: int = 20):
     """Get list of sessions"""
     sessions = chat_logger.get_session_list(user_id, limit)
@@ -705,13 +672,13 @@ async def get_sessions_list(user_id: Optional[str] = None, limit: int = 20):
         "sessions": sessions
     }
 
-@app.get("/logs/today", tags=["Logging"])
+@app.get("/logs/today", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def get_today_statistics():
     """Get today's chat statistics"""
     stats = chat_logger.get_today_stats()
     return stats
 
-@app.get("/logs/search", tags=["Logging"])
+@app.get("/logs/search", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def search_logs(query: str, limit: int = 20):
     """Search logs by message content"""
     results = chat_logger.search_logs(query, limit)
@@ -722,21 +689,17 @@ async def search_logs(query: str, limit: int = 20):
     }
 
 @app.post("/logs/export/{user_id}", tags=["Logging"],
+          dependencies=[Depends(require_admin)],
           responses={500: {"description": "Export failed"}})
 async def export_user_logs(user_id: str):
     """Export all data for a user as JSON file"""
     filepath = chat_logger.export_user_data(user_id)
     if filepath:
-        return {
-            "status": "success",
-            "user_id": user_id,
-            "filepath": filepath,
-            "message": f"User data exported to {filepath}"
-        }
+        return {"status": "success"}
     else:
-        raise HTTPException(status_code=500, detail="Failed to export user data")
+        raise HTTPException(status_code=500, detail="Export failed")
 
-@app.delete("/logs/cleanup", tags=["Logging"])
+@app.delete("/logs/cleanup", tags=["Logging"], dependencies=[Depends(require_admin)])
 async def cleanup_old_logs(days: int = 30):
     """Delete logs older than specified days"""
     deleted = chat_logger.cleanup_old_logs(days)
@@ -823,7 +786,7 @@ async def submit_feedback(request: FeedbackRequest):
     return {"status": "ok", "feedback_id": feedback_id}
 
 
-@app.get("/feedback", tags=["Feedback"])
+@app.get("/feedback", tags=["Feedback"], dependencies=[Depends(require_admin)])
 async def get_feedback(
     limit: int = 100,
     helpful: Optional[bool] = None,
@@ -860,7 +823,7 @@ async def get_feedback_reasons():
     return FEEDBACK_REASONS
 
 
-@app.get("/feedback/stats", tags=["Feedback"])
+@app.get("/feedback/stats", tags=["Feedback"], dependencies=[Depends(require_admin)])
 async def get_feedback_stats():
     """
     Aggregated feedback statistics: overall totals, per-intent breakdown,
@@ -870,7 +833,7 @@ async def get_feedback_stats():
     return stats
 
 
-@app.get("/feedback/fallbacks", tags=["Feedback"])
+@app.get("/feedback/fallbacks", tags=["Feedback"], dependencies=[Depends(require_admin)])
 async def get_feedback_fallbacks(limit: int = 100):
     """
     Return recent messages that triggered the nlu_fallback intent.
@@ -881,7 +844,8 @@ async def get_feedback_fallbacks(limit: int = 100):
 
 
 @app.post("/feedback/analyze", tags=["Feedback"],
-          responses={500: {"description": "Intent file not found or DB rebuild failed"}})
+          dependencies=[Depends(require_admin)],
+          responses={500: {"description": "Operation failed"}})
 async def analyze_feedback(request: FeedbackAnalyzeRequest):
     """
     Batch feedback analysis — identify misclassified utterances from stored
@@ -924,7 +888,7 @@ async def analyze_feedback(request: FeedbackAnalyzeRequest):
     db_path = root / "data" / "cavsu_intents.db"
 
     if not intents_path.exists():
-        raise HTTPException(status_code=500, detail=f"Intent file not found: {intents_path}")
+        raise HTTPException(status_code=500, detail="Intent dataset unavailable")
 
     raw = await asyncio.to_thread(intents_path.read_text, encoding="utf-8")
     intents_doc = json.loads(raw)
@@ -974,15 +938,12 @@ async def analyze_feedback(request: FeedbackAnalyzeRequest):
             result["db_error"] = str(exc)
 
         result["status"] = "applied"
-        result["backup_file"] = str(backup_path)
-        result["output_file"] = str(intents_path)
         result["restart_api_required"] = True
     else:
         preview_path = root / "data" / f"cavsu_intents_preview_{run_id}.json"
         preview_text = json.dumps(intents_doc, indent=2, ensure_ascii=False)
         await asyncio.to_thread(preview_path.write_text, preview_text, encoding="utf-8")
         result["status"] = "preview"
-        result["preview_file"] = str(preview_path)
         result["message"] = "Dry-run complete. Set apply=true to commit changes."
 
     return result
@@ -1038,20 +999,57 @@ def _predict_proba_dict(text: str) -> Dict[str, float]:
 # ============================================================================
 DASHBOARD_PIN = os.getenv("DASHBOARD_PIN", "")
 
+# Simple in-memory rate limiter for PIN verification (brute-force protection)
+_pin_attempts: Dict[str, list] = {}       # ip -> [timestamps]
+_PIN_MAX_ATTEMPTS = 5
+_PIN_WINDOW_SECONDS = 300                  # 5-minute window
+
+
+def _check_rate_limit(client_ip: str) -> None:
+    """Raise 429 if the client has exceeded PIN attempt limits."""
+    now = time.time()
+    attempts = _pin_attempts.get(client_ip, [])
+    # Prune old entries
+    attempts = [t for t in attempts if now - t < _PIN_WINDOW_SECONDS]
+    _pin_attempts[client_ip] = attempts
+    if len(attempts) >= _PIN_MAX_ATTEMPTS:
+        raise HTTPException(429, "Too many attempts. Try again later.")
+
+
+def _record_attempt(client_ip: str) -> None:
+    _pin_attempts.setdefault(client_ip, []).append(time.time())
+
+
+async def require_admin(request: Request) -> None:
+    """Dependency: verify the X-Admin-Pin header matches DASHBOARD_PIN.
+
+    All admin/dashboard endpoints should declare
+    ``dependencies=[Depends(require_admin)]``.
+    """
+    if not DASHBOARD_PIN:
+        raise HTTPException(503, "Admin access not configured")
+    pin = request.headers.get("X-Admin-Pin", "")
+    if pin != DASHBOARD_PIN:
+        raise HTTPException(401, "Unauthorized")
+
+
 class PinRequest(BaseModel):
     pin: str
 
 @app.post("/admin/verify", tags=["Admin"])
-async def verify_admin_pin(body: PinRequest):
-    """Verify dashboard access PIN."""
+async def verify_admin_pin(body: PinRequest, request: Request):
+    """Verify dashboard access PIN (rate-limited)."""
+    client_ip = request.client.host if request.client else "unknown"
+    _check_rate_limit(client_ip)
     if not DASHBOARD_PIN:
-        raise HTTPException(503, "Dashboard PIN not configured")
+        raise HTTPException(503, "Admin access not configured")
     if body.pin != DASHBOARD_PIN:
+        _record_attempt(client_ip)
         raise HTTPException(401, "Invalid PIN")
     return {"status": "ok"}
 
 
-@app.post("/admin/intents/sanitize", tags=["Admin"])
+@app.post("/admin/intents/sanitize", tags=["Admin"], dependencies=[Depends(require_admin)])
 async def sanitize_intent(body: CandidateIntent):
     """Pre-flight checks before onboarding a new intent.
 
@@ -1076,7 +1074,7 @@ async def sanitize_intent(body: CandidateIntent):
     return report.to_dict()
 
 
-@app.post("/admin/intents", tags=["Admin"])
+@app.post("/admin/intents", tags=["Admin"], dependencies=[Depends(require_admin)])
 async def create_intent(body: CandidateIntent, force: bool = False):
     """Apply a candidate intent: append to cavsu_intents.json, rebuild the
     SQLite DB, and ask the caller to re-run training to activate it in the
@@ -1094,7 +1092,7 @@ async def create_intent(body: CandidateIntent, force: bool = False):
     try:
         from intents_db import load_intents as _load_intents
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"intents_db unavailable: {exc}")
+        raise HTTPException(status_code=500, detail="Intent database unavailable")
 
     existing = _load_intents()
     candidate = body.model_dump()
@@ -1138,7 +1136,8 @@ async def create_intent(body: CandidateIntent, force: bool = False):
         conn.commit()
         conn.close()
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"DB write failed: {exc}")
+        _logger.error("DB write failed: %s", exc)
+        raise HTTPException(status_code=500, detail="Failed to save intent")
 
     # Also sync to JSON as a backup export
     json_path = _Path("data/cavsu_intents.json")
@@ -1173,14 +1172,40 @@ async def create_intent(body: CandidateIntent, force: bool = False):
 # ============================================================================
 # Error Handlers
 # ============================================================================
+
+# Safe error messages by status code — never leak internals to the client.
+_SAFE_ERROR_MESSAGES = {
+    400: "Bad request",
+    401: "Unauthorized",
+    403: "Forbidden",
+    404: "Not found",
+    422: "Validation error",
+    429: "Too many requests",
+    500: "Internal server error",
+    503: "Service unavailable",
+}
+
+
 @app.exception_handler(HTTPException)
-async def http_exception_handler(request, exc):
-    """Custom HTTP exception handler."""
-    return {
-        "error": True,
-        "status_code": exc.status_code,
-        "message": exc.detail
-    }
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """Return generic error messages. Internal details are logged server-side only."""
+    # Log full detail for debugging, but never send it to the client
+    _logger.warning("HTTP %s on %s: %s", exc.status_code, request.url.path, exc.detail)
+    safe_message = _SAFE_ERROR_MESSAGES.get(exc.status_code, "Request failed")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": True, "message": safe_message},
+    )
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Catch-all: log the real error, return a generic 500."""
+    _logger.exception("Unhandled exception on %s", request.url.path)
+    return JSONResponse(
+        status_code=500,
+        content={"error": True, "message": "Internal server error"},
+    )
 
 # ============================================================================
 # Run Server
