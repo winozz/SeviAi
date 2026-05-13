@@ -145,6 +145,40 @@ app.add_middleware(
 )
 
 # ============================================================================
+# Admin Authentication
+# ============================================================================
+DASHBOARD_PIN = os.getenv("DASHBOARD_PIN", "")
+
+# Simple in-memory rate limiter for PIN verification (brute-force protection)
+_pin_attempts: Dict[str, list] = {}       # ip -> [timestamps]
+_PIN_MAX_ATTEMPTS = 5
+_PIN_WINDOW_SECONDS = 300                  # 5-minute window
+
+
+def _check_rate_limit(client_ip: str) -> None:
+    """Raise 429 if the client has exceeded PIN attempt limits."""
+    now = time.time()
+    attempts = _pin_attempts.get(client_ip, [])
+    attempts = [t for t in attempts if now - t < _PIN_WINDOW_SECONDS]
+    _pin_attempts[client_ip] = attempts
+    if len(attempts) >= _PIN_MAX_ATTEMPTS:
+        raise HTTPException(429, "Too many attempts. Try again later.")
+
+
+def _record_attempt(client_ip: str) -> None:
+    _pin_attempts.setdefault(client_ip, []).append(time.time())
+
+
+async def require_admin(request: Request) -> None:
+    """Dependency: verify the X-Admin-Pin header matches DASHBOARD_PIN."""
+    if not DASHBOARD_PIN:
+        raise HTTPException(503, "Admin access not configured")
+    pin = request.headers.get("X-Admin-Pin", "")
+    if pin != DASHBOARD_PIN:
+        raise HTTPException(401, "Unauthorized")
+
+
+# ============================================================================
 # Request/Response Models
 # ============================================================================
 class ChatRequest(BaseModel):
@@ -992,45 +1026,6 @@ def _predict_proba_dict(text: str) -> Dict[str, float]:
         return {tag: float(p) for tag, p in zip(classes, proba)}
     except Exception:
         return {}
-
-
-# ============================================================================
-# Admin Authentication
-# ============================================================================
-DASHBOARD_PIN = os.getenv("DASHBOARD_PIN", "")
-
-# Simple in-memory rate limiter for PIN verification (brute-force protection)
-_pin_attempts: Dict[str, list] = {}       # ip -> [timestamps]
-_PIN_MAX_ATTEMPTS = 5
-_PIN_WINDOW_SECONDS = 300                  # 5-minute window
-
-
-def _check_rate_limit(client_ip: str) -> None:
-    """Raise 429 if the client has exceeded PIN attempt limits."""
-    now = time.time()
-    attempts = _pin_attempts.get(client_ip, [])
-    # Prune old entries
-    attempts = [t for t in attempts if now - t < _PIN_WINDOW_SECONDS]
-    _pin_attempts[client_ip] = attempts
-    if len(attempts) >= _PIN_MAX_ATTEMPTS:
-        raise HTTPException(429, "Too many attempts. Try again later.")
-
-
-def _record_attempt(client_ip: str) -> None:
-    _pin_attempts.setdefault(client_ip, []).append(time.time())
-
-
-async def require_admin(request: Request) -> None:
-    """Dependency: verify the X-Admin-Pin header matches DASHBOARD_PIN.
-
-    All admin/dashboard endpoints should declare
-    ``dependencies=[Depends(require_admin)]``.
-    """
-    if not DASHBOARD_PIN:
-        raise HTTPException(503, "Admin access not configured")
-    pin = request.headers.get("X-Admin-Pin", "")
-    if pin != DASHBOARD_PIN:
-        raise HTTPException(401, "Unauthorized")
 
 
 class PinRequest(BaseModel):
