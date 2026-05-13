@@ -1033,6 +1033,24 @@ def _predict_proba_dict(text: str) -> Dict[str, float]:
         return {}
 
 
+# ============================================================================
+# Admin Authentication
+# ============================================================================
+DASHBOARD_PIN = os.getenv("DASHBOARD_PIN", "")
+
+class PinRequest(BaseModel):
+    pin: str
+
+@app.post("/admin/verify", tags=["Admin"])
+async def verify_admin_pin(body: PinRequest):
+    """Verify dashboard access PIN."""
+    if not DASHBOARD_PIN:
+        raise HTTPException(503, "Dashboard PIN not configured")
+    if body.pin != DASHBOARD_PIN:
+        raise HTTPException(401, "Invalid PIN")
+    return {"status": "ok"}
+
+
 @app.post("/admin/intents/sanitize", tags=["Admin"])
 async def sanitize_intent(body: CandidateIntent):
     """Pre-flight checks before onboarding a new intent.
