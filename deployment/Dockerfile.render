@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
 COPY deployment/requirements_render.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Download NLTK data
-RUN python -c "import nltk; nltk.download('punkt_tab'); nltk.download('wordnet'); nltk.download('omw-1.4')"
+# Download NLTK data (both punkt and punkt_tab for compatibility across NLTK versions)
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('wordnet'); nltk.download('omw-1.4')"
 
 # Copy application
 COPY . .
