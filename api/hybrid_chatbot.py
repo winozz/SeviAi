@@ -264,7 +264,8 @@ class LocalLLM:
             req = urllib.request.Request(f"{self.base_url}/api/tags", method="GET")
             with urllib.request.urlopen(req, timeout=15):
                 return True
-        except Exception:
+        except Exception as e:
+            print(f"[WARNING] Ollama probe failed: {type(e).__name__}: {e}  url={self.base_url}")
             return False
 
     def generate(self, user_message: str, conversation_context: list = None) -> Optional[str]:
