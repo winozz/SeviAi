@@ -1,7 +1,11 @@
 {
   "greeting": 0.65,
   "goodbye": 0.65,
+<<<<<<< Updated upstream
   "thanks": 0.6452,
+=======
+  "thanks": 0.567,
+>>>>>>> Stashed changes
   "about_cvsu": 0.65,
   "vision_mission": 0.65,
   "campus_location": 0.65,
@@ -21,7 +25,11 @@
   "contact_info": 0.65,
   "registrar": 0.65,
   "student_organizations": 0.65,
+<<<<<<< Updated upstream
   "campus_specific": 0.501,
+=======
+  "campus_specific": 0.5327,
+>>>>>>> Stashed changes
   "nlu_fallback": 0.65,
   "chitchat": 0.65,
   "nstp": 0.65,
@@ -110,5 +118,13 @@
   "compare_to_other_school": 0.65,
   "choosing_program": 0.65,
   "off_topic_homework": 0.65,
-  "verify_against_official": 0.65
+  "verify_against_official": 0.65,
+  "student_refund": 0.65,
+  "student_clearance_signing": 0.65,
+  "foreign_student_admission": 0.65,
+  "counseling_procedure": 0.65,
+  "off_campus_activities": 0.65,
+  "library_card_replacement": 0.65,
+  "tcp_admission": 0.65,
+  "visitor_accommodation": 0.65
 }

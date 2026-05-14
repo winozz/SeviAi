@@ -317,6 +317,141 @@ class LocalLLM:
             return None
 
 
+class NonsenseGate:
+    """
+    Blocks gibberish, prompt-injection, and off-topic statements before
+    they reach the LLM. Rule set is tuned from observed bad inputs in
+    chat_*.log — see notes in each pattern. Intentionally conservative:
+    a clear question word or "?" lets borderline messages through, so
+    legitimate Filipino + English queries are not blocked.
+    """
+
+    MIN_LEN = 3
+    MIN_ALPHAS = 2
+    MIN_VOWEL_RATIO = 0.18  # below this on length-5+ tokens = keysmash
+
+    # Short words we accept on their own (whole-message equality).
+    _ALLOW_SHORT = {
+        "hi", "hello", "hey", "yes", "no", "ok", "okay",
+        "cvsu", "ceit", "con", "cas", "cafenr", "cemds",
+        "ojt", "tor", "cat", "map", "fee", "fees",
+    }
+
+    # Profanity / pure venting — no information to act on.
+    # NOTE: tang(ina|ena)\w* catches "tangina", "tanginamo", "tanginang", etc.
+    _PROFANITY = re.compile(
+        r"\b(wtf|f[*u]ck|sh[*i]t|bullsh|tang(?:ina|ena)\w*|gago\w*|"
+        r"putang\w*|tarantado|bobo|hayop|ulol)\b",
+        re.IGNORECASE,
+    )
+
+    # Explicit prompt-injection cues — always block, even with CvSU words.
+    _PROMPT_INJECTION = re.compile(
+        r"\b(the\s+correct\s+answer\s+is|correct\s+answer\s+is\s+that|"
+        r"ignore\s+(?:previous|prior|the)\s+instructions|"
+        r"you\s+are\s+now|forget\s+(?:everything|your\s+instructions)|"
+        r"as\s+an\s+ai\b|system\s+prompt)\b",
+        re.IGNORECASE,
+    )
+
+    # Keyboard-mashing patterns ("asdfgh", "qwerqwer", "zxcvb")
+    _KEYSMASH = re.compile(
+        r"(?:asdf|qwer|zxcv|hjkl|fdsa|rewq|poiu|jkl;)",
+        re.IGNORECASE,
+    )
+
+    # Fact-injection / prompt-injection assertions. Caught examples:
+    #   "Ang Turon ay isang sikat na meryenda..."
+    #   "The correct answer is that ..."
+    #   "Ang swimming pool ay matatagpuan malapit sa saluysoy"
+    #   "Saging ang laman ng lumpiang saging..."
+    #   "Lumpiang saging is just a playful term for ..."
+    _FACT_INJECTION = re.compile(
+        r"\b(ang\s+\w+(?:\s+\w+){0,3}\s+ay\s+\S+|"
+        r"\w+\s+ang\s+laman\s+ng\s+\w+|"
+        r"magkaiba\s+ang\s+\w+|"
+        r"\w+\s+is\s+just\s+a\b|"
+        r"the\s+correct\s+answer\s+is|"
+        r"correct\s+answer\s+is\s+that|"
+        r"\w+\s+ay\s+matatagpuan|"
+        r"\w+\s+is\s+near\s+\w+|"
+        r"\w+\s+is\s+the\s+same\s+as|"
+        r"hindi\s+\w+,?\s+\w+\s+ang)\b",
+        re.IGNORECASE,
+    )
+
+    # Off-topic concrete nouns (food etc.) that have no CvSU meaning.
+    _OFFTOPIC_NOUNS = re.compile(
+        r"\b(turon|lumpia(?:ng)?|adobo|sinigang|kakanin|halo[\-\s]?halo|"
+        r"hotdog|lechon|kainan|sikat\s+na\s+meryenda|merienda|meryenda)\b",
+        re.IGNORECASE,
+    )
+
+    # Strong question signals — having any of these lets a borderline
+    # message through (we don't want to block real Filipino questions).
+    _QUESTION = re.compile(
+        r"[?]|^\s*(what|when|where|why|how|who|which|"
+        r"is\s|are\s|can\s|does\s|do\s|will\s|may\s|"
+        r"ano|saan|kailan|sino|paano|bakit|alin|kamusta|"
+        r"may|meron|mayroon|pwede|puwede)\b",
+        re.IGNORECASE,
+    )
+
+    # CvSU context — exempts assertions that mention real CvSU terms
+    # (so "BSCS ay 4-year program" still gets through to the model).
+    _CVSU_CONTEXT = re.compile(
+        r"\b(cvsu|cavite\s+state|admission|enrollment|tuition|"
+        r"ceit|cafenr|cemds|cas|college|registrar|campus|"
+        r"course|program|class|student|scholarship|"
+        r"freshmen|transferee|graduate|bs[a-z]{1,4})\b",
+        re.IGNORECASE,
+    )
+
+    def allows(self, text: str) -> Tuple[bool, str]:
+        if not text or not text.strip():
+            return False, "empty"
+        t = text.strip()
+        t_lower = t.lower()
+        alphas = sum(c.isalpha() for c in t)
+
+        # Single-word / very short input — only allow well-known short tokens.
+        if alphas < self.MIN_ALPHAS:
+            return False, "too_short"
+        if " " not in t and t_lower not in self._ALLOW_SHORT and alphas < 4:
+            return False, "too_short"
+
+        if self._PROFANITY.search(t):
+            return False, "profanity"
+
+        if self._KEYSMASH.search(t):
+            return False, "keysmash"
+
+        # Prompt-injection language is blocked unconditionally (CvSU
+        # mention is not an exemption — these phrasings are abusive).
+        if self._PROMPT_INJECTION.search(t):
+            return False, "prompt_injection"
+
+        # Vowel-starved token = keyboard noise (e.g. "fgbhnj", "tnsmnsl")
+        if alphas >= 5:
+            vowels = sum(c.lower() in "aeiou" for c in t if c.isalpha())
+            if vowels / alphas < self.MIN_VOWEL_RATIO:
+                return False, "low_vowel_ratio"
+
+        # Off-topic food / non-CvSU noun without any CvSU context.
+        if self._OFFTOPIC_NOUNS.search(t) and not self._CVSU_CONTEXT.search(t):
+            return False, "offtopic_subject"
+
+        # Fact-injection statement without question + without CvSU context.
+        if (
+            self._FACT_INJECTION.search(t)
+            and not self._QUESTION.search(t)
+            and not self._CVSU_CONTEXT.search(t)
+        ):
+            return False, "fact_injection"
+
+        return True, "ok"
+
+
 class ScopeGate:
     """
     Pre-filter that blocks off-topic queries before they reach the LLM.
@@ -548,6 +683,7 @@ class HybridChatbot:
         # Initialize LLM fallback (Claude API by default, Ollama optional)
         provider = os.getenv("LLM_PROVIDER", "claude").strip().lower()
         self.scope_gate = ScopeGate()
+        self.nonsense_gate = NonsenseGate()
         self.llm = None
         self.llm_provider = provider
 
@@ -701,6 +837,14 @@ class HybridChatbot:
 
         # Step 3: LLM fallback — fires only when NB+NN are both below threshold
         if self.llm and self.llm.available:
+            # NonsenseGate first: catches gibberish, profanity, and
+            # fact-injection attempts ("the correct answer is...",
+            # "Ang turon ay X") before ScopeGate's off-topic check.
+            ns_allowed, ns_reason = self.nonsense_gate.allows(user_input)
+            if not ns_allowed:
+                self.model_usage_stats["scope_gate_blocked"] += 1
+                return self.FALLBACK_INTENT, self.scope_gate.refusal(), 0.0, f"NonsenseGate ({ns_reason})", nlu_data
+
             allowed, reason = self.scope_gate.allows(user_input)
             if not allowed:
                 # Pre-filter blocked the query — don't even call the API
